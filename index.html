@@ -1524,7 +1524,7 @@
 </style>
 
 <style>
-  /* v42 CareRx Clean Handout & Final Curation Styles */
+  /* v43 CareRx Clean Handout: Ultra-Plain Language, True 4-Level Font Scale, Illustrated Life Time Icons */
   .rx-edit { padding: 12px 13px; background: #fdfcf9; border-bottom: 1px solid var(--primary-border); }
   .rx-edit .grid-2 { gap: 8px; }
   .rx-edit .rx-slot { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 6px; align-items: end; margin: 6px 0; }
@@ -1532,8 +1532,8 @@
   .rx-note { width: 100%; min-height: 62px; font-size: 13px; line-height: 1.5; }
   .rx-edit details { margin-top: 8px; }
   .rx-status { font-size: 12px; color: #a5502a; margin: 4px 0 6px; }
-  .rx-chip { display: inline-flex; align-items: center; gap: 5px; }
-  .rx-chip .rx-slot-svg { width: 18px; height: 18px; flex: none; }
+  .rx-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px 4px 6px; }
+  .rx-chip .rx-slot-svg { width: 22px; height: 22px; flex: none; }
   .rx-nonoral-box { margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: #f6e7de; border: 1px solid #e3c2ae; }
   .rx-nonoral-box label { color: #7c3818; font-weight: 700; margin-top: 0; }
   .rx-official-photo-mini { width: 42px; height: 32px; object-fit: contain; border-radius: 4px; border: 1px solid #d2ccbf; background: #fff; margin-top: 2px; }
@@ -1561,7 +1561,7 @@
   .final-note-row.tier-green { border-left: 3.5px solid #2f6b63; }
   .final-note-row input[type="checkbox"] { width: 17px; height: 17px; margin-top: 7px; cursor: pointer; accent-color: var(--primary); }
   .final-note-row select { font-size: 12px !important; padding: 5px 6px !important; min-height: 32px !important; }
-  .final-note-row textarea { min-height: 44px; font-size: 13px !important; padding: 6px 8px !important; line-height: 1.45; }
+  .final-note-row textarea { min-height: 40px; font-size: 13px !important; padding: 6px 8px !important; line-height: 1.45; }
   .final-note-del {
     background: transparent; border: 1px solid #e5d5d2; color: #b3261e; border-radius: 6px;
     width: 28px; height: 28px; cursor: pointer; font-weight: 700; margin-top: 2px;
@@ -1591,13 +1591,13 @@
   .rx-page .sheet-org { font-size: 12.5px; color: var(--primary-dark); font-weight: 700; }
 
   .rx-part { min-height: 0; overflow: visible; }
-  .rx-part h3 { font-size: 17.5px; color: var(--primary-dark); margin: 0 0 6px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+  .rx-part h3 { font-size: 17px; color: var(--primary-dark); margin: 0 0 6px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
   .rx-part.rx-warnings { border-top: 2px solid var(--primary); padding-top: 8px; margin-top: 2px; }
 
-  /* 放大清晰的服藥時間點徽章與 Icon */
+  /* 生活化大圖示服藥時間標籤（公雞／大太陽／亮燈小屋／床鋪Zzz／急救箱／鬧鐘） */
   .rx-time {
     display: grid;
-    grid-template-columns: 142px minmax(0, 1fr);
+    grid-template-columns: 148px minmax(0, 1fr);
     gap: 11px;
     border-bottom: 1px dashed var(--primary-border);
     padding: 6.5px 0;
@@ -1609,8 +1609,8 @@
   .rx-time-label {
     background: var(--primary);
     color: #fff;
-    border-radius: 10px;
-    padding: 8px 10px;
+    border-radius: 12px;
+    padding: 6px 10px 6px 7px;
     font-weight: 800;
     font-size: 15px;
     line-height: 1.25;
@@ -1621,15 +1621,15 @@
     text-align: left;
   }
   .rx-time-label .rx-slot-svg {
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
     flex: none;
-    color: #fff8dc;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.18));
   }
   .rx-time-label.slot-morning { background: #2c7265; }
   .rx-time-label.slot-noon { background: #2f6b63; }
-  .rx-time-label.slot-evening { background: #275852; }
-  .rx-time-label.slot-bed { background: #1d3f4a; }
+  .rx-time-label.slot-evening { background: #2a4d5c; }
+  .rx-time-label.slot-bed { background: #1d364a; }
   .rx-time-label.slot-prn { background: #a5502a; }
 
   .rx-line {
@@ -1697,71 +1697,84 @@
   .rx-tier-list {
     margin: 0;
     padding-left: 18px;
-    font-size: 14.8px;
-    line-height: 1.46;
+    font-size: 14.5px;
+    line-height: 1.48;
   }
-  .rx-tier-card.tier-red .rx-tier-list { color: #7f1d1d; font-weight: 600; }
+  .rx-tier-card.tier-red .rx-tier-list { color: #7f1d1d; }
   .rx-tier-card.tier-amber .rx-tier-list { color: #6c3608; }
   .rx-tier-card.tier-green .rx-tier-list { color: #174635; }
   .rx-tier-list li { margin-bottom: 3px; }
   .rx-tier-list li:last-child { margin-bottom: 0; }
+  .rx-tier-list .rx-kw { font-weight: 800; }
 
   .rx-page .sheet-footer { margin-top: auto; padding-top: 6px; border-top: 1px solid #d2ccbf; font-size: 11.5px; color: #5b6763; display: flex; justify-content: space-between; gap: 8px; }
 
-  /* Font size presets */
+  /* 4 階明確字體大小預設（精簡 / 標準 / 放大 A+ / 特大 A++） */
+  /* 1. 精簡 */
   .rx-page.rx-small { padding: 4.5mm 5.5mm; gap: 5px; }
-  .rx-page.rx-small .rx-line { font-size: 13.5px; padding: 2px 0; }
-  .rx-page.rx-small .rx-time { padding: 4px 0; grid-template-columns: 126px minmax(0, 1fr); }
-  .rx-page.rx-small .rx-time-label { font-size: 13px; padding: 5px 8px; gap: 6px; }
-  .rx-page.rx-small .rx-time-label .rx-slot-svg { width: 22px; height: 22px; }
+  .rx-page.rx-small .sheet-header-left h2 { font-size: 18.5px; }
+  .rx-page.rx-small .rx-part h3 { font-size: 15px; margin-bottom: 4px; }
+  .rx-page.rx-small .rx-line { font-size: 13.2px; padding: 2px 0; }
+  .rx-page.rx-small .rx-time { padding: 4px 0; grid-template-columns: 128px minmax(0, 1fr); }
+  .rx-page.rx-small .rx-time-label { font-size: 13px; padding: 4px 8px 4px 6px; gap: 6px; }
+  .rx-page.rx-small .rx-time-label .rx-slot-svg { width: 26px; height: 26px; }
   .rx-page.rx-small .rx-line .rx-pill-icon { width: 38px; height: 24px; }
   .rx-page.rx-small .rx-tier-card { padding: 6px 9px; margin-bottom: 5px; }
   .rx-page.rx-small .rx-tier-title { font-size: 13px; margin-bottom: 3px; }
-  .rx-page.rx-small .rx-tier-list { font-size: 13px; line-height: 1.38; }
+  .rx-page.rx-small .rx-tier-list { font-size: 12.8px; line-height: 1.38; }
 
-  .rx-page.rx-large .rx-line { font-size: 17.5px; line-height: 1.44; }
-  .rx-page.rx-large .rx-time { grid-template-columns: 158px minmax(0, 1fr); }
-  .rx-page.rx-large .rx-time-label { font-size: 16.5px; padding: 9px 11px; }
-  .rx-page.rx-large .rx-time-label .rx-slot-svg { width: 30px; height: 30px; }
-  .rx-page.rx-large .rx-line .rx-pill-icon { width: 52px; height: 33px; }
-  .rx-page.rx-large .rx-tier-title { font-size: 16.5px; }
-  .rx-page.rx-large .rx-tier-list { font-size: 16.5px; line-height: 1.5; }
+  /* 2. 放大 A+（明顯比標準大一階，且絕不被智慧防留白縮回標準字！） */
+  .rx-page.rx-large .sheet-header-left h2 { font-size: 25px; }
+  .rx-page.rx-large .sheet-header-left .meta-line { font-size: 14px; }
+  .rx-page.rx-large .sheet-org { font-size: 14px; }
+  .rx-page.rx-large .rx-part h3 { font-size: 19.5px; }
+  .rx-page.rx-large .rx-line { font-size: 18.5px; line-height: 1.46; padding: 4px 0; }
+  .rx-page.rx-large .rx-time { grid-template-columns: 168px minmax(0, 1fr); padding: 7.5px 0; }
+  .rx-page.rx-large .rx-time-label { font-size: 17px; padding: 7px 11px 7px 8px; }
+  .rx-page.rx-large .rx-time-label .rx-slot-svg { width: 38px; height: 38px; }
+  .rx-page.rx-large .rx-line .rx-pill-icon { width: 54px; height: 34px; }
+  .rx-page.rx-large .rx-tier-card { padding: 9px 13px; margin-bottom: 8px; }
+  .rx-page.rx-large .rx-tier-title { font-size: 17px; margin-bottom: 6px; }
+  .rx-page.rx-large .rx-tier-list { font-size: 17.2px; line-height: 1.5; }
 
-  .rx-page.rx-xlarge .rx-line { font-size: 19.5px; line-height: 1.48; }
-  .rx-page.rx-xlarge .rx-time { grid-template-columns: 172px minmax(0, 1fr); }
-  .rx-page.rx-xlarge .rx-time-label { font-size: 18px; padding: 10px 12px; }
-  .rx-page.rx-xlarge .rx-time-label .rx-slot-svg { width: 34px; height: 34px; }
-  .rx-page.rx-xlarge .rx-line .rx-pill-icon { width: 58px; height: 37px; }
-  .rx-page.rx-xlarge .rx-tier-title { font-size: 18px; }
-  .rx-page.rx-xlarge .rx-tier-list { font-size: 18px; line-height: 1.52; }
+  /* 3. 特大 A++（長輩老花專用超大字） */
+  .rx-page.rx-xlarge .sheet-header-left h2 { font-size: 28px; }
+  .rx-page.rx-xlarge .sheet-header-left .meta-line { font-size: 15.5px; }
+  .rx-page.rx-xlarge .sheet-org { font-size: 15px; }
+  .rx-page.rx-xlarge .rx-part h3 { font-size: 22px; }
+  .rx-page.rx-xlarge .rx-line { font-size: 21px; line-height: 1.5; padding: 5px 0; }
+  .rx-page.rx-xlarge .rx-time { grid-template-columns: 186px minmax(0, 1fr); padding: 8.5px 0; }
+  .rx-page.rx-xlarge .rx-time-label { font-size: 19px; padding: 8px 12px 8px 9px; }
+  .rx-page.rx-xlarge .rx-time-label .rx-slot-svg { width: 42px; height: 42px; }
+  .rx-page.rx-xlarge .rx-line .rx-pill-icon { width: 60px; height: 38px; }
+  .rx-page.rx-xlarge .rx-tier-card { padding: 10px 14px; margin-bottom: 9px; }
+  .rx-page.rx-xlarge .rx-tier-title { font-size: 19px; margin-bottom: 6px; }
+  .rx-page.rx-xlarge .rx-tier-list { font-size: 19.5px; line-height: 1.52; }
 
-  /* Smart-fit gentle tight tiers (to pull slight overflow back into 1 A4 page) */
-  .rx-page.rx-tight-1 { padding: 4.5mm 6mm; gap: 5px; }
+  /* 僅縮減外距與留白（完全不縮小字體，供「放大 A+」與「標準」第一階段防留白使用） */
+  .rx-page.rx-pad-tight { padding: 4.2mm 5.8mm; gap: 5px; }
+  .rx-page.rx-pad-tight .a4-page-body { gap: 5px; }
+  .rx-page.rx-pad-tight .sheet-header { padding-bottom: 4px; }
+  .rx-page.rx-pad-tight .rx-part h3 { margin-bottom: 4px; }
+  .rx-page.rx-pad-tight .rx-part.rx-warnings { padding-top: 6px; }
+  .rx-page.rx-pad-tight .rx-time { padding: 4px 0; }
+  .rx-page.rx-pad-tight .rx-line { padding: 2px 0; }
+  .rx-page.rx-pad-tight .rx-tier-card { padding: 6px 10px; margin-bottom: 5px; }
+  .rx-page.rx-pad-tight .rx-tier-list li { margin-bottom: 2px; }
+
+  /* 僅供「標準」模式微幅緊縮以拉回 1 頁（絕不套用於放大/特大！） */
+  .rx-page.rx-tight-1 { padding: 4.2mm 5.8mm; gap: 5px; }
   .rx-page.rx-tight-1 .a4-page-body { gap: 5px; }
   .rx-page.rx-tight-1 .sheet-header { padding-bottom: 4px; }
-  .rx-page.rx-tight-1 .sheet-header-left h2 { font-size: 19.5px; }
+  .rx-page.rx-tight-1 .sheet-header-left h2 { font-size: 20px; }
   .rx-page.rx-tight-1 .rx-part h3 { font-size: 16px; margin-bottom: 4px; }
-  .rx-page.rx-tight-1 .rx-time { padding: 4.5px 0; grid-template-columns: 134px minmax(0, 1fr); }
-  .rx-page.rx-tight-1 .rx-time-label { padding: 6px 8px; font-size: 14px; }
-  .rx-page.rx-tight-1 .rx-time-label .rx-slot-svg { width: 23px; height: 23px; }
-  .rx-page.rx-tight-1 .rx-line { font-size: 14.3px; padding: 2px 0; }
-  .rx-page.rx-tight-1 .rx-tier-card { padding: 6px 9px; margin-bottom: 5px; }
-  .rx-page.rx-tight-1 .rx-tier-title { font-size: 13.5px; margin-bottom: 3px; }
-  .rx-page.rx-tight-1 .rx-tier-list { font-size: 13.6px; line-height: 1.38; }
-
-  .rx-page.rx-tight-2 { padding: 3.8mm 5.2mm; gap: 4px; }
-  .rx-page.rx-tight-2 .a4-page-body { gap: 4px; }
-  .rx-page.rx-tight-2 .sheet-header { padding-bottom: 3px; }
-  .rx-page.rx-tight-2 .sheet-header-left h2 { font-size: 18px; }
-  .rx-page.rx-tight-2 .rx-part h3 { font-size: 15px; margin-bottom: 3px; }
-  .rx-page.rx-tight-2 .rx-time { padding: 3px 0; grid-template-columns: 124px minmax(0, 1fr); }
-  .rx-page.rx-tight-2 .rx-time-label { font-size: 13px; padding: 5px 7px; gap: 6px; }
-  .rx-page.rx-tight-2 .rx-time-label .rx-slot-svg { width: 21px; height: 21px; }
-  .rx-page.rx-tight-2 .rx-line { font-size: 13.2px; padding: 1.5px 0; }
-  .rx-page.rx-tight-2 .rx-line .rx-pill-icon { width: 36px; height: 23px; }
-  .rx-page.rx-tight-2 .rx-tier-card { padding: 5px 8px; margin-bottom: 4px; }
-  .rx-page.rx-tight-2 .rx-tier-title { font-size: 12.8px; margin-bottom: 2px; }
-  .rx-page.rx-tight-2 .rx-tier-list { font-size: 12.6px; line-height: 1.34; }
+  .rx-page.rx-tight-1 .rx-time { padding: 4.5px 0; grid-template-columns: 140px minmax(0, 1fr); }
+  .rx-page.rx-tight-1 .rx-time-label { padding: 5px 8px 5px 6px; font-size: 14px; }
+  .rx-page.rx-tight-1 .rx-time-label .rx-slot-svg { width: 30px; height: 30px; }
+  .rx-page.rx-tight-1 .rx-line { font-size: 14.6px; padding: 2px 0; }
+  .rx-page.rx-tight-1 .rx-tier-card { padding: 6px 10px; margin-bottom: 5px; }
+  .rx-page.rx-tight-1 .rx-tier-title { font-size: 13.8px; margin-bottom: 3px; }
+  .rx-page.rx-tight-1 .rx-tier-list { font-size: 13.8px; line-height: 1.4; }
 
   @media print {
     @page { size: A4 portrait; margin: 4mm; }
@@ -5111,7 +5124,7 @@ ${JSON.stringify(items)}
       const drug = document.getElementById('rep_drug').value.trim() || '（未指定）';
       const desc = document.getElementById('rep_desc').value.trim();
       const contact = document.getElementById('rep_contact').value.trim() || '（未填寫）';
-      const env = `CareRx-v42 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
+      const env = `CareRx-v43 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
       return { type, drug, desc, contact, env, plainText: `【類型】${type}\n【藥品】${drug}\n【描述】${desc}\n【聯絡】${contact}\n【環境】${env}` };
     }
 
@@ -5260,19 +5273,107 @@ ${JSON.stringify(items)}
       th:'ตรวจสอบซองยา'
     };
 
-    // 時段專屬 SVG 圖示（0:早餐前, 1:早餐後, 2:午餐前, 3:午餐後, 4:晚餐前, 5:晚餐後, 6:睡前, 7:需要時, 8:其他時間）
+    // 時段專屬「生活意象」彩色插畫 SVG 圖示（公雞＝早上、大太陽＝中午、亮燈小屋＝晚上、床鋪Zzz＝睡前、急救箱＝需要時、鬧鐘＝其他時間）
     function rxSlotIconSvg(slotIdx) {
       const i = Number(slotIdx);
-      const wrap = (inner) => `<svg class="rx-slot-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
-      if (i === 0) return wrap('<path d="M12 4v3M4.9 10.9l2.1 2.1M19.1 10.9l-2.1 2.1"/><path d="M7 16a5 5 0 0 1 10 0"/><path d="M3 16h18M6 20h12"/>'); // 早餐前：日出
-      if (i === 1) return wrap('<path d="M12 3v3M5.6 9.6l2.1 2.1M18.4 9.6l-2.1 2.1"/><path d="M7 15a5 5 0 0 1 10 0" fill="currentColor" fill-opacity="0.28"/><path d="M3 15h18M7 19h10"/>'); // 早餐後：晨陽
-      if (i === 2) return wrap('<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/>'); // 午餐前：太陽線條
-      if (i === 3) return wrap('<circle cx="12" cy="12" r="4.5" fill="currentColor" fill-opacity="0.3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/>'); // 午餐後：正午太陽
-      if (i === 4) return wrap('<path d="M7 15a5 5 0 0 1 10 0"/><path d="M3 15h18M12 5v4M9 7l3 2 3-2M6 19h12"/>'); // 晚餐前：日落
-      if (i === 5) return wrap('<path d="M7 15a5 5 0 0 1 10 0" fill="currentColor" fill-opacity="0.28"/><path d="M3 15h18M5 19h14M17 6.5a2.5 2.5 0 0 0 2 2.4"/>'); // 晚餐後：傍晚
-      if (i === 6) return wrap('<path d="M20 14.5A8 8 0 0 1 9.5 4a7.5 7.5 0 1 0 10.5 10.5z" fill="currentColor" fill-opacity="0.22"/><path d="M16 5l.7 1.6L18.3 7l-1.6.7L16 9.3l-.7-1.6L13.7 7l1.6-.7z" fill="currentColor" stroke="none"/>'); // 睡前：月亮星星
-      if (i === 7) return wrap('<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 7v10M7 12h10"/>'); // 需要時：急救十字
-      return wrap('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'); // 其他時間：時鐘
+      const wrap = (bg, inner) => `<svg class="rx-slot-svg" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="${bg}" stroke="#e3dccb" stroke-width="1.2"/>${inner}</svg>`;
+
+      // 0: 早餐前（公雞喔喔啼＋啼叫聲波） / 1: 早餐後（公雞＋溫馨朝陽）
+      if (i === 0 || i === 1) {
+        const rooster =
+          // 尾羽（深綠與橘棕雙層翹尾，一眼辨識公雞輪廓）
+          '<path d="M13 22 C7 19 6 12 10 9 C11 13 13 15 15 18 Z" fill="#15803d"/>' +
+          '<path d="M14 23 C8 22 6 17 8 13 C10 16 12 18 15 20 Z" fill="#d97706"/>' +
+          // 雙腳
+          '<path d="M18 28 V33 M18 33 L15.5 34.5 M18 33 L20 34.5 M23 28 V33 M23 33 L21 34.5 M23 33 L25.5 34.5" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" fill="none"/>' +
+          // 公雞身體與頸部（飽滿暖白色）
+          '<path d="M13 21 C13 27 17 30 22 29.5 C26.5 29 28.5 25.5 28 21.5 C27.8 19.5 29 17 29.5 14.5 C29.8 12 28 10 25.5 10 C23 10 21.5 12 21.5 14.5 C21.5 17 19.5 19.5 16.5 19.5 C14.8 19.5 13.5 20 13 21 Z" fill="#ffffff" stroke="#5c4738" stroke-width="1.4" stroke-linejoin="round"/>' +
+          // 翅膀
+          '<path d="M16.5 22 C18.5 20.5 23 21 24 24 C21.5 26 17.5 25.5 16.5 22 Z" fill="#f3dfc1" stroke="#8a6c4b" stroke-width="1.1"/>' +
+          // 紅雞冠（三瓣超清楚！）
+          '<path d="M22.5 10.5 C22 7.5 24.5 6.8 25.3 8.8 C26 6.3 28.8 6.8 28.3 9.3 C30.2 8.2 31.3 10.2 29.2 11.5 Z" fill="#dc2626"/>' +
+          // 橘色尖嘴與紅色肉垂
+          '<path d="M29.2 12.8 L34.2 14.2 L29.2 15.6 Z" fill="#f59e0b" stroke="#b45309" stroke-width="0.7" stroke-linejoin="round"/>' +
+          '<path d="M28.8 15.5 C30.3 16.5 30 18.6 28.5 18.4 C27.4 18.3 27.6 16.4 28.8 15.5 Z" fill="#dc2626"/>' +
+          // 眼睛
+          '<circle cx="27" cy="13.2" r="1.15" fill="#1f2937"/>';
+        const extra = i === 0
+          ? '<path d="M34.8 11.2 Q36.6 12.6 35.4 14.2 M36 9.8 Q38.4 12 36.8 15" fill="none" stroke="#ea580c" stroke-width="1.3" stroke-linecap="round"/>' // 喔喔啼聲波（剛起床飯前）
+          : '<circle cx="11" cy="31" r="2.2" fill="#facc15" opacity="0.75"/>'; // 清晨亮點
+        return wrap('#fff8e6', extra + rooster);
+      }
+
+      // 2: 午餐前 / 3: 午餐後（高掛正中的金黃大太陽）
+      if (i === 2 || i === 3) {
+        const sunRays =
+          '<g stroke="#ea580c" stroke-width="2.6" stroke-linecap="round">' +
+          '<line x1="20" y1="4.5" x2="20" y2="8.5"/><line x1="20" y1="31.5" x2="20" y2="35.5"/>' +
+          '<line x1="4.5" y1="20" x2="8.5" y2="20"/><line x1="31.5" y1="20" x2="35.5" y2="20"/>' +
+          '<line x1="9.1" y1="9.1" x2="11.9" y2="11.9"/><line x1="28.1" y1="28.1" x2="30.9" y2="30.9"/>' +
+          '<line x1="30.9" y1="9.1" x2="28.1" y2="11.9"/><line x1="11.9" y1="28.1" x2="9.1" y2="30.9"/>' +
+          '</g>';
+        const core = '<circle cx="20" cy="20" r="8.2" fill="#facc15" stroke="#ea580c" stroke-width="1.8"/>';
+        const face = i === 3
+          ? '<circle cx="17.5" cy="18.8" r="1" fill="#9a3412"/><circle cx="22.5" cy="18.8" r="1" fill="#9a3412"/><path d="M17.2 21.8 Q20 24.2 22.8 21.8" fill="none" stroke="#9a3412" stroke-width="1.4" stroke-linecap="round"/>'
+          : '<circle cx="20" cy="20" r="4.5" fill="#fef08a"/>';
+        return wrap('#fffbeb', sunRays + core + face);
+      }
+
+      // 4: 晚餐前 / 5: 晚餐後（黃昏亮燈小屋＋傍晚彎月，一眼就懂「晚上回家吃晚飯」）
+      if (i === 4 || i === 5) {
+        const evening =
+          // 傍晚天色半圓背景
+          '<path d="M2.5 23 A18 18 0 0 1 37.5 23 Z" fill="#fed7aa" opacity="0.55"/>' +
+          // 右上小彎月＋星星
+          '<path d="M30.5 9.2 A4.2 4.2 0 1 0 33.8 14 A3.2 3.2 0 1 1 30.5 9.2 Z" fill="#d97706"/>' +
+          '<circle cx="10.5" cy="11.5" r="1.2" fill="#f59e0b"/>' +
+          // 屋頂
+          '<path d="M8 21 L20 11 L32 21 Z" fill="#b45309" stroke="#7c2d12" stroke-width="1.2" stroke-linejoin="round"/>' +
+          // 屋身
+          '<rect x="11" y="21" width="18" height="12" rx="1" fill="#fef3c7" stroke="#7c2d12" stroke-width="1.3"/>' +
+          // 溫暖發亮窗戶（代表天暗開燈）
+          '<rect x="13.5" y="23.5" width="5.2" height="5.2" rx="0.8" fill="#facc15" stroke="#b45309" stroke-width="1"/>' +
+          '<line x1="16.1" y1="23.5" x2="16.1" y2="28.7" stroke="#b45309" stroke-width="0.9"/>' +
+          '<line x1="13.5" y1="26.1" x2="18.7" y2="26.1" stroke="#b45309" stroke-width="0.9"/>' +
+          // 大門
+          '<rect x="21.5" y="25" width="4.8" height="8" rx="0.8" fill="#92400e"/>';
+        return wrap('#fff7ed', evening);
+      }
+
+      // 6: 睡前（床鋪＋枕頭＋月亮＋Zzz，阿公阿嬤秒懂「睡覺前」）
+      if (i === 6) {
+        const bed =
+          // 上方彎月與 Zzz
+          '<path d="M12.5 8 A4.8 4.8 0 1 0 16.5 13.8 A3.8 3.8 0 1 1 12.5 8 Z" fill="#facc15"/>' +
+          '<text x="21.5" y="13.5" fill="#1e3a5f" font-size="8.5" font-weight="900" font-family="sans-serif">Z</text>' +
+          '<text x="27.5" y="11" fill="#2f6b63" font-size="6.8" font-weight="900" font-family="sans-serif">z</text>' +
+          // 床架與床頭板
+          '<path d="M7 18 V31 M33 22 V31 M7 27 H33" stroke="#5c4033" stroke-width="2.4" stroke-linecap="round"/>' +
+          // 白色枕頭
+          '<rect x="9.2" y="21.2" width="7.2" height="4.2" rx="2" fill="#ffffff" stroke="#64748b" stroke-width="1.2"/>' +
+          // 暖色棉被
+          '<path d="M16.5 21.5 H29.5 C31.2 21.5 32.5 22.8 32.5 24.5 V26.8 H16.5 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.2"/>' +
+          '<path d="M16.5 21.5 H20.5 V26.8 H16.5 Z" fill="#dbeafe"/>';
+        return wrap('#eef4fa', bed);
+      }
+
+      // 7: 需要時（紅十字急救藥箱）
+      if (i === 7) {
+        const kit =
+          '<path d="M15.5 13 V10.5 A2 2 0 0 1 17.5 8.5 H22.5 A2 2 0 0 1 24.5 10.5 V13" fill="none" stroke="#991b1b" stroke-width="2.2"/>' +
+          '<rect x="7.5" y="13" width="25" height="18.5" rx="3.5" fill="#ffffff" stroke="#dc2626" stroke-width="2"/>' +
+          '<path d="M20 17.2 V27.2 M15 22.2 H25" stroke="#dc2626" stroke-width="3.6" stroke-linecap="round"/>';
+        return wrap('#fef2f2', kit);
+      }
+
+      // 8: 其他時間（復古雙鈴大鬧鐘）
+      const clock =
+        '<circle cx="11.5" cy="11.5" r="3.4" fill="#d97706"/><circle cx="28.5" cy="11.5" r="3.4" fill="#d97706"/>' +
+        '<path d="M12.5 31 L10.5 34 M27.5 31 L29.5 34" stroke="#475569" stroke-width="2.2" stroke-linecap="round"/>' +
+        '<circle cx="20" cy="21.5" r="10.8" fill="#ffffff" stroke="#2f6b63" stroke-width="2.2"/>' +
+        '<path d="M20 15.5 V21.5 L24.5 24" fill="none" stroke="#1f2e2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<circle cx="20" cy="21.5" r="1.4" fill="#dc2626"/>';
+      return wrap('#f0f7f5', clock);
     }
 
     // 注意事項分類 SVG 圖示（0:飲食, 1:防跌, 2:腎臟, 3:回診, 4:注意, 5:就醫）
@@ -5626,25 +5727,25 @@ ${JSON.stringify(items)}
 
     const RX_TIER_META = {
       red: {
-        zh: '重要安全警訊（防跌・急救・勿驟停）',
-        en: 'Critical Safety Alerts (Falls · Urgent Care)',
-        vi: 'Cảnh báo an toàn quan trọng (Chống ngã · Khẩn cấp)',
-        id: 'Peringatan Keamanan Penting (Cegah Jatuh · Darurat)',
-        th: 'คำเตือนความปลอดภัยสำคัญ (ระวังหกล้ม · ฉุกเฉิน)'
+        zh: '特別小心（防跌・急救）',
+        en: 'Stay Safe (Falls · Urgent)',
+        vi: 'Cần đặc biệt cẩn thận',
+        id: 'Penting & Waspada',
+        th: 'ระวังเป็นพิเศษ (หกล้ม・ฉุกเฉิน)'
       },
       amber: {
-        zh: '飲食與用藥注意（禁忌・時機・常見反應）',
-        en: 'Food & Medication Cautions',
-        vi: 'Lưu ý ăn uống & khi dùng thuốc',
-        id: 'Perhatian Makanan & Pemakaian Obat',
-        th: 'ข้อควรระวังด้านอาหารและการใช้ยา'
+        zh: '吃藥與飲食提醒',
+        en: 'Food & Medicine Tips',
+        vi: 'Lưu ý ăn uống & thuốc',
+        id: 'Aturan Makan & Obat',
+        th: 'ข้อควรระวังอาหารและยา'
       },
       green: {
-        zh: '日常保健與回診建議（量測・生活・回診）',
-        en: 'Daily Care & Follow-up Tips',
-        vi: 'Chăm sóc hàng ngày & Tái khám',
-        id: 'Perawatan Harian & Saran Kontrol',
-        th: 'การดูแลประจำวันและคำแนะนำการพบแพทย์'
+        zh: '日常保養與回診',
+        en: 'Daily Care & Checkups',
+        vi: 'Chăm sóc & Tái khám',
+        id: 'Perawatan & Kontrol',
+        th: 'ดูแลตัวเองและพบแพทย์'
       }
     };
 
@@ -5791,210 +5892,210 @@ ${JSON.stringify(items)}
     }
 
     // =========================================================================
-    // 智慧語意合併引擎：將所有相近提醒合併為精簡不重複的三級清單（支援 5 國語系）
+    // 智慧語意合併引擎（v43 超白話短句版：每條 1 句話，自動合併相近意思不重複）
     // =========================================================================
     const RX_SEMANTIC_THEMES = [
-      // 🔴 第一級：重要安全警訊
+      // 🔴 第一級：特別小心（防跌・急救）
       {
         key: 'mtx_weekly', tier: 'red',
         re: /每週.*1\s*次|ONCE A WEEK|1 LẦN\/TUẦN|1 KALI SEMINGGU|สัปดาห์ละ\s*1\s*ครั้ง/i,
         i18n: {
-          zh: '高警訊：本藥多為「每週固定吃 1 次」，千萬不可每天服用，請在月曆圈出固定服藥日！',
-          en: 'HIGH ALERT: Usually taken ONCE A WEEK only (never daily). Mark your fixed weekly day on a calendar.',
-          vi: 'CẢNH BÁO CAO: Thuốc thường chỉ uống 1 LẦN/TUẦN (tuyệt đối không uống hàng ngày). Hãy đánh dấu trên lịch.',
-          id: 'PERINGATAN TINGGI: Umumnya diminum 1 KALI SEMINGGU (jangan setiap hari). Tandai hari tetap di kalender.',
-          th: 'ยาอันตรายสูง: มักรับประทานเพียงสัปดาห์ละ 1 ครั้ง (ห้ามกินทุกวันเด็ดขาด) กรุณาวงวันในปฏิทิน'
+          zh: '每週只吃一次：這種藥一週固定吃 1 天就好，千萬別每天吃！',
+          en: 'Once a week ONLY: Take on 1 fixed day per week—never daily!',
+          vi: 'Chỉ uống 1 lần/tuần: Uống 1 ngày cố định mỗi tuần, tuyệt đối không uống hàng ngày!',
+          id: 'Hanya 1x seminggu: Minum di 1 hari tetap tiap minggu—jangan setiap hari!',
+          th: 'กินสัปดาห์ละ 1 ครั้งเท่านั้น: เลือกกินสัปดาห์ละ 1 วัน ห้ามกินทุกวันเด็ดขาด!'
         }
       },
       {
         key: 'fall_dizzy', tier: 'red',
-        re: /跌倒|夜燈|頭暈|嗜睡|想睡|腳步不穩|走路不穩|站起來.*放慢|起身.*放慢|dizziness|drowsiness|nightlight|unsteady|stand.*slowly|chóng mặt|buồn ngủ|té ngã|pusing|mengantuk|jatuh|เวียนหัว|เวียนศีรษะ|ง่วงซึม|หกล้ม/i,
+        re: /跌倒|夜燈|頭暈|嗜睡|想睡|腳步不穩|走路不穩|記憶力變差|站起來.*放慢|起身.*放慢|dizziness|drowsiness|nightlight|unsteady|stand.*slowly|chóng mặt|buồn ngủ|té ngã|pusing|mengantuk|jatuh|เวียนหัว|เวียนศีรษะ|ง่วงซึม|หกล้ม/i,
         i18n: {
-          zh: '防跌警示：部分藥品可能引起頭暈、嗜睡或腳步不穩；睡前躺好再吃，起床先在床邊坐一下再慢慢站起，半夜起身務必開小夜燈。',
-          en: 'Fall Risk: Some medicines may cause dizziness or drowsiness. Take sleep pills right in bed, sit on the bed edge before standing slowly, and use a nightlight.',
-          vi: 'Phòng té ngã: Một số thuốc dễ gây chóng mặt, buồn ngủ. Uống thuốc ngủ khi đã lên giường, ngồi mép giường trước khi đứng dậy từ từ và bật đèn ngủ ban đêm.',
-          id: 'Cegah Jatuh: Beberapa obat dapat menyebabkan pusing atau mengantuk. Minum obat tidur saat sudah di ranjang, duduk sebentar sebelum berdiri pelan, dan nyalakan lampu malam.',
-          th: 'ระวังหกล้ม: ยาบางชนิดอาจทำให้เวียนศีรษะหรือง่วงซึม ควรกินยาก่อนนอนเมื่อพร้อมเข้านอน นั่งพักขอบเตียงก่อนลุกยืนช้า ๆ และเปิดไฟกลางคืน'
+          zh: '小心跌倒：容易頭暈想睡；睡前躺好再吃，起床先坐一下再站，半夜開夜燈。',
+          en: 'Prevent falls: May cause dizziness/drowsiness. Stand up slowly and use a nightlight.',
+          vi: 'Cẩn thận té ngã: Dễ chóng mặt, buồn ngủ. Đứng dậy từ từ và bật đèn ngủ ban đêm.',
+          id: 'Hati-hati jatuh: Bisa pusing/mengantuk. Berdiri pelan dan nyalakan lampu malam.',
+          th: 'ระวังหกล้ม: ยาอาจทำให้ง่วงหรือเวียนหัว ลุกยืนช้า ๆ และเปิดไฟกลางคืน'
         }
       },
       {
         key: 'hypo_sugar', tier: 'red',
         re: /低血糖|冒冷汗|手抖.*心|隨身.*糖果|low blood sugar|cold sweats|carry candy|hạ đường huyết|vã mồ hôi lạnh|gula.*rendah|keringat dingin|น้ำตาล.*ต่ำ|เหงื่อออกตัวเย็น/i,
         i18n: {
-          zh: '防低血糖：若出現手抖、冒冷汗、心慌頭暈，請立刻吃糖果並聯絡家人或藥師；出門請隨身帶糖果。',
-          en: 'Low Blood Sugar Alert: If shaky, sweating, or dizzy, eat candy immediately and tell family/pharmacist. Carry candy when going out.',
-          vi: 'Phòng hạ đường huyết: Nếu run tay, vã mồ hôi lạnh, chóng mặt, hãy ăn kẹo ngay và báo người nhà/dược sĩ. Luôn mang theo kẹo khi ra ngoài.',
-          id: 'Waspada Gula Rendah: Jika gemetar, keringat dingin, atau pusing, segera makan permen dan hubungi keluarga. Selalu bawa permen saat bepergian.',
-          th: 'ระวังน้ำตาลในเลือดต่ำ: หากมือสั่น เหงื่อออกตัวเย็น หรือเวียนหัว ให้รีบกินลูกอมทันทีและแจ้งญาติ ควรพกลูกอมติดตัวเสมอ'
+          zh: '防低血糖：手抖冒冷汗時立刻吃糖果，出門隨身帶幾顆糖。',
+          en: 'Low blood sugar: Eat candy right away if shaky or sweating; carry candy.',
+          vi: 'Phòng hạ đường huyết: Ăn kẹo ngay nếu run tay, vã mồ hôi; luôn mang kẹo.',
+          id: 'Gula rendah: Makan permen segera jika gemetar/keringat dingin; bawa permen.',
+          th: 'ระวังน้ำตาลต่ำ: หากมือสั่นเหงื่อออกให้รีบกินลูกอม และพกลูกอมติดตัว'
         }
       },
       {
         key: 'bleed_alert', tier: 'red',
         re: /黑便|血尿|流血不止|牙齦.*出血|瘀青|拔牙.*手術|black stool|red urine|bruising|bleeding|phân đen|tiểu ra máu|chảy máu|BAB hitam|perdarahan|ถ่ายดำ|ปัสสาวะเป็นเลือด|เลือดออก/i,
         i18n: {
-          zh: '防出血警訊：若出現解黑便、血尿、牙齦流血不止或大片瘀青請立即就醫；看牙醫或手術前務必告知有吃抗凝血／抗血小板藥。',
-          en: 'Bleeding Alert: Seek urgent care for black stools, red urine, unusual bruising, or ongoing bleeding. Inform your doctor before dental work or surgery.',
-          vi: 'Cảnh báo chảy máu: Đi khám ngay nếu phân đen, tiểu ra máu, bầm tím lớn hoặc chảy máu kéo dài. Báo bác sĩ trước khi nhổ răng/phẫu thuật.',
-          id: 'Waspada Perdarahan: Segera ke dokter jika BAB hitam, urine merah, memar luas, atau perdarahan. Beri tahu dokter sebelum cabut gigi/operasi.',
-          th: 'ระวังเลือดออกผิดปกติ: หากถ่ายดำ ปัสสาวะเป็นเลือด ฟกช้ำมาก หรือเลือดออกไม่หยุดให้รีบพบแพทย์ และแจ้งแพทย์ก่อนทำฟันหรือผ่าตัด'
+          zh: '注意出血：若解黑便、血尿、流血不止或大片瘀青快就醫；拔牙開刀前先講。',
+          en: 'Watch for bleeding: See doctor for black stools, red urine, or big bruises; tell dentist/doctor before procedures.',
+          vi: 'Chú ý chảy máu: Đi khám nếu phân đen, tiểu máu, bầm lớn; báo bác sĩ trước khi nhổ răng/mổ.',
+          id: 'Waspada perdarahan: Ke dokter jika BAB hitam, urine merah, atau memar luas; beri tahu dokter sebelum operasi.',
+          th: 'ระวังเลือดออก: หากถ่ายดำ ปัสสาวะแดง หรือฟกช้ำมากให้พบแพทย์ แจ้งแพทย์ก่อนทำฟัน/ผ่าตัด'
         }
       },
       {
         key: 'rash_allergy', tier: 'red',
         re: /皮膚紅疹|水泡|嘴破|嚴重.*過敏|呼吸困難|喘不過氣|severe.*rash|blisters|mouth sores|breathing trouble|dị ứng da nặng|phồng rộp|khó thở|alergi kulit berat|sesak napas|แพ้ยา.*รุนแรง|ผื่น.*พุพอง|หายใจลำบาก/i,
         i18n: {
-          zh: '過敏警訊：若服藥後出現皮膚紅疹、水泡、嘴破、發燒或呼吸困難，請立刻停藥並馬上就醫。',
-          en: 'Allergy Alert: Stop immediately and seek urgent care if skin rash, blisters, mouth sores, fever, or breathing trouble occurs.',
-          vi: 'Cảnh báo dị ứng: Ngừng thuốc và đi khám ngay nếu nổi mẩn đỏ, phồng rộp da, loét miệng, sốt hoặc khó thở.',
-          id: 'Tanda Alergi: Hentikan obat dan segera ke dokter jika muncul ruam kulit, lepuh, sariawan, demam, atau sesak napas.',
-          th: 'เตือนอาการแพ้ยา: หากมีผื่นแดง พุพอง แผลในปาก มีไข้ หรือหายใจลำบาก ให้หยุดยาทันทีและรีบพบแพทย์'
+          zh: '過敏快停藥：若起紅疹、水泡、嘴破或喘不過氣，馬上停藥就醫。',
+          en: 'Allergy alert: Stop and see a doctor right away for rash, blisters, or trouble breathing.',
+          vi: 'Dị ứng ngừng ngay: Ngừng thuốc và đi khám ngay nếu nổi mẩn, phồng da hoặc khó thở.',
+          id: 'Alergi hentikan segera: Hentikan obat & ke dokter jika ruam, lepuh, atau sesak napas.',
+          th: 'แพ้ยาหยุดทันที: หากมีผื่น พุพอง แผลในปาก หรือหายใจลำบาก ให้หยุดยาพบแพทย์ทันที'
         }
       },
       {
         key: 'no_abrupt_stop', tier: 'red',
         re: /切勿突然停藥|不要自行停藥|不可自行停藥|慢慢減量|never stop abruptly|do not stop suddenly|không tự ý ngừng|jangan hentikan mendadak|ห้ามหยุดยา.*กะทันหัน/i,
         i18n: {
-          zh: '切勿自行突然停藥：慢性病與神經／睡眠用藥皆需由醫師評估後逐步調整，不可自行停藥或增減顆數。',
-          en: 'Do NOT stop abruptly: Chronic and nerve/sleep medications must be adjusted gradually with your doctor.',
-          vi: 'Không tự ý ngừng thuốc đột ngột: Thuốc bệnh mạn tính và thần kinh/ngủ cần được bác sĩ giảm liều từ từ.',
-          id: 'Jangan berhenti mendadak: Obat penyakit kronis dan saraf/tidur harus disesuaikan bertahap bersama dokter.',
-          th: 'ห้ามหยุดยากะทันหัน: ยาโรคเรื้อรังและยาระบบประสาท/ยานอนหลับต้องให้แพทย์ค่อย ๆ ปรับลดขนาด'
+          zh: '別自己停藥：想停藥或改顆數都要先問醫師，不要自己停吃。',
+          en: 'Do not stop suddenly: Always ask your doctor before stopping or changing doses.',
+          vi: 'Không tự ý ngừng thuốc: Luôn hỏi bác sĩ trước khi ngừng hoặc đổi liều.',
+          id: 'Jangan berhenti sendiri: Selalu tanya dokter sebelum berhenti atau mengubah dosis.',
+          th: 'ห้ามหยุดยาเอง: ปรึกษาแพทย์ก่อนทุกครั้งหากต้องการหยุดยาหรือปรับขนาด'
         }
       },
       {
         key: 'urgent_gi_nausea', tier: 'red',
         re: /莫名噁心想吐|酮酸中毒|胃痛黑便|腳腫.*就醫|尿變茶色|嚴重拉肚子|sudden nausea|dark urine|severe diarrhea|buồn nôn lạ|tiêu chảy nặng|mual mendadak|urine gelap|คลื่นไส้ผิดปกติ|ปัสสาวะสีชาเข้ม|ท้องเสียรุนแรง/i,
         i18n: {
-          zh: '異常不適警訊：若出現莫名噁心想吐、劇烈胃痛、尿液變深茶色、嚴重腹瀉或腳部明顯水腫，請盡快回診就醫。',
-          en: 'Warning Signs: Seek medical care promptly if sudden unexplained nausea/vomiting, severe stomach pain, dark tea-colored urine, severe diarrhea, or sudden swelling occurs.',
-          vi: 'Dấu hiệu bất thường: Đi khám sớm nếu buồn nôn lạ, đau dạ dày dữ dội, nước tiểu màu trà đậm, tiêu chảy nặng hoặc phù chân nhiều.',
-          id: 'Tanda Bahaya: Segera periksa ke dokter jika mual muntah mendadak, nyeri lambung berat, urine gelap seperti teh, diare berat, atau kaki bengkak.',
-          th: 'อาการผิดปกติที่ต้องพบแพทย์: หากคลื่นไส้อาเจียนผิดปกติ ปวดท้องรุนแรง ปัสสาวะสีชาเข้ม ท้องเสียรุนแรง หรือขาบวมมากให้รีบพบแพทย์'
+          zh: '不舒服快看醫師：若莫名想吐、劇烈胃痛、尿變茶色或猛拉肚子請快就醫。',
+          en: 'See a doctor fast: If sudden nausea, bad stomach pain, dark urine, or severe diarrhea happens.',
+          vi: 'Đi khám sớm: Nếu buồn nôn lạ, đau dạ dày nhiều, nước tiểu màu trà hoặc tiêu chảy nặng.',
+          id: 'Segera ke dokter: Jika mual mendadak, nyeri perut berat, urine gelap, atau diare parah.',
+          th: 'รีบพบแพทย์: หากคลื่นไส้ผิดปกติ ปวดท้องมาก ปัสสาวะสีชาเข้ม หรือท้องเสียรุนแรง'
         }
       },
 
-      // 🟡 第二級：飲食與用藥注意
-      {
-        key: 'avoid_alcohol', tier: 'amber',
-        re: /喝酒|飲酒|酒精|啤酒|alcohol|rượu|bia|alkohol|แอลกอฮอล์|เบียร์/i,
-        i18n: {
-          zh: '避免飲酒：服藥期間請勿喝酒或含酒精飲料，以免加重頭暈嗜睡、低血糖或增加肝胃負擔。',
-          en: 'Avoid Alcohol: Do not drink alcohol while taking your medicines—it worsens drowsiness, dizziness, low blood sugar, or stomach/liver risk.',
-          vi: 'Tránh rượu bia: Không uống rượu bia khi đang dùng thuốc để tránh tăng chóng mặt, buồn ngủ, hạ đường huyết hoặc hại gan dạ dày.',
-          id: 'Hindari Alkohol: Jangan minum alkohol selama minum obat agar tidak memperparah pusing, kantuk, gula rendah, atau gangguan hati/lambung.',
-          th: 'งดดื่มแอลกอฮอล์: หลีกเลี่ยงเครื่องดื่มแอลกอฮอล์ทุกชนิด เพราะจะทำให้ง่วง เวียนหัว น้ำตาลต่ำ หรือเพิ่มภาระต่อตับและกระเพาะ'
-        }
-      },
+      // 🟡 第二級：吃藥與飲食提醒
       {
         key: 'avoid_grapefruit', tier: 'amber',
         re: /葡萄柚|柚子|grapefruit|pomelo|bưởi|jeruk bali|ส้มโอ|เกรปฟรุต/i,
         i18n: {
-          zh: '勿吃葡萄柚／柚子：服藥期間請避免食用葡萄柚、柚子或其果汁，以免影響代謝導致血壓過低或副作用增加。',
-          en: 'Avoid Grapefruit & Pomelo: Do not eat grapefruit/pomelo or drink their juice—they can alter drug levels and side effects.',
-          vi: 'Không ăn bưởi: Tránh ăn bưởi hoặc uống nước ép bưởi trong thời gian dùng thuốc vì dễ gây tụt huyết áp hoặc tăng tác dụng phụ.',
-          id: 'Hindari Grapefruit / Jeruk Bali: Jangan makan jeruk bali/grapefruit atau jusnya karena dapat memengaruhi kadar obat dan tekanan darah.',
-          th: 'งดส้มโอและเกรปฟรุต: ห้ามรับประทานส้มโอ เกรปฟรุต หรือน้ำคั้น เพราะอาจทำให้ความดันตกหรือเกิดผลข้างเคียงมากขึ้น'
+          zh: '別吃葡萄柚、柚子：會影響藥效，讓血壓太低或不舒服。',
+          en: 'No grapefruit or pomelo: Can make blood pressure drop too low.',
+          vi: 'Không ăn bưởi: Có thể gây tụt huyết áp hoặc tăng tác dụng phụ.',
+          id: 'Jangan makan jeruk bali/grapefruit: Bisa membuat tensi turun terlalu rendah.',
+          th: 'งดส้มโอและเกรปฟรุต: อาจทำให้ความดันตกหรือเกิดผลข้างเคียง'
+        }
+      },
+      {
+        key: 'avoid_alcohol', tier: 'amber',
+        re: /喝酒|飲酒|酒精|啤酒|alcohol|rượu|bia|alkohol|แอลกอฮอล์|เบียร์/i,
+        i18n: {
+          zh: '不要喝酒：喝酒會更頭暈想睡，也比較傷胃傷肝。',
+          en: 'No alcohol: Worsens dizziness/drowsiness and harms stomach or liver.',
+          vi: 'Không uống rượu bia: Làm tăng chóng mặt, buồn ngủ và hại gan dạ dày.',
+          id: 'Jangan minum alkohol: Memperparah pusing/kantuk dan mengganggu lambung/hati.',
+          th: 'งดแอลกอฮอล์: ทำให้ง่วงเวียนหัวมากขึ้น และระคายเคืองกระเพาะกับตับ'
         }
       },
       {
         key: 'avoid_caffeine', tier: 'amber',
         re: /咖啡因|茶或咖啡|濃茶|coffee|strong tea|cà phê|trà|kopi|teh|กาแฟ|ชาเข้ม/i,
         i18n: {
-          zh: '減少咖啡與濃茶：服藥請配溫白開水，下午以後避免喝含咖啡因的茶或咖啡，以免影響睡眠或胃部不適。',
-          en: 'Limit Coffee & Tea: Take medicines with plain warm water; avoid tea or coffee in the afternoon/evening.',
-          vi: 'Hạn chế trà & cà phê: Uống thuốc với nước ấm; tránh trà, cà phê vào buổi chiều tối để không mất ngủ.',
-          id: 'Batasi Kopi & Teh: Minum obat dengan air putih hangat; hindari teh atau kopi pada sore dan malam hari.',
-          th: 'ลดชาและกาแฟ: กินยาพร้อมน้ำอุ่นเปล่า หลีกเลี่ยงชาและกาแฟช่วงบ่ายถึงเย็นเพื่อไม่ให้รบกวนการนอน'
+          zh: '下午少喝茶、咖啡：吃藥配溫白開水，下午別喝以免睡不著。',
+          en: 'Limit tea & coffee: Take pills with warm water; avoid caffeine in the afternoon.',
+          vi: 'Hạn chế trà, cà phê: Uống thuốc với nước ấm; tránh uống buổi chiều tối.',
+          id: 'Kurangi teh & kopi: Minum obat dengan air hangat; hindari sore/malam.',
+          th: 'ลดชาและกาแฟ: กินยาพร้อมน้ำอุ่น หลีกเลี่ยงช่วงบ่ายถึงเย็น'
         }
       },
       {
         key: 'antibiotic_course', tier: 'amber',
         re: /完整吃完|天數.*吃完|療程.*吃完|finish.*course|finish all prescribed|uống hết liệu trình|uống đủ số ngày|habiskan.*resep|กินยาให้ครบ/i,
         i18n: {
-          zh: '抗生素請按療程吃完：即使症狀好轉也請把醫師開的天數完整吃完，避免細菌產生抗藥性。',
-          en: 'Finish Your Antibiotic: Complete all prescribed days even if you feel better to prevent infection returning.',
-          vi: 'Uống hết liệu trình kháng sinh: Dùng đủ số ngày bác sĩ kê dù triệu chứng đã đỡ để tránh nhờn thuốc.',
-          id: 'Habiskan Antibiotik: Minum sampai habis sesuai jumlah hari dari dokter meski gejala sudah membaik.',
-          th: 'กินยาปฏิชีวนะให้ครบ: รับประทานให้ครบตามวันที่แพทย์สั่งแม้จะรู้สึกดีขึ้นแล้ว เพื่อป้องกันเชื้อดื้อยา'
+          zh: '抗生素要吃完：感覺好了也要把天數吃完，病菌才會清乾淨。',
+          en: 'Finish antibiotics: Take all prescribed days even if you feel better.',
+          vi: 'Uống hết kháng sinh: Uống đủ ngày bác sĩ kê dù đã thấy đỡ.',
+          id: 'Habiskan antibiotik: Minum sampai habis sesuai resep meski sudah membaik.',
+          th: 'กินยาฆ่าเชื้อให้ครบ: กินให้หมดตามวันแพทย์สั่งแม้จะดีขึ้นแล้ว'
         }
       },
       {
         key: 'take_with_meal', tier: 'amber',
         re: /隨餐或飯後|飯後吃.*傷胃|胃脹或拉肚子|take with or right after meals|after meals to protect|uống.*sau bữa ăn|setelah makan|กินหลังอาหาร/i,
         i18n: {
-          zh: '飯後服藥護胃：降血糖／止痛／抗生素等較易刺激胃部，隨餐或飯後配溫開水服用可減少胃脹或腹瀉不適。',
-          en: 'Take With/After Meals: Taking stomach-sensitive medicines with or right after food reduces mild stomach upset or loose stools.',
-          vi: 'Uống sau ăn để đỡ hại dạ dày: Uống cùng hoặc ngay sau bữa ăn giúp giảm đầy bụng hoặc khó chịu dạ dày.',
-          id: 'Minum Setelah Makan: Minum saat atau segera setelah makan membantu mengurangi rasa kembung atau mual ringan.',
-          th: 'กินหลังอาหารช่วยลดระคายเคืองกระเพาะ: รับประทานพร้อมหรือหลังอาหารทันทีช่วยลดอาการท้องอืดหรือถ่ายเหลวเล็กน้อย'
+          zh: '飯後吃較不傷胃：隨餐或飯後配水吃，比較不會胃脹或拉肚子。',
+          en: 'Take with/after meals: Helps prevent mild stomach upset or loose stools.',
+          vi: 'Uống sau ăn: Giúp đỡ đầy bụng, khó chịu dạ dày hoặc đi lỏng.',
+          id: 'Minum setelah makan: Membantu mencegah kembung atau sakit perut ringan.',
+          th: 'กินหลังอาหาร: ช่วยลดอาการท้องอืดหรือถ่ายเหลวเล็กน้อย'
         }
       },
       {
         key: 'diet_salt_sugar', tier: 'amber',
         re: /少鹽|清淡|低鈉鹽|含糖飲料|少吃油炸|low-salt|sugary drinks|less salt|ăn nhạt|đồ uống ngọt|kurangi garam|minuman manis|ลดเค็ม|เครื่องดื่มรสหวาน/i,
         i18n: {
-          zh: '清淡飲食控糖少鹽：日常飲食少鹽、少含糖飲料與油炸物；避免使用含高鉀的「低鈉鹽」，生病吃不下飯時先詢問醫師。',
-          en: 'Heart & Sugar Friendly Diet: Limit salt, sugary drinks, and fried foods; avoid high-potassium salt substitutes. Ask your doctor if sick and unable to eat.',
-          vi: 'Ăn nhạt, ít đường ít dầu mỡ: Hạn chế muối, nước ngọt, đồ chiên rán; tránh muối ít natri giàu kali. Hỏi bác sĩ khi ốm không ăn được.',
-          id: 'Diet Rendah Garam & Gula: Kurangi makanan asin, minuman manis, dan gorengan; hindari garam rendah natrium tinggi kalium.',
-          th: 'ลดเค็ม ลดหวาน ลดมัน: หลีกเลี่ยงอาหารเค็ม เครื่องดื่มรสหวาน ของทอด และเกลือโซเดียมต่ำที่มีโพแทสเซียมสูง'
+          zh: '飲食少鹽少糖：少喝甜飲與油炸，別用「低鈉鹽」；生病吃不下先問醫師。',
+          en: 'Eat less salt & sugar: Limit sweet drinks/fried food; avoid low-sodium salt substitutes.',
+          vi: 'Ăn nhạt, ít đường: Giảm nước ngọt, đồ chiên; tránh muối ít natri (nhiều kali).',
+          id: 'Kurangi garam & gula: Batasi minuman manis/gorengan; hindari garam rendah natrium.',
+          th: 'ลดเค็มลดหวาน: เลี่ยงน้ำหวาน ของทอด และเกลือโซเดียมต่ำ'
         }
       },
       {
         key: 'mild_edema_side', tier: 'amber',
         re: /腳踝輕微水腫|臉部微熱|手腳微腫|ankle swelling|facial warmth|phù nhẹ cổ chân|bengkak ringan|ข้อเท้าบวมเล็กน้อย/i,
         i18n: {
-          zh: '留意輕微水腫：部分血壓或神經藥可能造成腳踝或手腳輕微水腫、臉部微熱，若水腫加重或喘請回診評估。',
-          en: 'Mild Swelling: Mild ankle/hand swelling or facial warmth can occur—tell your doctor if swelling worsens.',
-          vi: 'Theo dõi phù nhẹ: Có thể hơi phù cổ chân/tay hoặc nóng mặt; báo bác sĩ nếu sưng phù nhiều hơn.',
-          id: 'Pantau Bengkak Ringan: Bengkak ringan di pergelangan kaki atau wajah hangat bisa terjadi; lapor dokter bila memburuk.',
-          th: 'สังเกตอาการบวมเล็กน้อย: อาจมีข้อเท้าหรือมือเท้าบวมเล็กน้อย หน้าแดงร้อน หากบวมมากขึ้นให้แจ้งแพทย์'
+          zh: '留意輕微水腫：腳踝或手腳可能微腫、臉熱熱的，變嚴重再告訴醫師。',
+          en: 'Mild swelling: Slight ankle/hand swelling or warmth may happen; tell doctor if worse.',
+          vi: 'Phù nhẹ: Có thể hơi phù cổ chân hoặc nóng mặt; báo bác sĩ nếu sưng nhiều hơn.',
+          id: 'Bengkak ringan: Kaki/tangan mungkin sedikit bengkak; lapor dokter bila memburuk.',
+          th: 'อาการบวมเล็กน้อย: อาจมีข้อเท้าบวมหรือหน้าร้อนเล็กน้อย หากบวมมากให้แจ้งแพทย์'
         }
       },
 
-      // 🟢 第三級：日常保健與回診建議
+      // 🟢 第三級：日常保養與回診
       {
         key: 'bp_pulse_daily', tier: 'green',
         re: /每天.*量血壓|量血壓.*記錄|量脈搏|check blood pressure|measure blood pressure|check pulse|đo huyết áp|ukur tekanan darah|cek tensi|วัดความดัน/i,
         i18n: {
-          zh: '血壓日常記錄：每天固定時間（如早晚）量血壓並記錄，回診時帶給醫師參考。',
-          en: 'Daily Blood Pressure Log: Measure and record your blood pressure at the same time each day and bring it to appointments.',
-          vi: 'Theo dõi huyết áp hàng ngày: Đo và ghi chép huyết áp vào giờ cố định mỗi ngày, mang theo khi tái khám.',
-          id: 'Catat Tensi Harian: Ukur dan catat tekanan darah di jam yang sama setiap hari, lalu bawa saat kontrol.',
-          th: 'จดบันทึกความดันทุกวัน: วัดความดันเวลาเดิมทุกวันและจดบันทึกไว้ เพื่อนำไปให้แพทย์ดูวันนัด'
+          zh: '每天量血壓：固定時間量好記下來，回診帶給醫師看。',
+          en: 'Check blood pressure daily: Write it down and bring it to your doctor.',
+          vi: 'Đo huyết áp mỗi ngày: Ghi chép lại và mang cho bác sĩ xem khi tái khám.',
+          id: 'Cek tensi tiap hari: Catat hasilnya dan bawa saat kontrol dokter.',
+          th: 'วัดความดันทุกวัน: จดบันทึกไว้แล้วนำไปให้แพทย์ดูวันนัด'
         }
       },
       {
         key: 'bg_contrast_care', tier: 'green',
         re: /按時量血糖|顯影劑|check blood sugar|contrast scan|đo đường huyết|chụp cản quang|cek gula darah|kontras|ตรวจน้ำตาล|ฉีดสี/i,
         i18n: {
-          zh: '血糖追蹤與檢查提醒：按時監測血糖；若安排打顯影劑的電腦斷層等檢查，請先告訴醫師您正在服用血糖藥。',
-          en: 'Blood Sugar & Scan Reminder: Monitor blood sugar regularly; tell your doctor about your diabetes pill before any contrast dye scan.',
-          vi: 'Đo đường huyết & lưu ý chụp chiếu: Theo dõi đường huyết đều đặn; báo bác sĩ đang uống thuốc tiểu đường trước khi chụp cản quang.',
-          id: 'Cek Gula & Pemeriksaan: Pantau gula darah rutin; beri tahu dokter sebelum pemeriksaan dengan cairan kontras.',
-          th: 'ตรวจน้ำตาลและแจ้งก่อนฉีดสี: ตรวจระดับน้ำตาลสม่ำเสมอ และแจ้งแพทย์ว่ากินยาเบาหวานก่อนตรวจร่างกายที่ต้องฉีดสี'
+          zh: '量血糖、做檢查先講：按時量血糖；要打顯影劑做檢查先告訴醫師有吃血糖藥。',
+          en: 'Check blood sugar: Test regularly; tell doctor about diabetes pills before dye scans.',
+          vi: 'Đo đường huyết: Theo dõi đều; báo bác sĩ đang uống thuốc tiểu đường trước khi chụp cản quang.',
+          id: 'Cek gula darah: Pantau rutin; beri tahu dokter sebelum pemeriksaan kontras.',
+          th: 'ตรวจน้ำตาล: ตรวจสม่ำเสมอ และแจ้งแพทย์ก่อนตรวจร่างกายที่ต้องฉีดสี'
         }
       },
       {
         key: 'hydration_hygiene', tier: 'green',
-        re: /多喝白開水|多喝溫開水|私密處清潔|不要憋尿|drink plenty of water|private area clean|uống nhiều nước|giữ vùng kín|minum banyak air|ดื่มน้ำเปล่ามาก/i,
+        re: /多喝白開水|多喝溫開水|私密處|尿量變多|不要憋尿|drink plenty of water|more urination|private area|uống nhiều nước|đi tiểu nhiều|vùng kín|minum banyak air|sering buang air|ดื่มน้ำเปล่า|ปัสสาวะบ่อย|จุดซ่อนเร้น/i,
         i18n: {
-          zh: '多喝水與泌尿保養：白天適度多喝溫白開水、不憋尿，並保持私密處清潔乾燥，可預防泌尿道不適。',
-          en: 'Stay Hydrated & Urinary Care: Drink plenty of warm water during the daytime, do not hold urine, and keep private areas clean and dry.',
-          vi: 'Uống đủ nước & vệ sinh: Ban ngày uống nhiều nước ấm, không nhịn tiểu và giữ vùng kín sạch khô để ngừa viêm nhiễm.',
-          id: 'Cukup Minum & Kebersihan: Minum air hangat yang cukup di siang hari, jangan menahan kencing, dan jaga area intim tetap bersih kering.',
-          th: 'ดื่มน้ำและดูแลสุขอนามัย: ดื่มน้ำอุ่นให้เพียงพอตอนกลางวัน ไม่กลั้นปัสสาวะ และรักษาความสะอาดจุดซ่อนเร้นให้แห้งเสมอ'
+          zh: '白天多喝水不憋尿：排尿會變多，請保持私密處乾爽清潔，發癢要告訴醫師。',
+          en: 'Drink water & stay clean: You may pee more—drink water in daytime and keep private area dry.',
+          vi: 'Uống nhiều nước, không nhịn tiểu: Đi tiểu nhiều hơn, giữ vùng kín sạch khô.',
+          id: 'Banyak minum & jaga bersih: Sering buang air kecil; jaga area intim bersih kering.',
+          th: 'ดื่มน้ำมาก ๆ ไม่กลั้นปัสสาวะ: จะปัสสาวะบ่อยขึ้น รักษาความสะอาดจุดซ่อนเร้นให้แห้ง'
         }
       },
       {
         key: 'exercise_lab', tier: 'green',
         re: /規律散步|定期抽血|walk regularly|routine.*blood|đi bộ đều đặn|xét nghiệm.*định kỳ|jalan santai|tes darah rutin|เดินออกกำลังกาย|ตรวจเลือด.*ตามนัด/i,
         i18n: {
-          zh: '規律活動與定期追蹤：維持溫和散步習慣，並依醫師安排定期抽血追蹤血脂、肝腎功能與電解質。',
-          en: 'Gentle Exercise & Lab Checks: Keep a gentle walking routine and attend scheduled blood tests for kidney, liver, or cholesterol.',
-          vi: 'Vận động nhẹ & xét nghiệm định kỳ: Duy trì đi bộ nhẹ nhàng và làm xét nghiệm máu kiểm tra thận, gan, mỡ máu đúng hẹn.',
-          id: 'Olahraga Ringan & Cek Lab: Rutin berjalan santai dan lakukan tes darah berkala sesuai jadwal dokter.',
-          th: 'ออกกำลังกายเบา ๆ และตรวจเลือดตามนัด: เดินออกกำลังกายสม่ำเสมอ และตรวจเลือดดูค่าตับ ไต หรือไขมันตามนัดแพทย์'
+          zh: '規律散步與抽血：平常多散步活動，並按時回醫院抽血檢查。',
+          en: 'Walk & lab checks: Take gentle walks and do your routine blood tests.',
+          vi: 'Đi bộ & xét nghiệm: Đi bộ nhẹ nhàng và làm xét nghiệm máu đúng hẹn.',
+          id: 'Jalan santai & cek darah: Rutin jalan santai dan cek darah sesuai jadwal.',
+          th: 'เดินออกกำลังกายและตรวจเลือด: เดินเบา ๆ สม่ำเสมอ และตรวจเลือดตามนัด'
         }
       }
     ];
@@ -6014,19 +6115,19 @@ ${JSON.stringify(items)}
       for (const g of s1) if (s2.has(g)) inter++;
       const jaccard = inter / (s1.size + s2.size - inter);
       const contain = inter / Math.min(s1.size, s2.size);
-      return jaccard >= 0.48 || contain >= 0.72;
+      return jaccard >= 0.45 || contain >= 0.70;
     }
 
     function rxClassifyTierFallback(text, catIdx) {
       if (catIdx === 1 || catIdx === 5) return 'red';
       if (catIdx === 0) return 'amber';
       if (catIdx === 2 || catIdx === 3) return 'green';
-      if (/立刻就醫|立即停藥|馬上就醫|致命|低血糖|出血|黑便|跌倒|昏迷|呼吸困難|切勿.*停藥|urgent|immediately|fatal|bleed|fall/i.test(text)) return 'red';
-      if (/量血壓|量血糖|量脈搏|多喝水|多喝溫|散步|回診|定期|抽血|運動|清潔乾燥|記錄|follow-up|monitor|walk|water|record/i.test(text)) return 'green';
+      if (/立刻就醫|立即停藥|馬上就醫|致命|低血糖|出血|黑便|跌倒|昏迷|呼吸困難|切勿.*停藥|別自己停|urgent|immediately|fatal|bleed|fall/i.test(text)) return 'red';
+      if (/量血壓|量血糖|量脈搏|多喝水|多喝溫|散步|回診|定期|抽血|運動|清潔乾燥|乾爽|記錄|follow-up|monitor|walk|water|record/i.test(text)) return 'green';
       return 'amber';
     }
 
-    // 從目前用藥與安全檢核建立「去重整合＋三級分色」的最終注意事項陣列
+    // 從目前用藥與安全檢核建立「超白話短句＋去重整合＋三級分色」的最終注意事項陣列
     function rxGenerateMergedFinalNotes(lang = 'zh') {
       const meds = medList.filter(m => m.checked);
       if (!meds.length) return [];
@@ -6068,7 +6169,7 @@ ${JSON.stringify(items)}
         }
       };
 
-      // 1. 掃描每種勾選藥品的注意事項（優先使用該語言的個別編輯欄，否則由白話模板萃取）
+      // 1. 掃描每種勾選藥品的注意事項
       meds.forEach(m => {
         const n = rxNoteState(m, lang);
         const srcTxt = (n.text && n.text.trim()) ? n.text.trim() : rxBuildCleanDraftText(m, lang);
@@ -6082,12 +6183,39 @@ ${JSON.stringify(items)}
           let catIdx = cats.indexOf(key);
           if (catIdx < 0) catIdx = RX_CATS.zh.indexOf(key);
           const body = (catIdx < 0 ? cleaned : cleaned.slice(pos + 1)).trim();
-          // 依分號切開複合長句，讓「生活＋飲食」或「量血壓＋防跌」能精準分流到對應分級並各自合併！
           body.split(/[；;]+/).forEach(part => processClause(part, catIdx < 0 ? 4 : catIdx));
         });
       });
 
-      // 2. 根據 Beers / 腎功能 / 重複用藥檢核，自動於 🟢 綠色區塊補上溫和的「回診討論建議」
+      // 2. 進階精簡合併：若同時出現「別喝酒」＋「少喝茶咖啡」，自動合成 1 句更俐落的飲品提醒！
+      const alcIdx = result.findIndex(x => x.themeKey === 'avoid_alcohol');
+      const cafIdx = result.findIndex(x => x.themeKey === 'avoid_caffeine');
+      if (alcIdx !== -1 && cafIdx !== -1) {
+        result[alcIdx].text = ({
+          zh: '別喝酒、下午少喝茶咖啡：吃藥請配溫白開水，喝酒會更頭暈傷胃。',
+          en: 'No alcohol; less tea/coffee: Take pills with warm water; avoid alcohol and afternoon caffeine.',
+          vi: 'Không rượu bia, ít trà cà phê: Uống thuốc với nước ấm; tránh rượu và trà/cà phê buổi chiều.',
+          id: 'Tanpa alkohol, kurangi teh/kopi: Minum obat dengan air hangat; hindari alkohol & kopi sore.',
+          th: 'งดเหล้า ลดชาและกาแฟ: กินยาพร้อมน้ำอุ่น หลีกเลี่ยงแอลกอฮอล์และชา/กาแฟช่วงบ่าย'
+        })[lang];
+        result.splice(cafIdx, 1);
+      }
+
+      // 3. 進階精簡合併：若同時出現「量血壓」＋「量血糖／顯影劑」，合併成 1 句日常量測提醒！
+      const bpIdx = result.findIndex(x => x.themeKey === 'bp_pulse_daily');
+      const bgIdx = result.findIndex(x => x.themeKey === 'bg_contrast_care');
+      if (bpIdx !== -1 && bgIdx !== -1) {
+        result[bpIdx].text = ({
+          zh: '每天量血壓、血糖：記下來回診給醫師看；若要打顯影劑做檢查先講有吃血糖藥。',
+          en: 'Log blood pressure & sugar: Bring notes to your doctor; mention diabetes pills before dye scans.',
+          vi: 'Đo huyết áp & đường huyết: Ghi lại mang đi khám; báo bác sĩ trước khi chụp cản quang.',
+          id: 'Catat tensi & gula darah: Bawa saat kontrol; beri tahu dokter sebelum tes kontras.',
+          th: 'วัดความดันและน้ำตาล: จดไปให้แพทย์ดู และแจ้งแพทย์ก่อนตรวจฉีดสี'
+        })[lang];
+        result.splice(bgIdx, 1);
+      }
+
+      // 4. 依安全檢核於 🟢 綠色區塊補上白話回診提醒
       const egfrVal = parseFloat(document.getElementById('p_egfr')?.value);
       const hasRenalAlert = latestBeersAlerts.some(a => /腎功能/.test(a.tableTag)) || (!isNaN(egfrVal) && egfrVal < 60);
       const hasDupAlert = latestBeersAlerts.some(a => a.level === 'dup');
@@ -6095,41 +6223,40 @@ ${JSON.stringify(items)}
 
       if (hasDupAlert) {
         addItem('red', ({
-          zh: '用藥整合提醒：藥袋中疑似含有重複成分藥品，請將全部藥袋帶給醫師或藥師確認，避免重複吞服過量。',
-          en: 'Duplicate Medicine Check: Bring all your medicine bags to your doctor/pharmacist to confirm no duplicate ingredients are taken.',
-          vi: 'Kiểm tra trùng thuốc: Mang toàn bộ túi thuốc cho bác sĩ/dược sĩ kiểm tra để tránh uống trùng hoạt chất.',
-          id: 'Cek Obat Ganda: Bawa semua kantong obat ke dokter/apoteker untuk memastikan tidak ada bahan aktif yang ganda.',
-          th: 'ตรวจสอบยาซ้ำซ้อน: นำซองยาทั้งหมดไปให้แพทย์หรือเภสัชกรตรวจเพื่อป้องกันการกินยาซ้ำตัวยาเดียวกัน'
+          zh: '核對重複藥品：藥袋裡有相同成分的藥，請全部帶給醫師或藥師確認別吃重了。',
+          en: 'Check duplicate pills: Bring all medicine bags to your doctor/pharmacist to avoid doubling up.',
+          vi: 'Kiểm tra thuốc trùng: Mang tất cả túi thuốc cho bác sĩ/dược sĩ xem tránh uống trùng.',
+          id: 'Cek obat ganda: Bawa semua obat ke dokter/apoteker agar tidak diminum ganda.',
+          th: 'ตรวจยาซ้ำซ้อน: นำซองยาทั้งหมดให้แพทย์หรือเภสัชกรเช็กเพื่อไม่ให้กินซ้ำ'
         })[lang], 'dup_check');
       }
 
       if (hasRenalAlert) {
         addItem('green', ({
-          zh: '腎功能與劑量回診：下次看診請帶著本單張，與醫師確認目前用藥種類與劑量是否適合您的腎臟功能。',
-          en: 'Kidney & Dose Follow-up: Bring this sheet to your next visit to review whether your doses fit your kidney function.',
-          vi: 'Tái khám kiểm tra thận & liều: Mang tờ hướng dẫn này khi tái khám để bác sĩ kiểm tra liều phù hợp với chức năng thận.',
-          id: 'Kontrol Ginjal & Dosis: Bawa lembar ini saat kontrol berikutnya untuk memastikan dosis sesuai fungsi ginjal Anda.',
-          th: 'ติดตามค่าไตและขนาดยา: นำเอกสารนี้ไปพบแพทย์ครั้งหน้าเพื่อทบทวนขนาดยาให้เหมาะกับการทำงานของไต'
+          zh: '回診確認腎臟劑量：下次看診帶這張單子，請醫師確認顆數是否適合您的腎臟。',
+          en: 'Kidney check at next visit: Bring this guide so your doctor can check kidney-safe doses.',
+          vi: 'Kiểm tra liều theo thận: Mang tờ này khi tái khám để bác sĩ xem liều phù hợp cho thận.',
+          id: 'Cek dosis ginjal: Bawa lembar ini saat kontrol untuk memastikan dosis aman bagi ginjal.',
+          th: 'เช็กขนาดยาตามค่าไต: นำใบนี้ไปให้แพทย์ดูวันนัดเพื่อปรับยาให้เหมาะกับไต'
         })[lang], 'renal_followup');
       } else if (hasBeersAvoid) {
         addItem('green', ({
-          zh: '回診用藥討論：請於下次看診時帶著本單張與所有藥袋，與醫師討論目前用藥反應與是否需要精簡調整。',
-          en: 'Medication Review at Next Visit: Bring this guide and all medication bags to discuss any side effects or adjustments with your doctor.',
-          vi: 'Trao đổi khi tái khám: Mang tờ hướng dẫn và các túi thuốc khi tái khám để trao đổi với bác sĩ về hiệu quả và tác dụng phụ.',
-          id: 'Diskusi Saat Kontrol: Bawa panduan dan semua obat saat kontrol untuk membahas efek samping atau penyesuaian dosis.',
-          th: 'ทบทวนยาวันนัด: นำคู่มือนี้และถุงยาทั้งหมดไปปรึกษาแพทย์ในวันนัดเพื่อประเมินอาการหรือปรับยา'
+          zh: '回診帶這張單子：下次看診把所有藥袋一起帶來，和醫師討論吃得習不習慣。',
+          en: 'Bring this to your next visit: Show all your medicines and tell your doctor how you feel.',
+          vi: 'Mang tờ này khi tái khám: Đem theo tất cả thuốc để trao đổi với bác sĩ.',
+          id: 'Bawa saat kontrol: Tunjukkan semua obat dan ceritakan keluhan Anda pada dokter.',
+          th: 'นำใบนี้ไปพบแพทย์: พกถุงยาทั้งหมดไปด้วยเพื่อปรึกษาอาการกับแพทย์'
         })[lang], 'beers_followup');
       } else {
         addItem('green', ({
-          zh: '安心回診提醒：請持續按時服藥並記錄身體狀況，定期回診追蹤，切勿自行停藥或購買成藥併用。',
-          en: 'Routine Follow-up: Keep taking your medicines on time, track how you feel, and attend regular follow-up visits.',
-          vi: 'Tái khám định kỳ: Tiếp tục uống thuốc đúng giờ, theo dõi sức khỏe và tái khám đúng hẹn.',
-          id: 'Kontrol Rutin: Terus minum obat teratur, catat kondisi tubuh Anda, dan datang kontrol sesuai jadwal.',
-          th: 'ติดตามการรักษาตามนัด: รับประทานยาตรงเวลาอย่างต่อเนื่อง สังเกตอาการ และมาพบแพทย์ตามนัดทุกครั้ง'
+          zh: '按時回診：每天照時間吃藥、定期回診，別自己去買成藥混著吃。',
+          en: 'Regular checkups: Take pills on time and ask before adding over-the-counter medicines.',
+          vi: 'Tái khám đều đặn: Uống thuốc đúng giờ và không tự mua thuốc ngoài uống chung.',
+          id: 'Kontrol teratur: Minum obat tepat waktu dan tanya dulu sebelum minum obat bebas.',
+          th: 'พบแพทย์ตามนัด: กินยาตรงเวลาและไม่ซื้อยามาใช้ร่วมเองโดยไม่ปรึกษา'
         })[lang], 'routine_followup');
       }
 
-      // 依嚴重度排序：🔴 red -> 🟡 amber -> 🟢 green
       const order = { red: 0, amber: 1, green: 2 };
       result.sort((a, b) => order[a.tier] - order[b.tier]);
       return result;
@@ -6268,7 +6395,7 @@ ${JSON.stringify(items)}
           text: `You are a clinical pharmacist translating elderly medication precautions into ${langName}.
 Rules:
 1. Keep exact clinical meaning, safety warnings, and conditions—do NOT omit urgent actions or invent dosing.
-2. Merge any overlapping items only if truly identical; keep wording short, warm, and easy to read.
+2. Use ultra-plain, warm, everyday spoken language for elderly patients (max 1 short sentence per item, <= 22 words / 28 Chinese chars, with a short bold-ready label before a colon).
 3. Return strict JSON array: [{"id": "...", "tier": "red|amber|green", "text": "..."}].
 
 Items:
@@ -6458,7 +6585,14 @@ ${sourceText.slice(0, 4000)}`
         const heading = (RX_TIER_META[tier] && RX_TIER_META[tier][lang]) || RX_TIER_META[tier].zh;
         cards.push(`<div class="rx-tier-card tier-${tier}" data-block="tip">
           <div class="rx-tier-title">${rxTierIconSvg(tier)}<span>${esc(heading)}</span></div>
-          <ul class="rx-tier-list">${items.map(it => `<li>${esc(it.text.trim())}</li>`).join('')}</ul>
+          <ul class="rx-tier-list">${items.map(it => {
+          const t = it.text.trim();
+          const idx = t.search(/[:：]/);
+          if (idx > 0 && idx <= 18) {
+            return `<li><strong class="rx-kw">${esc(t.slice(0, idx + 1))}</strong>${esc(t.slice(idx + 1).trim())}</li>`;
+          }
+          return `<li>${esc(t)}</li>`;
+        }).join('')}</ul>
         </div>`);
       }
       return cards;
@@ -6589,10 +6723,12 @@ ${sourceText.slice(0, 4000)}`
       }
 
       if (smartFit && currentFontSize !== 'xl') {
-        const tiers = currentFontSize === 'lg' ? ['rx-tight-1'] : ['rx-tight-1', 'rx-tight-2'];
+        // 放大 A+：僅縮減外距留白（rx-pad-tight），絕不縮小字體！放不下就自然分到第 2 頁
+        // 標準／精簡：先試不縮字的 rx-pad-tight，還差一點點才輕度微調 rx-tight-1
+        const tiers = currentFontSize === 'lg' ? ['rx-pad-tight'] : ['rx-pad-tight', 'rx-tight-1'];
         for (const tier of tiers) {
           if (renderFullSingle(tier) <= A4_SAFE_H) {
-            updatePreviewBadges(1, '✨ 已智慧微調為 1 頁', meds);
+            updatePreviewBadges(1, tier === 'rx-pad-tight' ? '✨ 已微調間距為 1 頁' : '✨ 已智慧微調為 1 頁', meds);
             fitMobilePreviewScale();
             return;
           }

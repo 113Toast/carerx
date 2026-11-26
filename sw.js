@@ -1,4 +1,4 @@
-const CACHE_NAME = 'elder-med-pwa-v42';
+const CACHE_NAME = 'elder-med-pwa-v43';
 const APP_SHELL = [
   './',
   './index.html',
