@@ -1,0 +1,21 @@
+{
+  "name": "安心用藥｜高齡用藥安全與衛教",
+  "short_name": "安心用藥",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#15304D",
+  "background_color": "#E8ECF1",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
