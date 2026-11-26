@@ -1521,10 +1521,18 @@
 /* V4: official appearance and concise grouped handout */
 .rx-choices{grid-template-columns:minmax(80px,1.2fr) repeat(2,minmax(0,1fr)) minmax(0,1.5fr)}
 .rx-thumb{font-size:12px;color:#4d5a57;display:flex;flex-direction:column;align-items:center;gap:3px}.rx-pill-icon{width:48px;height:30px;flex:none;vertical-align:middle}.rx-line .rx-pill-icon{width:44px;height:28px}.rx-line .rx-med-name{font-size:.72em;color:#626b68;font-weight:400;margin-left:6px;overflow-wrap:anywhere}.rx-line .rx-dose{font-weight:800;font-size:1.12em}.rx-line .rx-purpose{font-weight:500}.rx-line .rx-extra{display:block;font-size:.8em}.rx-line .rx-med-text{min-width:0}.rx-custom{margin-top:5px}.rx-tip ul{margin:0;padding-left:0;list-style:none}.rx-tip li+li{margin-top:3px}.rx-tip.rx-cat-4,.rx-tip.rx-cat-5{display:block}.rx-tip.rx-cat-4 .rx-cat,.rx-tip.rx-cat-5 .rx-cat{display:inline;padding:0 5px 0 0}.rx-tip .rx-source{font-size:.78em;font-weight:400;color:#53605c}.rx-page.rx-small .rx-pill-icon{width:34px;height:22px}.rx-appearance-note{font-size:11px;color:#596460}.rx-page .rx-part h3{margin-bottom:5px}@media(max-width:700px){.rx-choices{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.rx-page .rx-tip ul{list-style:disc;padding-left:1.1em}.rx-page .rx-tip li{margin:0 0 3px}.rx-page .rx-tip.rx-cat-4,.rx-page .rx-tip.rx-cat-5{display:flex;align-items:baseline;gap:6px;border-bottom:1px dotted #e3dfd5;padding:4px 0;font-weight:600}.rx-page .rx-tip.rx-cat-4 .rx-cat,.rx-page .rx-tip.rx-cat-5 .rx-cat{flex:none}.rx-central-row select{font-size:12px;max-width:92px;background:#e4efec;color:#1f4a44}.rx-central-source details{white-space:pre-wrap}
+
+.rx-category-icon{height:1.1em;width:1.1em;vertical-align:-.16em;margin-right:2px}.rx-page .rx-tip .rx-cat{white-space:normal}.rx-page .rx-tip.rx-cat-4,.rx-page .rx-tip.rx-cat-5{overflow-wrap:anywhere}.rx-page .rx-tip.rx-cat-4 .rx-cat{font-weight:700}
 </style>
 
 <style>
 .rx-edit{padding:12px;background:#fdfcf9;border-bottom:1px solid var(--primary-border)}.rx-edit .grid-2{gap:8px}.rx-edit .rx-slot{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:5px;align-items:end;margin:6px 0}.rx-edit label{font-size:12px}.rx-note{width:100%;min-height:45px}.rx-edit details{margin-top:8px}.rx-status{font-size:12px;color:#a5502a;margin:6px 0}.rx-page.a4-page{height:289mm;min-height:289mm;padding:6mm 7mm;display:grid;grid-template-rows:auto minmax(0,2fr) minmax(0,1fr) auto;gap:7px;box-sizing:border-box}.rx-page .sheet-header{margin:0}.rx-part{min-height:0;overflow:visible}.rx-part h3{font-size:19px;color:var(--primary-dark);margin:0 0 6px}.rx-part.rx-warnings{border-top:2px solid var(--primary);padding-top:7px}.rx-time{display:grid;grid-template-columns:112px 1fr;gap:10px;border-bottom:1px dashed var(--primary-border);padding:5px 0;align-items:start}.rx-time-label{background:var(--primary);color:white;border-radius:7px;padding:6px;text-align:center;font-weight:700;font-size:15px}.rx-line{display:flex;align-items:center;gap:7px;padding:2px 0;font-size:16px;line-height:1.35;overflow-wrap:anywhere}.rx-line img{width:42px;height:33px;object-fit:contain;flex:none}.rx-line b{font-weight:700}.rx-tip{font-size:15px;line-height:1.4;margin:3px 0;overflow-wrap:anywhere}.rx-tip strong{color:#a5502a}.rx-page .sheet-footer{margin:0;font-size:11px}.rx-page.rx-small .rx-line,.rx-page.rx-small .rx-tip{font-size:13px}.rx-page.rx-small .rx-time{padding:3px 0}.rx-page.rx-small .rx-line img{width:34px;height:25px}.rx-page.rx-large .rx-line,.rx-page.rx-large .rx-tip{font-size:18px}.rx-print-block{display:none}.rx-page.rx-invalid{outline:2px solid #a5502a}.rx-page.rx-invalid .rx-part{overflow:auto}.rx-page.rx-invalid .rx-part::after{content:none}@media print{@page{size:A4 portrait;margin:3.5mm}.rx-page.a4-page{width:100%!important;min-width:0!important;height:289mm!important;min-height:289mm!important;padding:4mm 5mm!important;break-after:auto!important;page-break-after:auto!important}.rx-page.rx-invalid{display:none!important}body.rx-blocked .rx-print-block{display:block!important;font-size:18px}body.rx-blocked #a4Preview{display:none!important}.preview-scale-wrap{transform:none!important}.rx-page .rx-part{overflow:visible!important}}
+</style>
+<style>
+[hidden]{display:none!important}.rx-page.a4-page{display:flex;flex-direction:column;gap:7px;overflow:visible}.rx-page>.sheet-header,.rx-page>.rx-part,.rx-page>.sheet-footer{flex:0 0 auto}.rx-page>.sheet-footer{margin-top:auto}.rx-page.rx-invalid .rx-part{overflow:visible}.rx-page.rx-invalid{height:auto;min-height:289mm}.rx-central-row{display:grid;grid-template-columns:19px minmax(65px,auto) minmax(0,1fr);gap:8px;align-items:start;margin:9px 0}.rx-central-row input[type=checkbox]{width:18px;height:18px;accent-color:#2f6b63;margin-top:10px}.rx-central-row textarea{font-size:14px;min-height:42px;resize:vertical;background:white;border:1.5px solid #e3dfd5}.rx-central-row.off textarea{color:#7d8784;text-decoration:line-through}.rx-central-row.off .rx-cat{background:#d2ccbf}.rx-central-row .rx-cat{margin-top:5px;white-space:normal}.rx-central-row.warning textarea{color:#a5502a}.rx-central-row.warning .rx-cat{color:#a5502a;background:#f6e7de}.rx-central-row.urgent textarea{color:#b3261e}.rx-central-source{font-size:11px;color:#65716c;margin-top:3px}.rx-central-title{font-size:14px;color:#1f4a44;margin-top:15px}.rx-central-source b{color:#a5502a}.rx-page .rx-part{min-width:0}.rx-page .rx-tip{break-inside:avoid}.rx-page.rx-invalid .sheet-footer{margin-top:8px}
+@media print{.rx-page.a4-page{padding:6mm 3.5mm!important;display:flex;flex-direction:column;gap:7px}.rx-page.rx-invalid{display:none!important}}
 </style>
 </head>
 <body>
@@ -1717,26 +1725,36 @@
           <div style="margin-top:8px;font-size:12px;color:var(--primary-dark)">新版：每種藥請先確認處方及選定語言的精簡注意事項；原始仿單不直接列印。A4 超出容量時會阻擋列印。</div><div id="aiRewriteStatus" style="font-size:12px; color:var(--primary); margin-top:6px;"></div>
         </div>
 
+        <div class="section-box" id="rxCentralPanel">
+          <h3>注意事項與列印內容 <span style="font-size:12px;color:var(--text-muted)">勾選才會印出</span></h3>
+          <label class="check-pill"><input type="checkbox" checked disabled> 用藥時間表（固定顯示）</label>
+          <p class="rx-status">依目前用藥整理候選提醒；可勾選、修改或合併。建議內容須由藥師核對，不代表已完成臨床審查。</p>
+          <div class="grounding-actions"><button type="button" class="btn btn-outline" onclick="rx53DraftAll()">帶入尚未填寫的參考提醒</button><button type="button" class="btn btn-outline" onclick="rx53Merge()">重新分類／去除重複提醒</button></div><p class="rx-status">一般輕微副作用可預設不勾選，重要警語仍保留。請核對原始提醒後決定是否列印；同類但不同意思的句子不會強制串成一段。</p>
+          <div id="rxCentralRows"></div>
+          <div id="rxCentralMissing" class="rx-status"></div>
+          <button type="button" class="btn btn-primary btn-block" onclick="rx53Review()">確認本次注意事項及列印選擇</button>
+          <div id="rxCentralStatus" class="rx-status" role="status"></div>
+        </div>
         <div class="section-box">
-          <h3>要印給長輩的欄位與版面</h3>
+          <h3>版面設定</h3>
           <div class="section-sub-label">主要區塊與排版</div>
           <div class="check-grid">
-            <label class="check-pill"><input type="checkbox" id="opt_schedule" checked disabled onchange="renderPreview()" />用藥時間表（固定顯示）</label>
-            <label class="check-pill"><input type="checkbox" id="opt_specialAlert" checked onchange="renderPreview()" />特別警示（防跌/低血糖/出血）</label>
-            <label class="check-pill"><input type="checkbox" id="opt_followUp" onchange="renderPreview()" />附上白話「回診討論提醒」</label>
-            <label class="check-pill"><input type="checkbox" id="opt_smartFit" checked onchange="renderPreview()" />✨ 智慧防留白（優先 1 頁）</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_schedule" checked disabled onchange="renderPreview()" />用藥時間表（固定顯示）</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_specialAlert" checked onchange="renderPreview()" />特別警示（防跌/低血糖/出血）</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_followUp" onchange="renderPreview()" />附上白話「回診討論提醒」</label>
+            <label class="check-pill"><input type="checkbox" id="opt_smartFit" checked onchange="renderPreview()" />智慧緊縮（單頁優先）</label>
           </div>
-          <div class="section-sub-label">藥品卡片顯示明細</div>
+          <div class="section-sub-label">藥品外觀</div>
           <div class="check-grid">
             <label class="check-pill"><input type="checkbox" id="opt_appearance" checked onchange="renderPreview()" />藥品外觀／圖片</label>
-            <label class="check-pill"><input type="checkbox" id="opt_usage" checked onchange="renderPreview()" />怎麼吃（用法）</label>
-            <label class="check-pill"><input type="checkbox" id="opt_purpose" checked onchange="renderPreview()" />作用（治什麼）</label>
-            <label class="check-pill"><input type="checkbox" id="opt_sideEffects" checked onchange="renderPreview()" />常見副作用</label>
-            <label class="check-pill"><input type="checkbox" id="opt_lifestyle" checked onchange="renderPreview()" />生活建議</label>
-            <label class="check-pill"><input type="checkbox" id="opt_diet" checked onchange="renderPreview()" />飲食建議</label>
-            <label class="check-pill"><input type="checkbox" id="opt_specialPop" checked onchange="renderPreview()" />特殊族群（孕/童/肝腎）</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_usage" checked onchange="renderPreview()" />怎麼吃（用法）</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_purpose" checked onchange="renderPreview()" />作用（治什麼）</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_sideEffects" checked onchange="renderPreview()" />常見副作用</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_lifestyle" checked onchange="renderPreview()" />生活建議</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_diet" checked onchange="renderPreview()" />飲食建議</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_specialPop" checked onchange="renderPreview()" />特殊族群（孕/童/肝腎）</label>
             <label class="check-pill" hidden><input type="checkbox" id="opt_interactions" onchange="renderPreview()" />藥物交互作用</label>
-            <label class="check-pill"><input type="checkbox" id="opt_storage" checked onchange="renderPreview()" />儲存方式</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_storage" checked onchange="renderPreview()" />儲存方式</label>
           </div>
           <div style="font-size:11.5px; color:var(--text-muted); margin-top:8px;">
             💡 字體大小（精簡／標準／放大／特大）可直接從右側預覽區上方工具列即時切換。
@@ -3788,6 +3806,7 @@
     function clearAllMeds() {
       if (medList.length && !confirm('確定要清空目前所有用藥清單嗎？')) return;
       medList = [];
+      Object.keys(rx53States).forEach(k=>delete rx53States[k]);
       runBeersAndRender();
     }
 
@@ -4677,6 +4696,7 @@ ${JSON.stringify(items)}
 
     // 載入高齡多重用藥示範案例（一次展示 Beers Table 2, 3, 4, 5, 6 檢核與 2 頁內雙欄卡片排版）
     function loadDemoPolypharmacy() {
+      Object.keys(rx53States).forEach(k=>delete rx53States[k]);
       document.getElementById('p_age').value = '78';
       document.getElementById('p_sex').value = 'F';
       document.getElementById('p_egfr').value = '42';
@@ -4881,6 +4901,80 @@ ${JSON.stringify(items)}
     function rxNoteConfirm(id,lang,v){let n=rxNoteState(rxFind(id),lang);n.ok=v;renderPreview();}
     function rxDraft(id){let m=rxFind(id),lang=currentPrintLang||'zh',v=getLocalizedMedView(m,lang);let text=[[4,v.specialText],[4,v.sideEffects],[4,v.specialPop],[0,v.diet],[4,v.lifestyle]].filter(x=>x[1]).map(([k,t])=>String(t).split(/\n+/).filter(Boolean).map(line=>RX_CATS[lang][k]+'：'+line).join('\n')).join('\n');if(lang!=='zh'&&/[\u3400-\u9fff]/.test(text)){alert('部分內容尚無翻譯，請使用 AI 精簡／翻譯或手動輸入。');return;}rxNote(id,lang,text);renderMedEditorList();}
     async function rxTranslate(id,btn){const m=rxFind(id),lang=currentPrintLang||'zh';const raw=String(m.rawLeafletText||'').trim();const note=rxNoteState(m,'zh');if(!raw&&!note.ok){alert('請先提供官方仿單原文，或確認中文注意事項。');return;}btn.disabled=true;try{const res=await callGeminiAPI([{text:'Write brief, patient-friendly actionable medication precautions in '+({zh:'Traditional Chinese',en:'English',vi:'Vietnamese',id:'Indonesian',th:'Thai'}[lang])+'. Use only the supplied source. Use short everyday sentences, one actionable point per line. Merge overlapping reminders without losing conditions, timing, or urgent action. Do not append drug names routinely; identify the relevant medicine only if necessary to avoid ambiguity. Prefix each line with the relevant category in the target language from '+JSON.stringify(RX_CATS[lang])+'. Do not list routine drug interactions separately; retain critical actionable avoidance and urgent warnings and their conditions. Never invent dosing or change advice. Do not omit important safety information to meet a length target. Return JSON {"text":"..."}. Source: '+(note.ok?note.text:raw)}]);if(res&&typeof res.text==='string'&&rxFind(id)){rxNote(id,lang,res.text);renderMedEditorList();}}catch(e){alert(e.message);}finally{btn.disabled=false;}}
+    // V5.3 centralized, per-language reminder selection; no external calls.
+    const rx53Extras={zh:['運動','睡眠','用藥','量測'],en:['Exercise','Sleep','Medication','Monitoring'],vi:['Vận động','Giấc ngủ','Dùng thuốc','Theo dõi'],id:['Olahraga','Tidur','Obat','Pemantauan'],th:['ออกกำลังกาย','การนอน','การใช้ยา','การติดตาม']};
+    Object.keys(rx53Extras).forEach(l=>RX_CATS[l].push(...rx53Extras[l]));
+    const rx53States={};
+    function rx53State(lang){return rx53States[lang]||(rx53States[lang]={signature:'',rows:[],reviewed:false,missing:[]});}
+    function rx53Norm(t){return t.normalize('NFKC').replace(/\s+/g,' ').replace(/[。.!！]+$/,'').trim();}
+    // V5.4: atomic reminders; scoped, conservative local transformations.
+    function rx54Atoms(text,cat,lang){
+      const t=String(text||'').trim(); if(!t)return [];
+      if(lang!=='zh')return [[cat,t]];
+      const norm=x=>x.replace(/[。！!]+$/,'').trim();
+      const fall='起床先坐一下，再慢慢站起來。', night='半夜起床記得開燈。', sleepy='可能想睡、頭暈或走路不穩。';
+      const rules=new Map([
+        ['易頭暈或想睡！起床先在床邊坐一下再慢慢站起來，半夜開夜燈防跌倒',[[4,sleepy],[1,fall],[1,night]]],
+        ['白天嗜睡、頭暈、腳步不穩、記憶力變差',[[4,sleepy],[4,'白天可能記憶力變差。']]],
+        ['睡前躺好再吃；半夜起床上廁所一定要開小夜燈、坐床邊一下再站起防跌倒',[[7,'睡前躺好再吃安眠藥。'],[1,fall],[1,night]]],
+        ['容易頭暈、嗜睡、手腳微腫或走路不穩',[[4,sleepy],[4,'手腳可能微腫。']]],
+        ['起身動作放慢防跌倒；切勿突然停藥，需由醫師慢慢減量',[[1,fall],[8,'需要停藥時，請由醫師逐步減量。']]],
+        ['每天固定時間量血壓；從床上或椅子站起來時動作放慢',[[9,'每天固定時間量血壓。'],[1,fall]]],
+        ['腳踝輕微水腫、臉部微熱或頭暈',[[4,'腳踝可能微腫、臉部微熱。'],[4,'可能頭暈。']]],
+        ['吃清淡少鹽；絕對不要吃葡萄柚或柚子，以免血壓降太低',[[0,'飲食清淡、少鹽。'],[0,'依藥師指示避開葡萄柚、柚子，以免血壓過低。']]],
+        ['剛吃時可能輕微胃脹或拉肚子（飯後吃可改善）',[[4,'剛開始吃可能胃脹或拉肚子，飯後吃可改善。']]],
+        ['隨餐或飯後吃最不傷胃；避免大量喝酒',[[8,'依處方隨餐或飯後服用，以減少胃不舒服。'],[0,'避免大量飲酒。']]],
+        ['按時量血糖；若要做打顯影劑的檢查，請先告訴醫師有吃這顆藥',[[9,'按時量血糖。'],[3,'做顯影劑檢查前，請出示用藥清單。']]],
+        ['少喝含糖飲料；生病吃不下飯時先詢問醫師是否暫停',[[0,'少喝含糖飲料。'],[8,'生病吃不下飯時，先問醫師哪些藥要暫停。']]],
+        ['尿量變多、私密處可能搔癢發炎；若莫名噁心想吐請就醫',[[4,'可能尿量變多、私密處癢或發炎。'],[5,'若莫名噁心想吐，請就醫。']]],
+        ['白天多喝白開水，保持私密處清潔乾燥，不要憋尿',[[8,'依醫師指示補充水分；保持私密處乾爽，不憋尿。']]],
+        ['絕對不要喝酒、不要喝含咖啡因的茶或咖啡（特別是下午以後）',[[0,'服用安眠藥時不要喝酒。'],[7,'避免含咖啡因的茶或咖啡，尤其下午以後。']]],
+        ['避免喝酒，以免頭暈嗜睡加重',[[0,'服用容易想睡的藥時，避免喝酒。']]],
+        ['從床上或椅子站起來時動作放慢',[[1,fall]]],['起身動作放慢防跌倒',[[1,fall]]],['起床先在床邊坐一下再慢慢站起來，半夜開夜燈防跌倒',[[1,fall],[1,night]]],
+        ['半夜起床上廁所一定要開小夜燈、坐床邊一下再站起防跌倒',[[1,fall],[1,night]]]
+      ]);
+      if(rules.has(norm(t)))return rules.get(norm(t));
+      // Do not rewrite unfamiliar medical clauses or split conditional warnings.
+      if(/立即就醫|馬上就醫|請就醫|緊急就醫/.test(t))return [[5,t]];
+      if(/防跌|避免跌倒|慢慢站起|起身.{0,8}放慢|開小夜燈/.test(t)&&!/[；;]|副作用|停藥|就醫/.test(t))return [[1,t]];
+      if(/^(每天|每日|按時|定期).{0,12}量(血壓|血糖)[。.]?$/.test(t))return [[9,t]];
+      return [[cat,t]];
+    }
+    function rx54CompactRows(rows,lang){
+      const map=new Map();for(const r of rows){const key=JSON.stringify([r.cat,rx53Norm(r.text)]);if(!map.has(key))map.set(key,{...r,names:[...r.names],originals:[...(r.originals||[])]});else{const x=map.get(key);x.names=[...new Set([...x.names,...r.names])];x.originals=[...new Set([...x.originals,...(r.originals||[])])];}}
+      const out=[...map.values()];
+      if(lang==='zh'){
+        // Identical action, separate from symptoms. Merge only exact canonical sentences.
+        const a=out.find(x=>x.cat===1&&x.text==='起床先坐一下，再慢慢站起來。'), b=out.find(x=>x.cat===1&&x.text==='半夜起床記得開燈。');
+        if(a&&b){a.text='起床先坐一下，再慢慢站起來；半夜記得開燈。';a.names=[...new Set([...a.names,...b.names])];a.originals=[...new Set([...a.originals,...b.originals])];out.splice(out.indexOf(b),1);}
+        const alcohol=out.filter(x=>x.cat===0&&['避免大量飲酒。','服用安眠藥時不要喝酒。','服用容易想睡的藥時，避免喝酒。'].includes(x.text));
+        if(alcohol.length>1){const a=alcohol[0], hasExcess=alcohol.some(x=>x.text==='避免大量飲酒。');a.text='需限酒的藥避免大量飲酒；服用安眠藥或容易想睡的藥時不要喝酒。';if(!hasExcess)a.text='服用安眠藥或容易想睡的藥時不要喝酒。';a.names=[...new Set(alcohol.flatMap(x=>x.names))];a.originals=[...new Set(alcohol.flatMap(x=>x.originals||[]))];alcohol.slice(1).forEach(x=>out.splice(out.indexOf(x),1));}
+        const mergeExact=(cat,phrases,combined,required=phrases)=>{const hits=out.filter(x=>x.cat===cat&&phrases.includes(x.text));if(!required.every(t=>hits.some(x=>x.text===t))||hits.length<2)return;const a=hits[0];a.text=combined;a.names=[...new Set(hits.flatMap(x=>x.names))];a.originals=[...new Set(hits.flatMap(x=>x.originals||[]))];hits.slice(1).forEach(x=>out.splice(out.indexOf(x),1));};
+        mergeExact(4,['可能想睡、頭暈或走路不穩。','可能頭暈。','白天可能記憶力變差。'],'可能想睡、頭暈或走路不穩；安眠鎮靜藥也可能影響記憶。',['可能想睡、頭暈或走路不穩。','白天可能記憶力變差。']);
+        mergeExact(4,['可能想睡、頭暈或走路不穩。','可能頭暈。'],'可能想睡、頭暈或走路不穩。');
+        mergeExact(9,['每天固定時間量血壓。','按時量血糖。'],'每天固定時間量血壓，按時量血糖。');
+        mergeExact(4,['腳踝可能微腫、臉部微熱。','手腳可能微腫。'],'腳踝或手腳可能微腫、臉部微熱。');
+      }return out;
+    }
+    function rx54Optional(r,lang){return lang==='zh'&&r.cat===4&&['腳踝可能微腫、臉部微熱。','手腳可能微腫。','腳踝或手腳可能微腫、臉部微熱。','剛開始吃可能胃脹或拉肚子，飯後吃可改善。'].includes(r.text);}
+    function rx53Build(lang,meds){
+      const st=rx53State(lang),signature=JSON.stringify(meds.map(m=>[m.id,m.nameZh,m.nameEn,rxNoteState(m,lang).text]));
+      const context=JSON.stringify([['p_age','p_sex','p_egfr','p_crcl'].map(id=>document.getElementById(id)?.value),[...document.querySelectorAll('#comorbidityChecks input:checked')].map(e=>e.value),meds.map(m=>rxState(m))]);if(st.context!==context){st.context=context;st.reviewed=false;}if(st.signature===signature)return st;
+      const cats=RX_CATS[lang], rows=[];
+      for(const m of meds){const n=rxNoteState(m,lang);for(const line of n.text.split(/\n+/).filter(x=>x.trim())){const pos=line.search(/[:：]/),k=pos>=0?cats.indexOf(line.slice(0,pos).trim()):-1,cat=k<0?4:k,body=(k<0?line:line.slice(pos+1)).trim();for(const [c,t] of rx54Atoms(body,cat,lang))rows.push({cat:c,text:t,selected:true,names:[m.nameZh||m.nameEn||m.generic||m.id],originals:[body]});}}
+      st.rows=rx54CompactRows(rows,lang).map((r,i)=>({...r,key:String(i),selected:!rx54Optional(r,lang),optional:rx54Optional(r,lang)}));st.signature=signature;st.reviewed=false;st.missing=meds.filter(m=>!rxNoteState(m,lang).text.trim()).map(m=>m.nameZh||m.nameEn||m.generic);return st;
+    }
+    function rx54CategoryIcon(k){const paths={0:'<path d="M3 11h18c-1 6-4 9-9 9s-8-3-9-9ZM13 3l-3 6m7-5-4 5"/>',1:'<circle cx="11" cy="4" r="2"/><path d="m11 7-3 5 4 3-2 6m-1-9 5 1 2 6M11 8l5 3 3 0"/>',2:'<path d="M9 3c-5-2-7 5-6 10 1 4 4 5 6 2 1-2 0-4 3-5m3-7c5-2 7 5 6 10-1 4-4 5-6 2-1-2 0-4-3-5"/>',3:'<rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 5V3h6v2m-3 4v8m-4-4h8"/>',6:'<circle cx="13" cy="4" r="2"/><path d="m12 7-5 5 5 2 3 6m-2-10 5 2m-6 2-6 6"/>',7:'<path d="M20 16A9 9 0 0 1 9 4a9 9 0 1 0 11 12Z"/>',8:'<rect x="4" y="6" width="16" height="14" rx="2"/><path d="M4 12h16m-8 0v8m-3-14V4h6v2"/>',9:'<path d="M12 20 4 12a5 5 0 0 1 8-6 5 5 0 0 1 8 6Z M4 12h5l2-4 3 8 2-4h4"/>'};return `<svg aria-hidden="true" class="rx-category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[k]||''}</svg>`;}
+    function rx53Panel(st,lang){const host=document.getElementById('rxCentralRows');if(!host)return;const cats=RX_CATS[lang];const order=[0,1,6,7,2,8,9,3,4,5];const rows=order.map(k=>{const entries=st.rows.map((r,i)=>({r,i})).filter(x=>x.r.cat===k);if(!entries.length)return '';return (k===4||k===5?`<h4 class="rx-central-title">${escapeHtml(cats[k])} · 紅字</h4>`:'')+entries.map(({r,i})=>`<div class="rx-central-row ${r.selected?'':'off'} ${k===4||k===5?'warning':''} ${k===5?'urgent':''}"><input aria-label="列印此提醒" type="checkbox" ${r.selected?'checked':''} onchange="rx53Change(${i},'selected',this.checked,this)"><select aria-label="提醒分類" onchange="rx53Change(${i},'cat',Number(this.value),this)">${cats.map((c,j)=>`<option value="${j}" ${j===k?'selected':''}>${escapeHtml(c)}</option>`).join('')}</select><div><textarea aria-label="編輯提醒" rows="2" oninput="rx53Change(${i},'text',this.value,this)">${escapeHtml(r.text)}</textarea><div class="rx-central-source"><b>${r.optional?'一般副作用・預設不勾選':'建議・須核對'}</b> · ${escapeHtml(r.names.join('、'))}（僅藥師端）</div><details class="rx-central-source"><summary>核對原始提醒</summary><div style="white-space:pre-wrap">${escapeHtml((r.originals||[]).join("\n"))}</div></details></div></div>`).join('');}).join('');
+      if(host.dataset.signature!==st.signature||!host.contains(document.activeElement)||document.activeElement.tagName!=='TEXTAREA')host.innerHTML=rows||'<p class="rx-status">尚無提醒，請先加入藥品並帶入參考提醒或填寫各藥品注意事項。</p>';
+      host.dataset.signature=st.signature;
+      document.getElementById('rxCentralMissing').textContent=st.missing.length?'尚無提醒文字（須逐一確認是否確實無需提醒）：'+st.missing.join('、'):'';
+      document.getElementById('rxCentralStatus').textContent=st.reviewed?'已確認本次列印選擇':'尚未確認本次列印選擇';
+    }
+    function rx53Change(i,k,v,el){const st=rx53State(currentPrintLang||'zh');if(!st.rows[i])return;st.rows[i][k]=v;st.reviewed=false;el.closest('.rx-central-row').classList.toggle('off',!st.rows[i].selected);renderPreview();}
+    function rx53DraftAll(){const lang=currentPrintLang||'zh',meds=medList.filter(m=>m.checked);let skipped=[];for(const m of meds){const n=rxNoteState(m,lang);if(n.text.trim()||n.ok)continue;const v=getLocalizedMedView(m,lang);const fields=[[4,v.specialText],[4,v.sideEffects],[4,v.specialPop],[0,v.diet],[8,v.lifestyle]];const text=fields.filter(x=>x[1]).map(([k,t])=>String(t).split(/\n+/).filter(Boolean).map(line=>RX_CATS[lang][k]+'：'+line).join('\n')).join('\n');if(lang!=='zh'&&/[\u3400-\u9fff]/.test(text)){skipped.push(m.nameZh||m.nameEn);continue;}n.text=text;n.ok=false;}renderMedEditorList();renderPreview();if(skipped.length)alert('以下藥品仍須翻譯或手動填寫：'+skipped.join('、'));}
+    function rx53Merge(){const lang=currentPrintLang||'zh',st=rx53State(lang);const selected=st.rows.filter(r=>r.selected).flatMap(r=>rx54Atoms(r.text,r.cat,lang).map(([cat,text])=>({...r,cat,text,originals:r.originals||[r.text]})));st.rows=[...rx54CompactRows(selected,lang),...st.rows.filter(r=>!r.selected)];st.reviewed=false;renderPreview();}
+    function rx53Review(){const lang=currentPrintLang||'zh',meds=medList.filter(m=>m.checked),st=rx53Build(lang,meds);if(!meds.length)return;if(st.rows.some(r=>r.selected&&(!r.text.trim()||(lang!=='zh'&&/[\u3400-\u9fff]/.test(r.text))))){alert('請填寫完整提醒，並確認使用選定的列印語言。');return;}if(!confirm('請確認已逐一核對每種藥的官方仿單、病人狀況與所有提醒（包含未勾選及無提醒的藥品），且未省略必要警語。確認後才可列印。'))return;meds.forEach(m=>rxNoteState(m,lang).ok=true);st.reviewed=true;renderMedEditorList();renderPreview();}
     function renderPreview(){const sheet=document.getElementById('a4Preview');if(!sheet)return;const lang=currentPrintLang||'zh',T=RX_TEXT[lang],L=LANG_LABELS[lang],meds=medList.filter(m=>m.checked);let issues=[];let groups=Array.from({length:9},()=>[]);let tips=[];const esc=escapeHtml;const units={tablet:T[12],mg:T[13],ml:T[14],application:T[15],other:''};const routes={zh:['口服','外用','其他'],en:['Oral','Topical','Other'],vi:['Uống','Dùng ngoài','Khác'],id:['Oral','Obat luar','Lainnya'],th:['รับประทาน','ใช้ภายนอก','อื่น ๆ']}[lang];
       const buckets=Array.from({length:6},()=>new Map());
       meds.forEach((m,i)=>{
@@ -4893,24 +4987,14 @@ ${JSON.stringify(items)}
           const visible=document.getElementById('opt_appearance').checked,icon=visible?rxAppearance(m,lang).icon:'',look=visible?esc(app.label)+' ':'',detail=['4','5','6'].includes(r.freq)?esc(freq):'';
           groups[Number(a.slot)].push(`<div class="rx-line">${icon}<span class="rx-med-text"><b class="rx-dose">${look}${esc(a.qty)} ${esc(rxUnit(r,a,units))}</b>${purpose?'：<span class="rx-purpose">'+esc(purpose)+'</span>':''}<span class="rx-med-name">${title}</span>${detail||a.extra?'<span class="rx-extra">'+[detail,esc(a.extra)].filter(Boolean).join(' · ')+'</span>':''}</span></div>`);
         });
-        if(!n.ok)issues.push(`${i+1}. ${lang} 注意事項待核對`);
-        if(n.ok&&n.text.trim()){
-          if(lang!=='zh'&&/[\u3400-\u9fff]/.test(n.text))issues.push(`${i+1}. 注意事項仍含中文`);
-          n.text.split(/\n+/).filter(x=>x.trim()).forEach(line=>{const cats=RX_CATS[lang],pos=line.search(/[:：]/),key=pos>=0?line.slice(0,pos).trim():'',cat=cats.indexOf(key),k=cat<0?4:cat,body=(cat<0?line:line.slice(pos+1)).trim();if(!body)return;const norm=body.normalize('NFKC').replace(/\s+/g,' ').replace(/[。.!！]+$/,'').trim();const bucket=buckets[k];if(!bucket.has(norm))bucket.set(norm,{body,names:new Set()});bucket.get(norm).names.add(name||m.generic||String(i+1));});
-        }
       });
-      if(lang==='zh'){
-        const b=buckets[4], entries=[...b.entries()];
-        const a=entries.find(([k,x])=>/^易頭暈或想睡[!！]?[ ]*起床先在床邊坐一下再慢慢站起來[，,]半夜開夜燈防跌倒[。.]?$/.test(x.body));
-        const z=entries.find(([k,x])=>/^睡前躺好再吃[；;][ ]*半夜起床上廁所一定要開小夜燈[、，,]坐床邊一下再站起防跌倒[。.]?$/.test(x.body));
-        const y=entries.find(([k,x])=>/^白天嗜睡[、，,]頭暈[、，,]腳步不穩[、，,]記憶力變差[。.]?$/.test(x.body));
-        const same=(x,y)=>x&&y&&[...x[1].names].sort().join('|')===[...y[1].names].sort().join('|');
-        if(same(a,z)&&same(a,y)){[a,z,y].forEach(x=>b.delete(x[0]));b.set('sleep-fall-merged',{body:'睡前躺好再吃；可能想睡、頭暈、走路不穩或記憶力變差。起床先坐一下再慢慢站起，半夜開小夜燈防跌。',names:a[1].names});}
-      }
-      buckets.forEach((bucket,k)=>{if(!bucket.size)return;const cat=esc(RX_CATS[lang][k]);const entries=[...bucket.values()];if(k>=4){entries.forEach(x=>tips.push(`<div class="rx-tip rx-cat-${k}"><span class="rx-cat">⚠ ${cat}：</span>${esc(x.body)}</div>`));}else{const symbols=['♨','♧','◇','✚'];tips.push(`<div class="rx-tip rx-cat-${k}"><span class="rx-cat">${symbols[k]} ${cat}</span><ul>${entries.map(x=>`<li>${esc(x.body)}</li>`).join('')}</ul></div>`);}});
-
+      const st=rx53Build(lang,meds);rx53Panel(st,lang);
+      if(meds.length&&!st.reviewed)issues.push('請確認本次注意事項與列印選擇');
+      if(meds.some(m=>!rxNoteState(m,lang).ok))issues.push('注意事項來源待核對');
+      const order=[0,1,6,7,2,8,9,3,4,5];
+      order.forEach(k=>{const entries=st.rows.filter(r=>r.cat===k&&r.selected&&r.text.trim());if(!entries.length)return;const cat=esc(RX_CATS[lang][k]);if(lang!=='zh'&&entries.some(r=>/[\u3400-\u9fff]/.test(r.text)))issues.push('注意事項仍含中文');if(k===4||k===5){entries.forEach(r=>tips.push(`<div class="rx-tip rx-cat-${k}"><span class="rx-cat">⚠ ${cat}：</span>${esc(r.text)}</div>`));}else{tips.push(`<div class="rx-tip rx-cat-${k}"><span class="rx-cat">${rx54CategoryIcon(k)} ${cat}</span><ul>${entries.map(r=>`<li>${esc(r.text)}</li>`).join('')}</ul></div>`);}});
       const schedule=groups.map((g,i)=>g.length?`<div class="rx-time"><div class="rx-time-label">${T[i+2]}</div><div>${g.join('')}</div></div>`:'').join('');sheet.classList.remove('size-compact','size-lg','size-xl');const size=currentFontSize==='compact'?'rx-small':currentFontSize==='lg'||currentFontSize==='xl'?'rx-large':'';const org=document.getElementById('f_orgName').value.trim();const rawTitle=document.getElementById('f_sheetTitle').value.trim();const title=lang==='zh'?(rawTitle||L.defaultTitle):L.defaultTitle;sheet.innerHTML=`<section class="a4-page rx-page ${size}"><header class="sheet-header"><div class="sheet-header-left"><h2>${esc(title)}</h2><p class="meta-line">${esc(L.medCount(meds.length))} · ${new Date().toLocaleDateString()}</p></div><div class="sheet-org">${esc(lang==='zh'?org:org==='藥劑部高齡用藥照護'?L.defaultOrg:org)}</div></header><div class="rx-part"><h3>${T[0]}</h3>${schedule||`<p>${T[17]}</p>`}</div><div class="rx-part rx-warnings"><h3>${T[1]}</h3>${tips.join('')||`<p>${T[18]}</p>`}</div><footer class="sheet-footer">${T[19]}</footer></section>`;updatePreviewBadges(1,"",meds);sheet.dataset.rxIssues=issues.join('；');sheet.dataset.rxCount=meds.length;rxMeasure();fitMobilePreviewScale();}
-    function rxMeasure(){const sheet=document.getElementById('a4Preview'),page=sheet?.querySelector('.rx-page');if(!page)return;let overflow=[...page.querySelectorAll('.rx-part')].some(x=>x.clientHeight>0&&x.scrollHeight>x.clientHeight+1);if(overflow&&!page.classList.contains('rx-small')&&currentFontSize==='normal'){page.classList.add('rx-small');overflow=[...page.querySelectorAll('.rx-part')].some(x=>x.clientHeight>0&&x.scrollHeight>x.clientHeight+1);}const why=[sheet.dataset.rxIssues,overflow?'A4 容量不足，請精簡已核對內容（勿刪重要警語）':'',Number(sheet.dataset.rxCount)?'':'尚未加入藥品'].filter(Boolean).join('；');document.body.classList.toggle('rx-blocked',!!why);page.classList.toggle('rx-invalid',!!why);const badge=document.getElementById('pageEstimateBadge');badge.className='page-badge '+(why?'warn':'ok');badge.textContent=why||'共 1 頁 A4 · 2/3 時間表 + 1/3 注意事項';}
+    function rxMeasure(){const sheet=document.getElementById('a4Preview'),page=sheet?.querySelector('.rx-page');if(!page)return;page.classList.remove('rx-invalid');const overflowNow=()=>{const cs=getComputedStyle(page),children=[...page.children];const required=children.reduce((sum,x)=>{const c=getComputedStyle(x);return sum+x.offsetHeight+(x.classList.contains('sheet-footer')?0:(parseFloat(c.marginTop)||0))+(parseFloat(c.marginBottom)||0);},0)+(parseFloat(cs.rowGap)||0)*Math.max(0,children.length-1);const available=page.clientHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0);return available>0&&(required>available+1||children.some(x=>x.scrollWidth>x.clientWidth+1));};let overflow=overflowNow();if(overflow&&!page.classList.contains('rx-small')&&currentFontSize==='normal'&&document.getElementById('opt_smartFit').checked){page.classList.add('rx-small');overflow=overflowNow();}const why=[sheet.dataset.rxIssues,overflow?'A4 容量不足，請精簡已核對內容（勿刪重要警語）':'',Number(sheet.dataset.rxCount)?'':'尚未加入藥品'].filter(Boolean).join('；');document.body.classList.toggle('rx-blocked',!!why);page.classList.toggle('rx-invalid',!!why);const badge=document.getElementById('pageEstimateBadge');badge.className='page-badge '+(why?'warn':'ok');badge.textContent=why||'共 1 頁 A4 · 依內容自動分配版面';}
     function rxPrint(){rxMeasure();if(document.body.classList.contains('rx-blocked')){alert(document.getElementById('pageEstimateBadge').textContent);return;}window.print();}
     window.addEventListener('beforeprint',rxMeasure);window.addEventListener('resize',rxMeasure);document.fonts?.ready.then(rxMeasure);
     // Refresh per-language editor when switching languages.
