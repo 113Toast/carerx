@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>高齡多重用藥檢核與衛教單張系統（2023 Beers Criteria）</title>
-  <meta name="theme-color" content="#15304D" />
+  <title>長者用藥小卡｜CareRx</title>
+  <meta name="theme-color" content="#1f4a44" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -1441,6 +1441,80 @@
     }
     .a4-sheet { box-sizing: border-box; }
     @media print { #previewScaleWrap { transform: none !important; } }
+
+/* Reference UI theme: visual changes only */
+:root {
+  --bg: #f4f2ec;
+  --card: #fdfcf9;
+  --field: #ffffff;
+  --seg: #ece8de;
+  --hover: #f3f0e8;
+  --ink: #1f2e2b;
+  --ink-2: #4d5a57;
+  --muted: #7d8784;
+  --line: #e3dfd5;
+  --line-2: #d2ccbf;
+  --teal: #2f6b63;
+  --teal-hover: #1f4a44;
+  --heading: #1f4a44;
+  --teal-l: #e4efec;
+  --teal-ink: #1f4a44;
+  --rust: #a5502a;
+  --rust-l: #f6e7de;
+  --on-accent: #ffffff;
+  --ok: #3d7f5a;      --ok-bg: #e3f0e8;
+  --caution: #a06d0c; --caution-bg: #f7efd9;
+  --adjust: #b9531a;  --adjust-bg: #fae5d8;
+  --avoid: #b3261e;   --avoid-bg: #f9dedb;
+  --unk: #7d8784;     --unk-bg: #eceae4;
+  --shadow: rgba(40, 50, 45, .08);
+  --radius: 14px;
+  --font: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+
+ --primary: #2f6b63; --primary-dark: #1f4a44; --primary-light: #e4efec; --primary-border: #cfd8d5; --primary-soft: #e4efec; --text-main: #1f2e2b; --text-muted: #4d5a57; --bg-app: #f4f2ec; --surface: #fdfcf9; --surface-2: #f4f2ec; --line: #e3dfd5; --line-strong: #d2ccbf; --ring: 0 0 0 3px #e4efec; --shadow-sm: 0 1px 2px rgba(40,50,45,.08); --shadow-md: 0 6px 18px rgba(40,50,45,.08); color-scheme: light;
+}
+@media screen {
+ body {background:var(--bg); font-family:var(--font);}
+ .editor-panel {width: max(440px,36vw); min-width:440px; background:var(--bg);}
+ .editor-header {background:var(--bg); color:var(--heading); padding:22px 20px 12px; box-shadow:none; gap:12px;}
+ .editor-header h1 {font-family:var(--font); font-size:30px; font-weight:900; letter-spacing:.04em; line-height:1.25;}
+ .brand-eyebrow {color:var(--rust); font-size:13px; font-weight:700; letter-spacing:.12em;}
+ .header-actions {flex-wrap:wrap; flex-shrink:1;}
+ .db-status {background:var(--teal-l); color:var(--teal-ink); border:0;}
+ .btn-help-header {color:var(--ink-2); background:transparent; border:1.5px solid var(--line-2); padding:6px 11px;}
+ .btn-help-header:hover {background:var(--teal-l); color:var(--heading);}
+ .tabs {background:var(--bg); border:0; box-shadow:none; padding:4px 16px 10px; flex-wrap:wrap; gap:5px;}
+ .tab-btn,.tab-btn.tab-compact {border:0; border-radius:999px; padding:8px 10px; font-size:13px; color:var(--ink-2); flex:0 1 auto;}
+ .tab-btn.active {background:var(--teal); color:white; box-shadow:none;}
+ .editor-body {padding:4px 20px 22px;}
+ .section-box {background:var(--card); border:0; border-top:5px solid var(--teal); border-radius:14px; padding:18px 20px 20px; margin-bottom:16px; box-shadow:0 1px 2px var(--shadow),0 6px 18px var(--shadow);}
+ .section-box h3 {font-family:var(--font); font-size:19px; color:var(--heading); line-height:1.4;}
+ .step-num {color:var(--rust); font-size:22px; font-weight:900; margin-right:9px;}
+ .editor-body label {font-size:13px; color:var(--ink-2);}
+ .editor-body input[type=text],.editor-body input[type=number],.editor-body input[type=password],.editor-body textarea,.editor-body select {font:inherit; font-size:15px; padding:9px 11px; background:var(--field); border:1.5px solid var(--line); border-radius:10px; color:var(--ink);}
+ .editor-body .grid-4 {grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;}
+ .btn {font-family:var(--font); font-size:14px; border-radius:999px; padding:8px 15px; box-shadow:none;}
+ .btn-sm {font-size:12px; padding:6px 12px;}
+ .btn-outline {background:transparent; border:1.5px solid var(--line-2); color:var(--ink-2);}
+ .comorb-details {background:transparent; border:1.5px dashed var(--line-2); border-radius:12px; padding:11px 13px;}
+ .comorb-details summary {font-size:14px;}
+ .search-results,.med-editor-card,.grounding-box,.leaflet-sections-box,.rx-inline-panel {border-radius:12px;}
+ .med-editor-head {background:var(--card); padding:11px 12px;}
+ .med-editor-title {font-family:var(--font); font-size:15px;}
+ .search-item {font-size:14px; padding:10px;}
+ .check-pill,.lang-btn,.filter-chip {font-size:13px; padding:5px 10px;}
+ .font-size-group {background:var(--seg); border-color:var(--line);}
+ .preview-panel {background:var(--bg); min-width:0;}
+ .preview-toolbar {background:var(--bg); border:0; box-shadow:none; padding:20px 16px 10px;}
+ .preview-scroll {background:var(--bg); padding:14px;}
+ .split-resizer {background:var(--bg); border-color:transparent;}
+ .split-resizer::after {background:var(--line-2);}
+ .a4-page {box-shadow:0 4px 24px var(--shadow);}
+ .modal-header {background:var(--teal-l); color:var(--heading);}
+ .modal-header h2 {font-family:var(--font);}
+ @media(max-width:960px) {.editor-panel{min-width:0!important;} .editor-header{padding:16px;} .editor-header h1{font-size:26px;} .editor-body{padding:4px 12px 20px;} .section-box{padding:15px;} .preview-toolbar{padding:12px;} }
+}
+
 </style>
 </head>
 <body>
@@ -1454,7 +1528,7 @@
   <!-- 左側藥師工作區 -->
   <aside class="editor-panel" id="editorPanel">
     <div class="editor-header">
-      <h1>💊 高齡多重用藥檢核與衛教系統</h1>
+      <div><div class="brand-eyebrow">社區藥局 · 長者用藥評估</div><h1>長者用藥小卡</h1></div>
       <div class="header-actions"><a class="btn-help-header" href="./lookup.html" target="_blank" rel="noopener">仿單全文查詢</a>
         <span id="dbStatus" class="db-status">載入資料庫...</span>
         <button type="button" class="btn-help-header" onclick="openHelpModal()">❓ 說明</button>
@@ -1484,7 +1558,7 @@
         <!-- 1. 病人基本與腎功能資料 -->
         <div class="section-box">
           <h3>
-            <span>病人評估資料</span>
+            <span><span class="step-num">01</span>病人資料</span>
             <button type="button" class="btn btn-outline btn-sm" onclick="loadDemoPolypharmacy()">📋 載入高齡範例</button>
           </h3>
           <div class="grid-4">
@@ -1532,7 +1606,7 @@
         <!-- 2. 新增藥品（搜尋 ＋ 內嵌處方箋拍照 ＋ 手動新增） -->
         <div class="section-box">
           <h3>
-            <span>加入藥品</span>
+            <span><span class="step-num">02</span>使用藥物</span>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button type="button" id="btnToggleRx" class="btn btn-outline btn-sm" onclick="toggleRxPanel()">📷 拍照辨識處方箋</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="addCustomMed()">＋ 手動新增</button>
@@ -1609,7 +1683,7 @@
       <div id="tab-design" class="tab-content">
         <div class="section-box">
           <h3>
-            <span>單張標題與語言</span>
+            <span><span class="step-num">03</span>列印內容</span>
             <button type="button" id="btnAiRewriteAll" class="btn btn-primary btn-sm" onclick="aiRewriteAllForElderly()" title="僅針對已附官方仿單原文的藥品進行白話改寫，杜絕 AI 幻覺">🤖 AI 依仿單轉白話</button>
           </h3>
           <div class="grid-2" style="margin-bottom:8px;">
