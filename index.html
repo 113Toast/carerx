@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>高齡多重用藥檢核與衛教單張系統（2023 Beers Criteria）</title>
-  <meta name="theme-color" content="#15304D" />
+  <title>長者用藥小卡｜CareRx</title>
+  <meta name="theme-color" content="#1f4a44" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -1441,6 +1441,277 @@
     }
     .a4-sheet { box-sizing: border-box; }
     @media print { #previewScaleWrap { transform: none !important; } }
+
+/* Reference UI theme: visual changes only */
+:root {
+  --bg: #f4f2ec;
+  --card: #fdfcf9;
+  --field: #ffffff;
+  --seg: #ece8de;
+  --hover: #f3f0e8;
+  --ink: #1f2e2b;
+  --ink-2: #4d5a57;
+  --muted: #7d8784;
+  --line: #e3dfd5;
+  --line-2: #d2ccbf;
+  --teal: #2f6b63;
+  --teal-hover: #1f4a44;
+  --heading: #1f4a44;
+  --teal-l: #e4efec;
+  --teal-ink: #1f4a44;
+  --rust: #a5502a;
+  --rust-l: #f6e7de;
+  --on-accent: #ffffff;
+  --ok: #3d7f5a;      --ok-bg: #e3f0e8;
+  --caution: #a06d0c; --caution-bg: #f7efd9;
+  --adjust: #b9531a;  --adjust-bg: #fae5d8;
+  --avoid: #b3261e;   --avoid-bg: #f9dedb;
+  --unk: #7d8784;     --unk-bg: #eceae4;
+  --shadow: rgba(40, 50, 45, .08);
+  --radius: 14px;
+  --font: "Noto Sans TC", "Noto Sans Thai", "PingFang TC", "Microsoft JhengHei", "Segoe UI", Tahoma, sans-serif;
+
+ --primary: #2f6b63; --primary-dark: #1f4a44; --primary-light: #e4efec; --primary-border: #cfd8d5; --primary-soft: #e4efec; --text-main: #1f2e2b; --text-muted: #4d5a57; --bg-app: #f4f2ec; --surface: #fdfcf9; --surface-2: #f4f2ec; --line: #e3dfd5; --line-strong: #d2ccbf; --ring: 0 0 0 3px #e4efec; --shadow-sm: 0 1px 2px rgba(40,50,45,.08); --shadow-md: 0 6px 18px rgba(40,50,45,.08); color-scheme: light;
+}
+@media screen {
+ body {background:var(--bg); font-family:var(--font);}
+ .editor-panel {width: max(440px,36vw); min-width:440px; background:var(--bg);}
+ .editor-header {background:var(--bg); color:var(--heading); padding:22px 20px 12px; box-shadow:none; gap:12px;}
+ .editor-header h1 {font-family:var(--font); font-size:30px; font-weight:900; letter-spacing:.04em; line-height:1.25;}
+ .brand-eyebrow {color:var(--rust); font-size:13px; font-weight:700; letter-spacing:.12em;}
+ .header-actions {flex-wrap:wrap; flex-shrink:1;}
+ .db-status {background:var(--teal-l); color:var(--teal-ink); border:0;}
+ .btn-help-header {color:var(--ink-2); background:transparent; border:1.5px solid var(--line-2); padding:6px 11px;}
+ .btn-help-header:hover {background:var(--teal-l); color:var(--heading);}
+ .tabs {background:var(--bg); border:0; box-shadow:none; padding:4px 16px 10px; flex-wrap:wrap; gap:5px;}
+ .tab-btn,.tab-btn.tab-compact {border:0; border-radius:999px; padding:8px 10px; font-size:13px; color:var(--ink-2); flex:0 1 auto;}
+ .tab-btn.active {background:var(--teal); color:white; box-shadow:none;}
+ .editor-body {padding:4px 20px 22px;}
+ .section-box {background:var(--card); border:0; border-top:5px solid var(--teal); border-radius:14px; padding:18px 20px 20px; margin-bottom:16px; box-shadow:0 1px 2px var(--shadow),0 6px 18px var(--shadow);}
+ .section-box h3 {font-family:var(--font); font-size:19px; color:var(--heading); line-height:1.4;}
+ .step-num {color:var(--rust); font-size:22px; font-weight:900; margin-right:9px;}
+ .editor-body label {font-size:13px; color:var(--ink-2);}
+ .editor-body input[type=text],.editor-body input[type=number],.editor-body input[type=password],.editor-body textarea,.editor-body select {font:inherit; font-size:15px; padding:9px 11px; background:var(--field); border:1.5px solid var(--line); border-radius:10px; color:var(--ink);}
+ .editor-body .grid-4 {grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;}
+ .btn {font-family:var(--font); font-size:14px; border-radius:999px; padding:8px 15px; box-shadow:none;}
+ .btn-sm {font-size:12px; padding:6px 12px;}
+ .btn-outline {background:transparent; border:1.5px solid var(--line-2); color:var(--ink-2);}
+ .comorb-details {background:transparent; border:1.5px dashed var(--line-2); border-radius:12px; padding:11px 13px;}
+ .comorb-details summary {font-size:14px;}
+ .search-results,.med-editor-card,.grounding-box,.leaflet-sections-box,.rx-inline-panel {border-radius:12px;}
+ .med-editor-head {background:var(--card); padding:11px 12px;}
+ .med-editor-title {font-family:var(--font); font-size:15px;}
+ .search-item {font-size:14px; padding:10px;}
+ .check-pill,.lang-btn,.filter-chip {font-size:13px; padding:5px 10px;}
+ .font-size-group {background:var(--seg); border-color:var(--line);}
+ .preview-panel {background:var(--bg); min-width:0;}
+ .preview-toolbar {background:var(--bg); border:0; box-shadow:none; padding:20px 16px 10px;}
+ .preview-scroll {background:var(--bg); padding:14px;}
+ .split-resizer {background:var(--bg); border-color:transparent;}
+ .split-resizer::after {background:var(--line-2);}
+ .a4-page {box-shadow:0 4px 24px var(--shadow);}
+ .modal-header {background:var(--teal-l); color:var(--heading);}
+ .modal-header h2 {font-family:var(--font);}
+ @media(max-width:960px) {.editor-panel{min-width:0!important;} .editor-header{padding:16px;} .editor-header h1{font-size:26px;} .editor-body{padding:4px 12px 20px;} .section-box{padding:15px;} .preview-toolbar{padding:12px;} }
+}
+
+
+.rx-compact-head{display:flex;flex-direction:column;gap:2px}.rx-compact-head span{font-size:13px;color:#7d8784}.rx-choices{display:grid;grid-template-columns:36px repeat(4,minmax(0,1fr)) minmax(0,1.5fr);gap:6px;align-items:end}.rx-thumb img{width:36px;height:36px;object-fit:contain}.rx-thumb{align-self:end;text-align:center;padding-bottom:5px}.rx-choices select,.rx-frequency select{padding:8px 5px;font-size:13px;border:1.5px solid #d2ccbf;border-radius:10px;background:white}.rx-chips{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}.rx-chip{font:inherit;font-size:13px;border:1.5px solid #d2ccbf;border-radius:999px;background:white;color:#4d5a57;padding:5px 10px;cursor:pointer}.rx-chip.on{background:#2f6b63;border-color:#2f6b63;color:white;font-weight:700}.rx-frequency{display:flex;gap:8px;align-items:center;max-width:260px}.rx-frequency label{white-space:nowrap}.rx-edit .rx-slot{grid-template-columns:1fr 1fr}.rx-tip{display:grid;grid-template-columns:104px minmax(0,1fr);gap:9px;align-items:start;border-bottom:1px dashed #cfd8d5;padding:5px 0;margin:0;font-size:16px;line-height:1.4}.rx-cat{background:#2f6b63;color:#fff;border-radius:6px;padding:3px 6px;font-weight:700;text-align:center;overflow-wrap:anywhere}.rx-cat-4,.rx-cat-5{color:#a5502a;font-weight:700;border-bottom:0}.rx-cat-4 .rx-cat,.rx-cat-5 .rx-cat{color:#a5502a;background:none;text-align:left}.rx-cat-5{color:#b3261e}.rx-cat-5 .rx-cat{color:#b3261e}.rx-page.rx-small .rx-tip{font-size:13px;padding:3px 0}.rx-tip b{font-weight:600}.rx-edit details summary{cursor:pointer;color:#1f4a44;font-weight:600}.rx-edit select:focus-visible,.rx-chip:focus-visible{outline:2px solid #2f6b63;outline-offset:2px}@media(max-width:700px){.rx-choices{grid-template-columns:repeat(3,minmax(0,1fr))}.rx-thumb{align-self:center}} 
+
+/* V4: official appearance and concise grouped handout */
+.rx-choices{grid-template-columns:minmax(80px,1.2fr) repeat(2,minmax(0,1fr)) minmax(0,1.5fr)}
+.rx-thumb{font-size:12px;color:#4d5a57;display:flex;flex-direction:column;align-items:center;gap:3px}.rx-pill-icon{width:48px;height:30px;flex:none;vertical-align:middle}.rx-line .rx-pill-icon{width:44px;height:28px}.rx-line .rx-med-name{font-size:.72em;color:#626b68;font-weight:400;margin-left:6px;overflow-wrap:anywhere}.rx-line .rx-dose{font-weight:800;font-size:1.12em}.rx-line .rx-purpose{font-weight:500}.rx-line .rx-extra{display:block;font-size:.8em}.rx-line .rx-med-text{min-width:0}.rx-custom{margin-top:5px}.rx-tip ul{margin:0;padding-left:0;list-style:none}.rx-tip li+li{margin-top:3px}.rx-tip.rx-cat-4,.rx-tip.rx-cat-5{display:block}.rx-tip.rx-cat-4 .rx-cat,.rx-tip.rx-cat-5 .rx-cat{display:inline;padding:0 5px 0 0}.rx-tip .rx-source{font-size:.78em;font-weight:400;color:#53605c}.rx-page.rx-small .rx-pill-icon{width:34px;height:22px}.rx-appearance-note{font-size:11px;color:#596460}.rx-page .rx-part h3{margin-bottom:5px}@media(max-width:700px){.rx-choices{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+
+<style>
+  /* v41 CareRx Clean Handout & Editor Styles (Priority 1-Page -> Auto 2-Page, No Print Blocking) */
+  .rx-edit { padding: 12px 13px; background: #fdfcf9; border-bottom: 1px solid var(--primary-border); }
+  .rx-edit .grid-2 { gap: 8px; }
+  .rx-edit .rx-slot { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 6px; align-items: end; margin: 6px 0; }
+  .rx-edit label { font-size: 12px; }
+  .rx-note { width: 100%; min-height: 62px; font-size: 13px; line-height: 1.5; }
+  .rx-edit details { margin-top: 8px; }
+  .rx-status { font-size: 12px; color: #a5502a; margin: 4px 0 6px; }
+  .rx-chip { display: inline-flex; align-items: center; gap: 4px; }
+  .rx-slot-svg { width: 15px; height: 15px; flex: none; vertical-align: -2px; }
+  .rx-cat-svg { width: 15px; height: 15px; flex: none; vertical-align: -2px; }
+  .rx-nonoral-box { margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: #f6e7de; border: 1px solid #e3c2ae; }
+  .rx-nonoral-box label { color: #7c3818; font-weight: 700; margin-top: 0; }
+  .rx-official-photo-mini { width: 42px; height: 32px; object-fit: contain; border-radius: 4px; border: 1px solid #d2ccbf; background: #fff; margin-top: 2px; }
+
+  /* A4 Handout: Natural vertical flow (Priority 1 page, auto-paginate to page 2 if needed) */
+  .rx-page.a4-page {
+    min-height: 289mm;
+    height: auto;
+    padding: 6mm 7mm;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-sizing: border-box;
+    font-family: var(--font);
+  }
+  .rx-page .a4-page-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .rx-page .sheet-header { margin: 0 0 2px 0; border-bottom: 2.5px solid var(--primary); padding-bottom: 6px; }
+  .rx-page .sheet-header-left h2 { font-size: 21px; color: var(--primary-dark); margin: 0; }
+  .rx-page .sheet-header-left .meta-line { font-size: 12.5px; color: #4d5a57; margin: 3px 0 0; }
+  .rx-page .sheet-org { font-size: 12.5px; color: var(--primary-dark); font-weight: 700; }
+
+  .rx-part { min-height: 0; overflow: visible; }
+  .rx-part h3 { font-size: 17.5px; color: var(--primary-dark); margin: 0 0 6px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+  .rx-part.rx-warnings { border-top: 2px solid var(--primary); padding-top: 8px; margin-top: 2px; }
+
+  .rx-time {
+    display: grid;
+    grid-template-columns: 126px minmax(0, 1fr);
+    gap: 10px;
+    border-bottom: 1px dashed var(--primary-border);
+    padding: 6px 0;
+    align-items: start;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .rx-time:last-child { border-bottom: none; }
+  .rx-time-label {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-align: center;
+  }
+  .rx-time-label .rx-slot-svg { width: 16px; height: 16px; color: #fff; }
+  .rx-time-label.slot-prn { background: #a5502a; }
+  .rx-time-label.slot-bed { background: #1f4a44; }
+
+  .rx-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 15.5px;
+    line-height: 1.38;
+    overflow-wrap: anywhere;
+  }
+  .rx-line .rx-pill-icon { width: 44px; height: 28px; flex: none; }
+  .rx-line .rx-dose { font-weight: 800; color: #1f2e2b; }
+  .rx-line .rx-purpose { font-weight: 600; color: #1f4a44; }
+  .rx-line .rx-med-name { font-size: 0.76em; color: #5b6763; font-weight: 500; margin-left: 6px; }
+  .rx-line .rx-extra { display: block; font-size: 0.84em; color: #7c3818; font-weight: 600; margin-top: 1px; }
+
+  .rx-tip {
+    display: grid;
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    border-bottom: 1px dashed #cfd8d5;
+    padding: 5.5px 0;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.44;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .rx-tip:last-child { border-bottom: none; }
+  .rx-cat {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 7px;
+    padding: 3.5px 7px;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-align: center;
+  }
+  .rx-tip ul { margin: 0; padding-left: 0; list-style: none; }
+  .rx-tip li + li { margin-top: 3px; }
+  .rx-tip.rx-cat-4, .rx-tip.rx-cat-5 {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    border-bottom: 1px dashed #ead5c9;
+  }
+  .rx-tip.rx-cat-4 { color: #8c3f1c; font-weight: 600; }
+  .rx-tip.rx-cat-5 { color: #9f1f18; font-weight: 700; }
+  .rx-tip.rx-cat-4 .rx-cat { background: #f6e7de; color: #8c3f1c; flex: none; }
+  .rx-tip.rx-cat-5 .rx-cat { background: #f9dedb; color: #9f1f18; flex: none; }
+
+  .rx-page .sheet-footer { margin-top: auto; padding-top: 6px; border-top: 1px solid #d2ccbf; font-size: 11.5px; color: #5b6763; display: flex; justify-content: space-between; gap: 8px; }
+
+  /* Font size presets */
+  .rx-page.rx-small { padding: 4.5mm 5.5mm; gap: 5px; }
+  .rx-page.rx-small .rx-line { font-size: 13.5px; padding: 2px 0; }
+  .rx-page.rx-small .rx-tip { font-size: 13px; padding: 3.5px 0; }
+  .rx-page.rx-small .rx-time { padding: 3.5px 0; grid-template-columns: 114px minmax(0, 1fr); }
+  .rx-page.rx-small .rx-time-label { font-size: 12.5px; padding: 4px 6px; }
+  .rx-page.rx-small .rx-line .rx-pill-icon { width: 36px; height: 23px; }
+
+  .rx-page.rx-large .rx-line { font-size: 17.5px; line-height: 1.44; }
+  .rx-page.rx-large .rx-tip { font-size: 16.5px; line-height: 1.48; }
+  .rx-page.rx-large .rx-time-label { font-size: 15.5px; }
+  .rx-page.rx-large .rx-time { grid-template-columns: 138px minmax(0, 1fr); }
+  .rx-page.rx-large .rx-line .rx-pill-icon { width: 50px; height: 32px; }
+
+  .rx-page.rx-xlarge .rx-line { font-size: 19.5px; line-height: 1.48; }
+  .rx-page.rx-xlarge .rx-tip { font-size: 18px; line-height: 1.5; }
+  .rx-page.rx-xlarge .rx-time-label { font-size: 17px; padding: 7px 9px; }
+  .rx-page.rx-xlarge .rx-time { grid-template-columns: 152px minmax(0, 1fr); }
+  .rx-page.rx-xlarge .rx-line .rx-pill-icon { width: 56px; height: 36px; }
+
+  /* Smart-fit gentle tight tiers (to pull slight overflow back into 1 A4 page) */
+  .rx-page.rx-tight-1 { padding: 4.5mm 6mm; gap: 5px; }
+  .rx-page.rx-tight-1 .a4-page-body { gap: 5px; }
+  .rx-page.rx-tight-1 .sheet-header { padding-bottom: 4px; }
+  .rx-page.rx-tight-1 .sheet-header-left h2 { font-size: 19px; }
+  .rx-page.rx-tight-1 .rx-part h3 { font-size: 16px; margin-bottom: 4px; }
+  .rx-page.rx-tight-1 .rx-time { padding: 4px 0; }
+  .rx-page.rx-tight-1 .rx-line { font-size: 14.2px; padding: 1.5px 0; }
+  .rx-page.rx-tight-1 .rx-tip { font-size: 13.8px; padding: 3.5px 0; }
+
+  .rx-page.rx-tight-2 { padding: 3.8mm 5.2mm; gap: 4px; }
+  .rx-page.rx-tight-2 .a4-page-body { gap: 4px; }
+  .rx-page.rx-tight-2 .sheet-header { padding-bottom: 3px; }
+  .rx-page.rx-tight-2 .sheet-header-left h2 { font-size: 17.5px; }
+  .rx-page.rx-tight-2 .rx-part h3 { font-size: 14.8px; margin-bottom: 3px; }
+  .rx-page.rx-tight-2 .rx-time { padding: 2.5px 0; grid-template-columns: 114px minmax(0, 1fr); }
+  .rx-page.rx-tight-2 .rx-time-label { font-size: 12.5px; padding: 4px 6px; }
+  .rx-page.rx-tight-2 .rx-line { font-size: 13px; padding: 1px 0; }
+  .rx-page.rx-tight-2 .rx-line .rx-pill-icon { width: 34px; height: 22px; }
+  .rx-page.rx-tight-2 .rx-tip { font-size: 12.6px; padding: 2.5px 0; }
+
+  @media print {
+    @page { size: A4 portrait; margin: 4mm; }
+    .rx-page.a4-page {
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: auto !important;
+      height: auto !important;
+      padding: 2mm 3mm !important;
+      box-shadow: none !important;
+      break-after: page;
+      page-break-after: always;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    .rx-page.a4-page:last-child {
+      break-after: auto !important;
+      page-break-after: auto !important;
+    }
+    .preview-scale-wrap { transform: none !important; width: auto !important; height: auto !important; }
+  }
 </style>
 </head>
 <body>
@@ -1454,8 +1725,8 @@
   <!-- 左側藥師工作區 -->
   <aside class="editor-panel" id="editorPanel">
     <div class="editor-header">
-      <h1>💊 高齡多重用藥檢核與衛教系統</h1>
-      <div class="header-actions"><a class="btn-help-header" href="./lookup.html" target="_blank" rel="noopener">仿單全文查詢</a>
+      <div><div class="brand-eyebrow">社區藥局 · 長者用藥評估</div><h1>長者用藥小卡</h1></div>
+      <div class="header-actions">
         <span id="dbStatus" class="db-status">載入資料庫...</span>
         <button type="button" class="btn-help-header" onclick="openHelpModal()">❓ 說明</button>
         <button type="button" class="btn-help-header" onclick="openReportModal()">🛠️ 回報</button>
@@ -1484,7 +1755,7 @@
         <!-- 1. 病人基本與腎功能資料 -->
         <div class="section-box">
           <h3>
-            <span>病人評估資料</span>
+            <span><span class="step-num">01</span>病人資料</span>
             <button type="button" class="btn btn-outline btn-sm" onclick="loadDemoPolypharmacy()">📋 載入高齡範例</button>
           </h3>
           <div class="grid-4">
@@ -1532,7 +1803,7 @@
         <!-- 2. 新增藥品（搜尋 ＋ 內嵌處方箋拍照 ＋ 手動新增） -->
         <div class="section-box">
           <h3>
-            <span>加入藥品</span>
+            <span><span class="step-num">02</span>使用藥物</span>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button type="button" id="btnToggleRx" class="btn btn-outline btn-sm" onclick="toggleRxPanel()">📷 拍照辨識處方箋</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="addCustomMed()">＋ 手動新增</button>
@@ -1609,7 +1880,7 @@
       <div id="tab-design" class="tab-content">
         <div class="section-box">
           <h3>
-            <span>單張標題與語言</span>
+            <span><span class="step-num">03</span>列印內容</span>
             <button type="button" id="btnAiRewriteAll" class="btn btn-primary btn-sm" onclick="aiRewriteAllForElderly()" title="僅針對已附官方仿單原文的藥品進行白話改寫，杜絕 AI 幻覺">🤖 AI 依仿單轉白話</button>
           </h3>
           <div class="grid-2" style="margin-bottom:8px;">
@@ -1630,29 +1901,33 @@
             <button type="button" class="lang-btn" data-lang="id" onclick="setPrintLang('id', this)">印尼文</button>
             <button type="button" class="lang-btn" data-lang="th" onclick="setPrintLang('th', this)">泰文</button>
           </div>
-          <div id="aiRewriteStatus" style="font-size:12px; color:var(--primary); margin-top:6px;"></div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="rxDraftAll()">📝 全部帶入白話注意事項</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="rxTranslateAll(this)">🌐 AI 一鍵翻譯全部注意事項</button>
+          </div>
+          <div style="margin-top:6px;font-size:12px;color:var(--primary-dark)">💡 版面採「優先 1 頁，放不下自動分至第 2 頁」，不會阻擋列印；切換語言後可一鍵翻譯全部注意事項。</div><div id="aiRewriteStatus" style="font-size:12px; color:var(--primary); margin-top:6px;"></div>
         </div>
 
         <div class="section-box">
           <h3>要印給長輩的欄位與版面</h3>
           <div class="section-sub-label">主要區塊與排版</div>
           <div class="check-grid">
-            <label class="check-pill"><input type="checkbox" id="opt_schedule" checked onchange="renderPreview()" />用藥時間表（早/中/晚/睡前）</label>
+            <label class="check-pill"><input type="checkbox" id="opt_schedule" checked disabled onchange="renderPreview()" />用藥時間表（固定顯示）</label>
             <label class="check-pill"><input type="checkbox" id="opt_specialAlert" checked onchange="renderPreview()" />特別警示（防跌/低血糖/出血）</label>
             <label class="check-pill"><input type="checkbox" id="opt_followUp" onchange="renderPreview()" />附上白話「回診討論提醒」</label>
             <label class="check-pill"><input type="checkbox" id="opt_smartFit" checked onchange="renderPreview()" />✨ 智慧防留白（優先 1 頁）</label>
           </div>
-          <div class="section-sub-label">藥品卡片顯示明細</div>
+          <div class="section-sub-label">單張顯示明細</div>
           <div class="check-grid">
-            <label class="check-pill"><input type="checkbox" id="opt_appearance" checked onchange="renderPreview()" />藥品外觀／圖片</label>
-            <label class="check-pill"><input type="checkbox" id="opt_usage" checked onchange="renderPreview()" />怎麼吃（用法）</label>
-            <label class="check-pill"><input type="checkbox" id="opt_purpose" checked onchange="renderPreview()" />作用（治什麼）</label>
-            <label class="check-pill"><input type="checkbox" id="opt_sideEffects" checked onchange="renderPreview()" />常見副作用</label>
-            <label class="check-pill"><input type="checkbox" id="opt_lifestyle" checked onchange="renderPreview()" />生活建議</label>
-            <label class="check-pill"><input type="checkbox" id="opt_diet" checked onchange="renderPreview()" />飲食建議</label>
-            <label class="check-pill"><input type="checkbox" id="opt_specialPop" checked onchange="renderPreview()" />特殊族群（孕/童/肝腎）</label>
-            <label class="check-pill"><input type="checkbox" id="opt_interactions" checked onchange="renderPreview()" />藥物交互作用</label>
-            <label class="check-pill"><input type="checkbox" id="opt_storage" checked onchange="renderPreview()" />儲存方式</label>
+            <label class="check-pill"><input type="checkbox" id="opt_appearance" checked onchange="renderPreview()" />藥品外觀圖示與顏色</label>
+            <label class="check-pill"><input type="checkbox" id="opt_purpose" checked onchange="renderPreview()" />藥品用途（治什麼）</label>
+            <label class="check-pill"><input type="checkbox" id="opt_sideEffects" checked onchange="renderPreview()" />帶入副作用提醒</label>
+            <label class="check-pill"><input type="checkbox" id="opt_lifestyle" checked onchange="renderPreview()" />帶入生活建議</label>
+            <label class="check-pill"><input type="checkbox" id="opt_diet" checked onchange="renderPreview()" />帶入飲食建議</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_usage" checked onchange="renderPreview()" />用法</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_specialPop" onchange="renderPreview()" />特殊族群</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_interactions" onchange="renderPreview()" />藥物交互作用</label>
+            <label class="check-pill" hidden><input type="checkbox" id="opt_storage" onchange="renderPreview()" />儲存方式</label>
           </div>
           <div style="font-size:11.5px; color:var(--text-muted); margin-top:8px;">
             💡 字體大小（精簡／標準／放大／特大）可直接從右側預覽區上方工具列即時切換。
@@ -1715,7 +1990,7 @@
         </div>
       </div>
       <div style="display:flex; gap:6px; flex-wrap:wrap;">
-        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">🖨️ 列印 / 匯出 PDF</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="rxPrint()">🖨️ 列印 / 匯出 PDF</button>
       </div>
     </div>
 
@@ -2078,26 +2353,67 @@
       return s.replace(/[，,、:：\s]+$/, '').trim();
     }
 
-    // 精簡擷取仿單章節給衛教單卡片顯示（移除原始條號與多餘標題、優先保留完整句、絕不留下半截括號或殘餘逗號）
+    // 精簡擷取仿單章節給衛教單卡片顯示（自動清洗 Markdown 表格 |---|---| 與官樣長句，不留亂碼與半截括號）
+    function cleanMarkdownTablesToProse(text) {
+      if (!text) return '';
+      const rawLines = String(text).replace(/\r/g, '').split('\n');
+      const out = [];
+      const tableItems = [];
+      const flushTable = () => {
+        if (tableItems.length) {
+          out.push(tableItems.join('；') + '。');
+          tableItems.length = 0;
+        }
+      };
+      for (const rawLine of rawLines) {
+        const ln = rawLine.trim();
+        if (!ln) { flushTable(); continue; }
+        // 忽略 Markdown 表格分隔線 |---|---|
+        if (/^\|?[\s:\-—–]+\|[\s:\-—–|]+$/.test(ln)) continue;
+        // 處理 Markdown 表格資料列 | 皮膚 | 發疹、發紅 |
+        if (ln.includes('|')) {
+          const cells = ln.split('|').map(c => c.trim()).filter(Boolean);
+          if (!cells.length) continue;
+          // 略過常見表頭（身體部位｜副作用、器官系統｜不良反應等）
+          if (cells.length >= 2 && /^(?:身體部位|部位|器官|系統|器官系統|不良反應分類|分類|項目|類別)$/.test(cells[0]) && /(?:副作用|不良反應|症狀|反應|發生率|說明)/.test(cells[1])) {
+            continue;
+          }
+          if (cells.length >= 2) {
+            const k = cells[0].replace(/[：:]+$/, '');
+            const v = cells.slice(1).join('、').replace(/[。．.]+$/, '');
+            if (v) tableItems.push(`${k}：${v}`);
+          } else {
+            tableItems.push(cells[0].replace(/[。．.]+$/, ''));
+          }
+          continue;
+        }
+        flushTable();
+        out.push(ln);
+      }
+      flushTable();
+      return out.join(' ')
+        .replace(/\|\s*\|/g, ' ')
+        .replace(/\|/g, '、');
+    }
+
     function summarizeLeafletSection(raw, maxLen = 88) {
       const cleaned = cleanInfoField(raw);
       if (!cleaned) return '';
-      let compact = cleaned
+      let compact = cleanMarkdownTablesToProse(cleaned)
         .replace(/[（(]\s*依文獻記載\s*[）)]/g, '')
-        .replace(/\r/g, '')
-        // 移除開頭或行內的 TFDA 制式章節標題（例如 8.1 臨床重要副作用/不良反應、【副作用】、5.1 使用本藥後...）
         .replace(/^\s*\d+(?:\.\d+)+\s*(?:臨床重要副作用[\/／]不良反應|副作用[\/／]不良反應|不良反應|副作用|用法用量|警語[\/／]注意事項|特殊族群|藥物交互作用|儲存條件|適應症)\s*/gm, '')
         .replace(/^\s*【(?:副作用|不良反應|說明|警語|注意事項|用法用量|禁忌|交互作用)】\s*/gm, '')
-        .replace(/^\s*5\.1\s*使用本藥後，若有發生以下症狀時，請立即停止使用，並接受醫師診治\s*/g, '')
+        .replace(/(?:^|\s)5\.1\s*使用本藥後，若有發生以下症狀時，請立即停止使用，並接受醫師診治[：:]?\s*/g, '若出現以下不適請停藥就醫：')
+        .replace(/服用本藥後[，,]?若有發生以下(?:副作用|症狀)[，,]?請立即停止使用[，,]?(?:並持此說明書)?諮詢醫師(?:[、，,]?藥師(?:[、，,]?藥劑生)?)?[。：:]?\s*/g, '若出現以下不適請停藥並諮詢醫師藥師：')
         .replace(/(?:^|\n)\s*\d+(?:\.\d+)+\s*/g, ' ')
         .replace(/\n+/g, ' ')
         .replace(/\s*([：:])\s*/g, '$1')
+        .replace(/([：:])\1+/g, '$1')
         .replace(/\s{2,}/g, ' ')
         .trim();
       if (!cleanInfoField(compact)) return '';
       if (compact.length <= maxLen) return compact.replace(/[，,、]+$/, '。');
 
-      // 往前多看 28 字：若整段或當前句子很快就有句號，優先保留完整句不硬切
       const lookAheadLimit = maxLen + 28;
       if (compact.length <= lookAheadLimit) return compact.replace(/[，,、]+$/, '。');
       const nextStopRel = compact.slice(maxLen, lookAheadLimit).search(/[。；;]/);
@@ -2126,7 +2442,7 @@
       return summarizeLeafletSection(target, 90);
     }
 
-    // 將 v2 結構化仿單 sections 整理成清晰可讀的完整原文（供藥師檢視與 AI 零幻覺接地使用）
+    // 將 v2 結構化仿單 sections 整理成清晰可讀的完整原文（供藥師檢視與 AI 需藥師核對接地使用）
     function buildStructuredLeafletText(leaflet) {
       if (!leaflet || !leaflet.sections) return '';
       const s = leaflet.sections;
@@ -3115,6 +3431,70 @@
         id: { purpose: 'Meredakan nyeri saraf atau kesemutan (atau mengontrol kejang)', sideEffects: 'Mudah pusing, mengantuk, bengkak ringan, atau jalan tidak stabil', lifestyle: 'Berdiri pelan agar tidak jatuh; jangan hentikan mendadak', diet: 'Hindari alkohol karena memperparah kantuk dan pusing' },
         th: { purpose: 'บรรเทาอาการปวดปลายประสาทหรืออาการชา (หรือคุมอาการชัก)', sideEffects: 'เวียนศีรษะ ง่วงซึม มือเท้าบวมเล็กน้อย หรือเดินเซ', lifestyle: 'ลุกยืนช้า ๆ ป้องกันหกล้ม และห้ามหยุดยากะทันหัน', diet: 'งดดื่มแอลกอฮอล์เพราะจะทำให้ง่วงและเวียนหัวมากขึ้น' }
       }
+      ,{
+        key: 'acetaminophen', re: /\b(acetaminophen|paracetamol)/i,
+        zh: { purpose: '退燒、止痛（緩解頭痛、發燒、身體痠痛）', sideEffects: '正常劑量下安全性高；過量可能傷肝（若起紅疹或噁心嘔吐請停藥就醫）', lifestyle: '注意勿同時吃多種含乙醯胺酚的綜合感冒藥，每天總量勿超過醫師指示', diet: '服藥期間避免喝酒，以免增加肝臟負擔' },
+        en: { purpose: 'Reduces fever and relieves pain or body aches', sideEffects: 'Generally safe at proper dose; overdose may harm the liver (stop if rash occurs)', lifestyle: 'Do not double up with other cold/pain meds containing acetaminophen', diet: 'Avoid alcohol while taking this medicine to protect your liver' },
+        vi: { purpose: 'Hạ sốt, giảm đau (đau đầu, nhức mỏi cơ thể)', sideEffects: 'An toàn ở liều đúng; quá liều hại gan (ngừng thuốc nếu nổi mẩn đỏ)', lifestyle: 'Không uống trùng nhiều thuốc cảm/giảm đau có chứa paracetamol', diet: 'Tránh uống rượu bia khi dùng thuốc để bảo vệ gan' },
+        id: { purpose: 'Menurunkan demam dan meredakan nyeri/pegal', sideEffects: 'Aman sesuai dosis; kelebihan dosis merusak hati (hentikan jika ruam)', lifestyle: 'Jangan minum bersamaan dengan obat flu/nyeri lain yang mengandung parasetamol', diet: 'Hindari alkohol selama minum obat ini untuk melindungi hati' },
+        th: { purpose: 'ลดไข้ บรรเทาปวดศีรษะและปวดเมื่อย', sideEffects: 'ปลอดภัยเมื่อกินตามขนาด หากกินเกินขนาดอาจเป็นพิษต่อตับ (หยุดยาหากมีผื่น)', lifestyle: 'ระวังอย่ากินซ้ำซ้อนกับยาแก้หวัดหรือยาแก้ปวดอื่นที่มีพาราเซตามอล', diet: 'งดดื่มแอลกอฮอล์ระหว่างใช้ยาเพื่อป้องกันตับอักเสบ' }
+      },
+      {
+        key: 'antihistamine2', re: /\b(cetirizine|levocetirizine|loratadine|desloratadine|fexofenadine|bilastine)/i,
+        zh: { purpose: '緩解過敏性鼻炎、流鼻水、打噴嚏或皮膚搔癢', sideEffects: '少數人輕微嗜睡或口乾', lifestyle: '較不易嗜睡，但初次服用仍請留意是否想睡再騎車開車', diet: '配溫白開水服用，避免配果汁（特別是 fexofenadine 與葡萄柚/柳橙汁）或酒精' },
+        en: { purpose: 'Relieves allergy symptoms, runny nose, sneezing, or itching', sideEffects: 'Occasional mild drowsiness or dry mouth', lifestyle: 'Less drowsy than older allergy pills, but check alertness before driving', diet: 'Take with water; avoid alcohol (avoid fruit juices with fexofenadine)' },
+        vi: { purpose: 'Giảm dị ứng mũi, sổ mũi, hắt hơi hoặc ngứa da', sideEffects: 'Ít gặp buồn ngủ nhẹ hoặc khô miệng', lifestyle: 'Ít gây buồn ngủ hơn nhưng vẫn nên theo dõi khi lái xe lần đầu', diet: 'Uống với nước lọc; tránh rượu bia và nước ép trái cây' },
+        id: { purpose: 'Meredakan alergi, pilek, bersin, atau gatal kulit', sideEffects: 'Jarang mengantuk ringan atau mulut kering', lifestyle: 'Lebih tidak bikin kantuk, namun tetap waspada saat berkendara', diet: 'Minum dengan air putih; hindari alkohol dan jus buah tertentu' },
+        th: { purpose: 'บรรเทาอาการแพ้ น้ำมูกไหล จาม หรือผื่นคัน', sideEffects: 'อาจง่วงซึมเล็กน้อยหรือปากแห้งในบางราย', lifestyle: 'ง่วงน้อยกว่ายารุ่นเก่า แต่ควรสังเกตอาการก่อนขับรถ', diet: 'ดื่มพร้อมน้ำเปล่า หลีกเลี่ยงแอลกอฮอล์และน้ำผลไม้บางชนิด' }
+      },
+      {
+        key: 'cough_cold', re: /\b(dextromethorphan|ambroxol|bromhexine|acetylcysteine|carbocisteine|guaifenesin|pseudoephedrine|phenylephrine)/i,
+        zh: { purpose: '止咳、化痰或緩解鼻塞（感冒呼吸道症狀）', sideEffects: '少數人輕微頭暈、腸胃不適（含緩解鼻塞成分者可能心悸或睡不著）', lifestyle: '多喝溫開水幫助化痰；症狀若超過一週未改善或發高燒請回診', diet: '多喝溫水，少吃甜食油炸與冰飲，避免喝酒' },
+        en: { purpose: 'Relieves cough, loosens phlegm, or eases stuffy nose', sideEffects: 'Mild dizziness or stomach upset (decongestants may cause fast heartbeat or insomnia)', lifestyle: 'Drink warm water to loosen phlegm; see doctor if symptoms last over 1 week', diet: 'Drink plenty of warm water; limit cold drinks, sweets, and alcohol' },
+        vi: { purpose: 'Giảm ho, long đờm hoặc giảm nghẹt mũi', sideEffects: 'Chóng mặt nhẹ hoặc khó chịu dạ dày (thuốc thông mũi có thể gây hồi hộp, khó ngủ)', lifestyle: 'Uống nhiều nước ấm giúp long đờm; đi khám nếu quá 1 tuần không đỡ', diet: 'Uống nhiều nước ấm; hạn chế đồ lạnh, đồ ngọt và rượu bia' },
+        id: { purpose: 'Meredakan batuk, mengencerkan dahak, atau hidung tersumbat', sideEffects: 'Sedikit pusing atau mual (pelega hidung bisa membuat berdebar/sulit tidur)', lifestyle: 'Minum air hangat agar dahak encer; ke dokter jika >1 minggu tidak membaik', diet: 'Perbanyak air hangat; kurangi minuman dingin, manis, dan alkohol' },
+        th: { purpose: 'บรรเทาอาการไอ ละลายเสมหะ หรือลดคัดจมูก', sideEffects: 'อาจเวียนหัวเล็กน้อย (ยาลดคัดจมูกอาจทำให้ใจสั่นหรือนอนไม่หลับ)', lifestyle: 'ดื่มน้ำอุ่นมาก ๆ ช่วยละลายเสมหะ หากเกิน 1 สัปดาห์ไม่ดีขึ้นให้พบแพทย์', diet: 'ดื่มน้ำอุ่นให้เพียงพอ ลดของหวาน ของเย็น และงดแอลกอฮอล์' }
+      },
+      {
+        key: 'beta_blocker', re: /\b(bisoprolol|carvedilol|propranolol|atenolol|metoprolol|nebivolol)/i,
+        zh: { purpose: '穩定心跳與血壓，減輕心臟負擔', sideEffects: '心跳變慢、容易疲倦、手腳冰冷或起身頭暈', lifestyle: '每天量血壓和脈搏（心跳低於每分鐘 55 下或頭暈請告知醫師）；切勿突然停藥', diet: '飲食少鹽；避免過量濃茶、咖啡與酒精' },
+        en: { purpose: 'Controls blood pressure and heart rate; protects the heart', sideEffects: 'Slow pulse, tiredness, cold hands/feet, or dizziness when standing', lifestyle: 'Check blood pressure & pulse daily (tell doctor if pulse < 55); never stop suddenly', diet: 'Eat low-salt meals; limit strong coffee, tea, and alcohol' },
+        vi: { purpose: 'Ổn định nhịp tim và huyết áp, giảm gánh nặng cho tim', sideEffects: 'Mạch chậm, mệt mỏi, lạnh tay chân hoặc chóng mặt khi đứng dậy', lifestyle: 'Đo huyết áp và mạch mỗi ngày (báo bác sĩ nếu mạch < 55); không tự ý ngừng đột ngột', diet: 'Ăn nhạt ít muối; hạn chế cà phê đặc, trà đặc và rượu bia' },
+        id: { purpose: 'Menstabilkan detak jantung dan tekanan darah; melindungi jantung', sideEffects: 'Nadi melambat, lelah, tangan/kaki dingin, atau pusing saat berdiri', lifestyle: 'Cek tensi & nadi harian (lapor dokter jika nadi < 55); jangan hentikan mendadak', diet: 'Kurangi garam; batasi kopi kental, teh kental, dan alkohol' },
+        th: { purpose: 'คุมความดันและอัตราการเต้นของหัวใจ ลดภาระการทำงานของหัวใจ', sideEffects: 'ชีพจรช้า เหนื่อยง่าย มือเท้าเย็น หรือเวียนหัวเวลาลุกยืน', lifestyle: 'วัดความดันและชีพจรทุกวัน (หากชีพจรต่ำกว่า 55 ให้แจ้งแพทย์) ห้ามหยุดยากะทันหัน', diet: 'ลดอาหารเค็ม จำกัดชาเข้ม กาแฟ และแอลกอฮอล์' }
+      },
+      {
+        key: 'dpp4i', re: /\b(sitagliptin|linagliptin|vildagliptin|saxagliptin|alogliptin)/i,
+        zh: { purpose: '溫和幫助餐後胰島素分泌，穩定血糖', sideEffects: '多數人耐受佳；若持續嚴重上腹痛或起水泡紅疹請就醫', lifestyle: '按時服藥並定期監測飯前與飯後血糖', diet: '均衡飲食、定時定量，少吃精緻甜食與含糖飲料' },
+        en: { purpose: 'Gently helps control blood sugar after meals', sideEffects: 'Usually well tolerated; see doctor for severe stomach pain or skin blisters', lifestyle: 'Take daily as directed and check blood sugar regularly', diet: 'Eat balanced meals on time; limit sugary foods and drinks' },
+        vi: { purpose: 'Hỗ trợ ổn định đường huyết nhẹ nhàng sau ăn', sideEffects: 'Thường dung nạp tốt; đi khám nếu đau bụng trên dữ dội hoặc phồng rộp da', lifestyle: 'Uống đều đặn mỗi ngày và đo đường huyết định kỳ', diet: 'Ăn uống cân đối đúng giờ; hạn chế đồ ngọt và nước có đường' },
+        id: { purpose: 'Membantu menstabilkan gula darah setelah makan', sideEffects: 'Umumnya nyaman; ke dokter jika nyeri ulu hati berat atau lepuh kulit', lifestyle: 'Minum rutin tiap hari dan pantau gula darah berkala', diet: 'Makan teratur bergizi seimbang; kurangi makanan dan minuman manis' },
+        th: { purpose: 'ช่วยคุมระดับน้ำตาลในเลือดหลังมื้ออาหารอย่างอ่อนโยน', sideEffects: 'ส่วนใหญ่ทนยาได้ดี หากปวดท้องรุนแรงหรือมีตุ่มพองที่ผิวหนังให้พบแพทย์', lifestyle: 'กินยาตรงเวลาทุกวันและตรวจน้ำตาลตามนัด', diet: 'รับประทานอาหารสมดุลตรงเวลา ลดขนมหวานและเครื่องดื่มรสหวาน' }
+      },
+      {
+        key: 'insulin', re: /\b(insulin|glargine|detemir|degludec|aspart|lispro|glulisine|humulin|novorapid|lantus|tresiba|toujeo)/i,
+        zh: { purpose: '補充胰島素，幫助有效控制血糖', sideEffects: '低血糖（手抖、冒冷汗、心悸、頭暈）或注射部位硬塊', lifestyle: '每次輪替不同注射部位；出門隨身帶糖果防低血糖；開封後室溫保存勿冷凍', diet: '注射後務必按時吃飯，不要空腹喝酒' },
+        en: { purpose: 'Replaces insulin to control blood sugar effectively', sideEffects: 'Low blood sugar (shaking, cold sweats, dizziness) or injection site lumps', lifestyle: 'Rotate injection sites; carry candy for low sugar; never freeze insulin', diet: 'Always eat meals on time after injecting; avoid alcohol on empty stomach' },
+        vi: { purpose: 'Bổ sung insulin giúp kiểm soát đường huyết hiệu quả', sideEffects: 'Hạ đường huyết (run tay, vã mồ hôi lạnh, chóng mặt) hoặc nổi cục chỗ tiêm', lifestyle: 'Đổi vị trí tiêm mỗi lần; mang theo kẹo phòng hạ đường huyết; không để đông đá', diet: 'Luôn ăn đúng bữa sau khi tiêm; tránh uống rượu khi đói' },
+        id: { purpose: 'Mengganti insulin untuk mengontrol gula darah secara efektif', sideEffects: 'Gula darah rendah (gemetar, keringat dingin, pusing) atau benjolan bekas suntik', lifestyle: 'Ganti titik suntik tiap kali; bawa permen; jangan bekukan insulin', diet: 'Selalu makan tepat waktu setelah menyuntik; hindari alkohol saat perut kosong' },
+        th: { purpose: 'ทดแทนอินซูลินเพื่อควบคุมระดับน้ำตาลในเลือด', sideEffects: 'น้ำตาลต่ำ (มือสั่น เหงื่อออกตัวเย็น เวียนหัว) หรือก้อนไตบริเวณที่ฉีด', lifestyle: 'เปลี่ยนจุดฉีดทุกครั้ง พกลูกอมติดตัว ห้ามแช่แข็งอินซูลิน', diet: 'รับประทานอาหารตรงเวลาหลังฉีดยา และงดดื่มแอลกอฮอล์ตอนท้องว่าง' }
+      },
+      {
+        key: 'laxative', re: /\b(sennoside|senna|bisacodyl|magnesium\s*oxide|lactulose|polyethylene\s*glycol)/i,
+        zh: { purpose: '幫助腸道蠕動或軟化糞便，改善便祕', sideEffects: '輕微腹絞痛或拉肚子（若連日水瀉請減量並詢問醫師藥師）', lifestyle: '每天適度散步活動，養成固定排便習慣', diet: '多喝溫白開水、多吃高纖蔬菜水果，效果會更好' },
+        en: { purpose: 'Softens stools or helps bowel movement for constipation', sideEffects: 'Mild cramps or loose stools (reduce & ask pharmacist if diarrhea persists)', lifestyle: 'Walk regularly and keep a consistent bathroom routine', diet: 'Drink plenty of warm water and eat fiber-rich vegetables and fruit' },
+        vi: { purpose: 'Làm mềm phân hoặc tăng nhu động ruột, giảm táo bón', sideEffects: 'Đau quặn bụng nhẹ hoặc đi lỏng (hỏi dược sĩ nếu tiêu chảy kéo dài)', lifestyle: 'Đi bộ nhẹ nhàng mỗi ngày, tập thói quen đi vệ sinh đúng giờ', diet: 'Uống nhiều nước ấm, ăn nhiều rau xanh và trái cây giàu chất xơ' },
+        id: { purpose: 'Melunakkan feses atau melancarkan BAB untuk sembelit', sideEffects: 'Kram perut ringan atau BAB encer (tanya apoteker bila diare berlanjut)', lifestyle: 'Rutin jalan santai dan biasakan jadwal BAB teratur', diet: 'Minum banyak air hangat dan makan sayur buah tinggi serat' },
+        th: { purpose: 'ช่วยกระตุ้นการขับถ่ายหรือทำให้อุจจาระนิ่ม แก้อาการท้องผูก', sideEffects: 'ปวดบิดท้องเล็กน้อยหรือถ่ายเหลว (หากท้องเสียต่อเนื่องให้ปรึกษาเภสัชกร)', lifestyle: 'เดินออกกำลังกายสม่ำเสมอและฝึกขับถ่ายให้เป็นเวลา', diet: 'ดื่มน้ำอุ่นให้มากและกินผักผลไม้ที่มีกากใยสูง' }
+      },
+      {
+        key: 'alendronate', re: /\b(alendronate|risedronate|ibandronate)/i,
+        zh: { purpose: '減緩骨質流失，預防骨質疏鬆與骨折', sideEffects: '食道刺激、胃部不適（若下巴疼痛腫脹請告知醫師）', lifestyle: '起床空腹配一大杯白開水吞服，服藥後至少 30 分鐘內保持坐姿或站姿「不可躺下」', diet: '服藥後至少 30 分鐘內不要吃早餐、喝咖啡、牛奶或吃鈣片' },
+        en: { purpose: 'Slows bone loss to treat osteoporosis and prevent fractures', sideEffects: 'Esophagus/stomach irritation (tell doctor if jaw pain occurs)', lifestyle: 'Take upon waking with a full glass of plain water; stay upright (do NOT lie down) for 30+ min', diet: 'Wait at least 30 min before eating breakfast or taking coffee/milk/calcium' },
+        vi: { purpose: 'Giảm mất xương, điều trị loãng xương và phòng gãy xương', sideEffects: 'Kích ứng thực quản, khó chịu dạ dày (báo bác sĩ nếu đau hàm)', lifestyle: 'Uống lúc mới dậy với 1 ly nước lọc đầy; ngồi/đứng thẳng ÍT NHẤT 30 phút (không nằm)', diet: 'Chờ ít nhất 30 phút mới ăn sáng, uống cà phê, sữa hoặc canxi' },
+        id: { purpose: 'Memperlambat pengeroposan tulang untuk osteoporosis', sideEffects: 'Iritasi kerongkongan/lambung (lapor dokter jika nyeri rahang)', lifestyle: 'Minum saat bangun tidur dengan 1 gelas air putih; tetap duduk/berdiri minimal 30 menit', diet: 'Tunggu minimal 30 menit sebelum sarapan, kopi, susu, atau kalsium' },
+        th: { purpose: 'ชะลอการสลายกระดูก รักษาโรคกระดูกพรุนและป้องกันกระดูกหัก', sideEffects: 'ระคายเคืองหลอดอาหารหรือกระเพาะ (แจ้งแพทย์หากปวดกราม)', lifestyle: 'กินตอนตื่นนอนพร้อมน้ำเปล่า 1 แก้วเต็ม แล้วนั่งหรือยืนตัวตรงอย่างน้อย 30 นาที ห้ามนอนราบ', diet: 'รออย่างน้อย 30 นาทีจึงค่อยกินอาหารเช้า กาแฟ นม หรือแคลเซียม' }
+      }
     ];
 
     const GENERIC_FALLBACK_I18N = {
@@ -3397,6 +3777,7 @@
           if (!idxRes.ok) throw new Error('index not found');
           rebuildDrugIndexMap(await idxRes.json());
           statusEl.textContent = `✅ ${drugIndex.length.toLocaleString()} 筆`;
+          loadAppearanceExtra(dbBasePath);
           return;
         }
 
@@ -3629,6 +4010,7 @@
         generic: (detail.ingredients || []).join(' / '),
         dosageForm: detail.dosage_form || '',
         appearance: isNhiOnly ? '' : formatDrugAppearance(detail),
+        officialAppearance: isNhiOnly ? null : {color:detail.color||'',shape:detail.shape||'',score:detail.score_line||RX_SCORE[licenseId]||'',imprint_1:detail.imprint_1||'',imprint_2:detail.imprint_2||''},
         imageUrls,
         imgUrl,
         usage: usageTxt,
@@ -3651,6 +4033,8 @@
         beersTags: []
       });
 
+      const added = medList[medList.length - 1];
+      if (added) rxAutoInitMed(added);
       runBeersAndRender();
     }
 
@@ -3716,6 +4100,8 @@
       const m = medList.find(x => x.id === id);
       if (!m) return;
       m[field] = val;
+      if (["usage","nameZh","nameEn","generic"].includes(field) && m.rx) m.rx.confirmed = false;
+      if (m.rxNotes) m.rxNotes = {};
       if (field === 'generic' || field === 'nameZh' || field === 'nameEn') {
         runBeersCriteria2023();
       }
@@ -3847,7 +4233,7 @@
               <div class="grid-2">
                 <div>
                   <label>外觀描述</label>
-                  <input type="text" value="${escapeAttr(m.appearance)}" oninput="updateMedField('${m.id}', 'appearance', this.value)" />
+                  <input type="text" value="${escapeAttr(m.appearance||'官方資料未提供')}" readonly />
                 </div>
                 <div>
                   <label>怎麼吃（白話用法）</label>
@@ -3874,11 +4260,12 @@
                 <button type="button" class="btn btn-danger btn-sm" onclick="removeMed('${m.id}')">刪除</button>
               </div>
             </div>
+            ${rxEditor(m)}
             <div class="med-editor-body">
               <div class="grounding-box ${st.color === 'red' ? 'unverified' : ''}">
                 <div style="font-weight:700; color:${st.color === 'red' ? 'var(--danger)' : 'var(--primary-dark)'};">
                   ${hasRaw
-                    ? '✅ 已具備官方仿單原文（AI 改寫將嚴格限定依此原文生成，零幻覺）'
+                    ? '✅ 已具備官方仿單原文（AI 改寫將嚴格限定依此原文生成，需藥師核對）'
                     : (isPdfOnly
                       ? '📄 本品項官方仿單為 PDF 格式，請點下方按鈕檢視衛福部官方仿單 PDF，或複製文字貼於下方進行 AI 接地生成。'
                       : (st.color === 'red'
@@ -3893,7 +4280,7 @@
                 </div>
                 ${structuredSecHtml}
                 <label style="margin-top:6px;">📄 官方仿單原文（${hasRaw ? `已載入 ${m.rawLeafletText.length.toLocaleString()} 字` : '尚未載入，請從上方官方仿單複製貼上'}）</label>
-                <textarea style="min-height:48px; font-size:11.5px;" placeholder="貼上 TFDA 官方仿單的適應症、用法、警語與副作用原文，即可啟動無幻覺 AI 接地生成..." oninput="updateMedField('${m.id}', 'rawLeafletText', this.value)">${escapeHtml(m.rawLeafletText || '')}</textarea>
+                <textarea style="min-height:48px; font-size:11.5px;" placeholder="貼上 TFDA 官方仿單的適應症、用法、警語與副作用原文，即可啟動依原文 AI 接地生成..." oninput="updateMedField('${m.id}', 'rawLeafletText', this.value)">${escapeHtml(m.rawLeafletText || '')}</textarea>
               </div>
 
               <div class="grid-2">
@@ -3923,18 +4310,15 @@
               <input type="text" value="${escapeAttr(m.storage || '')}" placeholder="例如：室溫 25°C 以下避光保存..." oninput="updateMedField('${m.id}', 'storage', this.value)" />
               <label style="color:var(--danger);">⚠️ 特別警示（如防跌、防低血糖、防出血、每週一次，留空則不印紅框）</label>
               <input type="text" value="${escapeAttr(m.specialAlertText || '')}" placeholder="例如：易頭暈想睡，起床放慢動作防跌倒" oninput="updateMedField('${m.id}', 'specialAlertText', this.value)" />
-              <label>服藥時段（對應上方「用藥時間表」）</label>
+              <label>舊版時段（新版請使用上方處方時段）</label>
               <div class="check-grid">
                 ${[['morning','早餐後'],['noon','午餐後'],['evening','晚餐後'],['bedtime','睡前'],['prn','需要時']].map(([tk, tl]) => `
                   <label class="check-pill" style="font-size:11px; padding:2px 7px;">
-                    <input type="checkbox" ${(m.timings || []).includes(tk) ? 'checked' : ''} onchange="toggleMedTiming('${m.id}', '${tk}', this.checked)" />${tl}
+                    <input type="checkbox" ${(m.timings || []).includes(tk) ? 'checked' : ''} disabled />${tl}
                   </label>
                 `).join('')}
               </div>
-              ${m.isNhiOnly ? '' : `
-                <label>替換外觀圖片（選填）</label>
-                <input type="file" accept="image/*" onchange="uploadMedImg('${m.id}', event)" style="font-size:11px;" />
-              `}
+              
             </div>
           </div>
         `;
@@ -3980,7 +4364,7 @@
       `;
     }
 
-    function renderPreview() {
+    function renderLegacyPreview() {
       const sheet = document.getElementById('a4Preview');
       const lang = currentPrintLang || 'zh';
       const L = LANG_LABELS[lang] || LANG_LABELS.zh;
@@ -4345,7 +4729,7 @@
       return JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text || '{}');
     }
 
-    // 單一藥品：強制僅依「官方仿單原文」生成白話衛教（零幻覺接地）
+    // 單一藥品：強制僅依「官方仿單原文」生成白話衛教（需藥師核對接地）
     async function aiGenerateSingleFromLeaflet(id) {
       const m = medList.find(x => x.id === id);
       if (!m) return;
@@ -4620,6 +5004,7 @@ ${JSON.stringify(items)}
           beersLevel: 'none', beersTags: []
         };
       });
+      medList.forEach(m => rxAutoInitMed(m));
       runBeersAndRender();
     }
 
@@ -4638,7 +5023,7 @@ ${JSON.stringify(items)}
       const drug = document.getElementById('rep_drug').value.trim() || '（未指定）';
       const desc = document.getElementById('rep_desc').value.trim();
       const contact = document.getElementById('rep_contact').value.trim() || '（未填寫）';
-      const env = `Polypharmacy-v39 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
+      const env = `CareRx-v41 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
       return { type, drug, desc, contact, env, plainText: `【類型】${type}\n【藥品】${drug}\n【描述】${desc}\n【聯絡】${contact}\n【環境】${env}` };
     }
 
@@ -4670,6 +5055,1000 @@ ${JSON.stringify(items)}
     }
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeHelpModal(); closeReportModal(); } });
+
+    // =========================================================================
+    // V41 CareRx Clean Engine:
+    // - Lazy-loaded appearance_extra.json (keeps index.html ~320KB instead of 2.8MB)
+    // - Oral + Non-oral (topical/injection/drops/inhaler/patch/suppository/liquid/powder) icons & labels
+    // - Time-of-day SVG icons & clean SVG precaution category icons
+    // - Priority 1-page A4 -> Auto Page 2 pagination (no fixed 2/3+1/3, never blocks print)
+    // =========================================================================
+    let RX_SCORE = {};
+    let RX_LEAF_APPEARANCE = {};
+
+    async function loadAppearanceExtra(base) {
+      try {
+        const res = await fetchWithTimeout(`${base || './data/'}appearance_extra.json`, 15000);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.leaf) RX_LEAF_APPEARANCE = data.leaf;
+        if (data && data.score) RX_SCORE = data.score;
+        if (medList.length) {
+          medList.forEach(m => {
+            if (m.officialAppearance && !m.officialAppearance.score && m.licenseId && RX_SCORE[m.licenseId]) {
+              m.officialAppearance.score = RX_SCORE[m.licenseId];
+            }
+          });
+          renderMedEditorList();
+          renderPreview();
+        }
+      } catch (_) {}
+    }
+
+    const RX_TEXT = {
+      zh:['每日用藥時間表','重要注意事項','早餐前','早餐後','午餐前','午餐後','晚餐前','晚餐後','睡前','需要時','其他時間','每次','顆','毫克','毫升','次','滴','噴','貼','包','支','請依處方使用','尚無特別注意事項，請按時服藥。','※ 本單張僅供用藥衛教參考，請勿自行停藥或改變劑量，若有疑問請詢問醫師或藥師。'],
+      en:['Daily Medication Schedule','Important Precautions','Before breakfast','After breakfast','Before lunch','After lunch','Before dinner','After dinner','Bedtime','As needed','Other time','Each dose','tablet(s)','mg','mL','time(s)','drop(s)','puff(s)','patch(es)','pack(s)','shot(s)','Use as prescribed','No special precautions noted. Take as directed.','※ For counseling only. Do NOT stop or change your dose without asking your doctor or pharmacist.'],
+      vi:['Lịch dùng thuốc hàng ngày','Lưu ý quan trọng','Trước ăn sáng','Sau ăn sáng','Trước ăn trưa','Sau ăn trưa','Trước ăn tối','Sau ăn tối','Trước khi ngủ','Khi cần','Giờ khác','Mỗi lần','viên','mg','mL','lần','giọt','nhát xịt','miếng dán','gói','mũi tiêm','Dùng theo đơn','Chưa có lưu ý đặc biệt. Hãy dùng thuốc đúng giờ.','※ Chỉ mang tính hướng dẫn. Không tự ý ngừng thuốc hoặc đổi liều khi chưa hỏi bác sĩ/dược sĩ.'],
+      id:['Jadwal Minum Obat Harian','Perhatian Penting','Sebelum sarapan','Sesudah sarapan','Sebelum makan siang','Sesudah makan siang','Sebelum makan malam','Sesudah makan malam','Sebelum tidur','Bila perlu','Waktu lain','Setiap dosis','tablet','mg','mL','kali','tetes','semprot','koyo/patch','saset','suntikan','Gunakan sesuai resep','Tidak ada catatan khusus. Gunakan secara teratur.','※ Hanya untuk panduan. Jangan menghentikan atau mengubah dosis tanpa bertanya kepada dokter/apoteker.'],
+      th:['ตารางการใช้ยาประจำวัน','ข้อควรระวังสำคัญ','ก่อนอาหารเช้า','หลังอาหารเช้า','ก่อนอาหารกลางวัน','หลังอาหารกลางวัน','ก่อนอาหารเย็น','หลังอาหารเย็น','ก่อนนอน','เมื่อจำเป็น','เวลาอื่น','ครั้งละ','เม็ด','มก.','มล.','ครั้ง','หยด','พ่น','แผ่น','ซอง','เข็ม','ใช้ตามใบสั่งยา','ไม่มีข้อควรระวังพิเศษ กรุณาใช้ยาตามแพทย์สั่ง','※ เพื่อเป็นแนวทางเท่านั้น ห้ามหยุดยาหรือปรับขนาดยาเองโดยไม่ปรึกษาแพทย์หรือเภสัชกร']
+    };
+
+    const RX_FREQ = {
+      zh:['每日一次','每日兩次','每日三次','每日四次','需要時','每週一次','其他（依處方）'],
+      en:['Once daily','Twice daily','Three times daily','Four times daily','As needed','Once weekly','Other (as prescribed)'],
+      vi:['1 lần/ngày','2 lần/ngày','3 lần/ngày','4 lần/ngày','Khi cần','1 lần/tuần','Khác (theo đơn)'],
+      id:['1 kali sehari','2 kali sehari','3 kali sehari','4 kali sehari','Bila perlu','1 kali seminggu','Lainnya (sesuai resep)'],
+      th:['วันละครั้ง','วันละ 2 ครั้ง','วันละ 3 ครั้ง','วันละ 4 ครั้ง','เมื่อจำเป็น','สัปดาห์ละครั้ง','อื่น ๆ (ตามใบสั่งยา)']
+    };
+
+    const RX_CATS = {
+      zh:['飲食','防跌','腎臟','回診','注意','就醫'],
+      en:['Food','Falls','Kidneys','Follow-up','Caution','Urgent care'],
+      vi:['Ăn uống','Tránh ngã','Thận','Tái khám','Lưu ý','Đi khám ngay'],
+      id:['Makanan','Cegah jatuh','Ginjal','Kontrol','Perhatian','Segera berobat'],
+      th:['อาหาร','ป้องกันล้ม','ไต','พบแพทย์','ระวัง','พบแพทย์ทันที']
+    };
+
+    const RX_UNITS = [
+      ['tablet','顆／錠'],
+      ['ml','mL（毫升）'],
+      ['drop','滴'],
+      ['puff','噴／吸'],
+      ['application','次（外用）'],
+      ['patch','貼'],
+      ['pack','包'],
+      ['shot','支／針'],
+      ['mg','mg（毫克）'],
+      ['other','其他']
+    ];
+
+    const RX_PURPOSES = {
+      zh:['降血壓','降血糖','降血脂','心臟保護','預防血栓','退燒止痛','感冒藥','化痰止咳','過敏／流鼻水','胃藥／護胃','幫助睡眠','神經痛／頭暈','攝護腺／排尿','痛風／降尿酸','抗生素','外用消炎止癢','眼藥水','骨質疏鬆','其他'],
+      en:['Lower blood pressure','Lower blood sugar','Lower cholesterol','Heart protection','Prevent blood clots','Fever & pain relief','Cold medicine','Cough & phlegm','Allergy / runny nose','Stomach medicine','Help with sleep','Nerve pain / dizziness','Prostate / urination','Gout / uric acid','Antibiotic','Topical anti-itch / relief','Eye drops','Osteoporosis','Other'],
+      vi:['Hạ huyết áp','Hạ đường huyết','Hạ mỡ máu','Bảo vệ tim','Ngừa cục máu đông','Hạ sốt giảm đau','Thuốc cảm','Giảm ho long đờm','Dị ứng / sổ mũi','Thuốc dạ dày','Hỗ trợ giấc ngủ','Đau thần kinh / chóng mặt','Tuyến tiền liệt / tiểu tiện','Gút / axit uric','Kháng sinh','Thuốc bôi ngoài da','Thuốc nhỏ mắt','Loãng xương','Khác'],
+      id:['Menurunkan tekanan darah','Menurunkan gula darah','Menurunkan kolesterol','Pelindung jantung','Mencegah bekuan darah','Demam & pereda nyeri','Obat flu','Batuk & dahak','Alergi / pilek','Obat lambung','Membantu tidur','Nyeri saraf / pusing','Prostat / berkemih','Asam urat','Antibiotik','Obat oles kulit','Tetes mata','Osteoporosis','Lainnya'],
+      th:['ลดความดันโลหิต','ลดน้ำตาลในเลือด','ลดไขมันในเลือด','บำรุงและปกป้องหัวใจ','ป้องกันลิ่มเลือด','ลดไข้แก้ปวด','ยาแก้หวัด','แก้ไอละลายเสมหะ','แก้แพ้ / น้ำมูกไหล','ยารักษาโรคกระเพาะ','ช่วยให้นอนหลับ','ปวดปลายประสาท / เวียนหัว','ต่อมลูกหมาก / ปัสสาวะ','โรคเกาต์ / ลดกรดยูริก','ยาปฏิชีวนะ','ยาทาภายนอกแก้คัน/อักเสบ','ยาหยอดตา','โรคกระดูกพรุน','อื่น ๆ']
+    };
+
+    const RX_CUSTOM_PURPOSE_I18N = {
+      '感冒藥': { en:'Cold medicine', vi:'Thuốc cảm', id:'Obat flu', th:'ยาแก้หวัด' },
+      '感冒': { en:'Cold relief', vi:'Trị cảm', id:'Obat flu', th:'แก้หวัด' },
+      '止痛': { en:'Pain relief', vi:'Giảm đau', id:'Pereda nyeri', th:'แก้ปวด' },
+      '止痛藥': { en:'Pain reliever', vi:'Thuốc giảm đau', id:'Obat nyeri', th:'ยาแก้ปวด' },
+      '退燒': { en:'Fever relief', vi:'Hạ sốt', id:'Penurun demam', th:'ลดไข้' },
+      '消炎': { en:'Anti-inflammatory', vi:'Kháng viêm', id:'Anti radang', th:'แก้อักเสบ' },
+      '消炎止痛': { en:'Pain & inflammation', vi:'Giảm đau kháng viêm', id:'Nyeri & radang', th:'แก้ปวดแก้อักเสบ' },
+      '止咳': { en:'Cough relief', vi:'Giảm ho', id:'Pereda batuk', th:'แก้ไอ' },
+      '化痰': { en:'Loosen phlegm', vi:'Long đờm', id:'Pengencer dahak', th:'ละลายเสมหะ' },
+      '過敏': { en:'Allergy relief', vi:'Trị dị ứng', id:'Obat alergi', th:'แก้แพ้' },
+      '流鼻水': { en:'Runny nose', vi:'Sổ mũi', id:'Pilek', th:'ลดน้ำมูก' },
+      '便祕': { en:'Constipation relief', vi:'Trị táo bón', id:'Obat sembelit', th:'แก้ท้องผูก' },
+      '軟便': { en:'Stool softener', vi:'Làm mềm phân', id:'Pelunak feses', th:'ช่วยระบาย' },
+      '止瀉': { en:'Diarrhea relief', vi:'Cầm tiêu chảy', id:'Obat diare', th:'แก้ท้องเสีย' },
+      '胃藥': { en:'Stomach medicine', vi:'Thuốc dạ dày', id:'Obat lambung', th:'ยาโรคกระเพาะ' },
+      '安眠藥': { en:'Sleep aid', vi:'Thuốc ngủ', id:'Obat tidur', th:'ยานอนหลับ' },
+      '維他命': { en:'Vitamin supplement', vi:'Bổ sung vitamin', id:'Suplemen vitamin', th:'วิตามินเสริม' },
+      '補鈣': { en:'Calcium supplement', vi:'Bổ sung canxi', id:'Suplemen kalsium', th:'แคลเซียมเสริม' },
+      '消水腫': { en:'Reduce swelling', vi:'Giảm phù nề', id:'Mengurangi bengkak', th:'ลดอาการบวม' },
+      '心臟': { en:'Heart medicine', vi:'Thuốc tim mạch', id:'Obat jantung', th:'ยาโรคหัวใจ' }
+    };
+
+    const RX_NONORAL_I18N = {
+      ointment:    { zh:'外用藥膏', en:'Topical cream/ointment', vi:'Thuốc bôi ngoài da', id:'Salep / krim oles', th:'ยาทาภายนอก' },
+      injection:   { zh:'注射針劑', en:'Injection', vi:'Thuốc tiêm', id:'Obat suntik', th:'ยาฉีด' },
+      drops:       { zh:'點眼／滴劑', en:'Eye / ear drops', vi:'Thuốc nhỏ mắt / tai', id:'Obat tetes', th:'ยาหยอดตา/หู' },
+      inhaler:     { zh:'吸入劑', en:'Inhaler', vi:'Thuốc hít', id:'Inhaler', th:'ยาพ่นสูด' },
+      patch:       { zh:'外用貼片', en:'Skin patch', vi:'Miếng dán ngoài da', id:'Koyo / patch kulit', th:'แผ่นแปะผิวหนัง' },
+      suppository: { zh:'栓劑', en:'Suppository', vi:'Thuốc đặt', id:'Supositoria', th:'ยาเหน็บ' },
+      liquid:      { zh:'口服藥水', en:'Oral liquid', vi:'Thuốc nước uống', id:'Obat cair / sirup', th:'ยาน้ำรับประทาน' },
+      powder:      { zh:'藥粉／顆粒', en:'Powder / granules', vi:'Thuốc bột / cốm', id:'Obat bubuk / granul', th:'ยาผง/แกรนูล' }
+    };
+
+    const RX_UNKNOWN = {
+      zh:'藥品（請核對藥袋）',
+      en:'Check medicine bag',
+      vi:'Đối chiếu túi thuốc',
+      id:'Cek kantong obat',
+      th:'ตรวจสอบซองยา'
+    };
+
+    // 時段專屬 SVG 圖示（0:早餐前, 1:早餐後, 2:午餐前, 3:午餐後, 4:晚餐前, 5:晚餐後, 6:睡前, 7:需要時, 8:其他時間）
+    function rxSlotIconSvg(slotIdx) {
+      const i = Number(slotIdx);
+      const wrap = (inner) => `<svg class="rx-slot-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+      if (i === 0) return wrap('<path d="M12 4v3M4.9 10.9l2.1 2.1M19.1 10.9l-2.1 2.1"/><path d="M7 16a5 5 0 0 1 10 0"/><path d="M3 16h18M6 20h12"/>'); // 早餐前：日出
+      if (i === 1) return wrap('<path d="M12 3v3M5.6 9.6l2.1 2.1M18.4 9.6l-2.1 2.1"/><path d="M7 15a5 5 0 0 1 10 0" fill="currentColor" fill-opacity="0.28"/><path d="M3 15h18M7 19h10"/>'); // 早餐後：晨陽
+      if (i === 2) return wrap('<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/>'); // 午餐前：太陽線條
+      if (i === 3) return wrap('<circle cx="12" cy="12" r="4.5" fill="currentColor" fill-opacity="0.3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/>'); // 午餐後：正午太陽
+      if (i === 4) return wrap('<path d="M7 15a5 5 0 0 1 10 0"/><path d="M3 15h18M12 5v4M9 7l3 2 3-2M6 19h12"/>'); // 晚餐前：日落
+      if (i === 5) return wrap('<path d="M7 15a5 5 0 0 1 10 0" fill="currentColor" fill-opacity="0.28"/><path d="M3 15h18M5 19h14M17 6.5a2.5 2.5 0 0 0 2 2.4"/>'); // 晚餐後：傍晚
+      if (i === 6) return wrap('<path d="M20 14.5A8 8 0 0 1 9.5 4a7.5 7.5 0 1 0 10.5 10.5z" fill="currentColor" fill-opacity="0.22"/><path d="M16 5l.7 1.6L18.3 7l-1.6.7L16 9.3l-.7-1.6L13.7 7l1.6-.7z" fill="currentColor" stroke="none"/>'); // 睡前：月亮星星
+      if (i === 7) return wrap('<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 7v10M7 12h10"/>'); // 需要時：急救十字
+      return wrap('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'); // 其他時間：時鐘
+    }
+
+    // 注意事項分類 SVG 圖示（0:飲食, 1:防跌, 2:腎臟, 3:回診, 4:注意, 5:就醫）
+    function rxCatIconSvg(k) {
+      const wrap = (inner) => `<svg class="rx-cat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+      if (k === 0) return wrap('<path d="M4 11h16a7 7 0 0 1-14 0z"/><path d="M8 7c0-1.5 1-2.5 1-4M12 7c0-1.5 1-2.5 1-4M16 7c0-1.5 1-2.5 1-4"/>'); // 飲食
+      if (k === 1) return wrap('<circle cx="12" cy="5" r="2"/><path d="M9 21l2-6 3 2 1 4M8 12l4-3 4 2"/>'); // 防跌
+      if (k === 2) return wrap('<path d="M12 3s6 6.2 6 11a6 6 0 1 1-12 0c0-4.8 6-11 6-11z"/>'); // 腎臟/水分
+      if (k === 3) return wrap('<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M12 13v4M10 15h4"/>'); // 回診
+      if (k === 4) return wrap('<path d="M12 3L2.5 19.5h19L12 3z"/><path d="M12 10v4M12 17h.01"/>'); // 注意
+      return wrap('<circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/>'); // 就醫
+    }
+
+    // 非口服劑型 SVG 圖示
+    function rxNonOralIconSvg(kind) {
+      if (kind === 'ointment') {
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="8" y="13" width="38" height="14" rx="3" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><path d="M46 16 L54 17.5 V22.5 L46 24 Z" fill="#2f6b63"/><rect x="54" y="16" width="5" height="8" rx="1.5" fill="#1f4a44"/><path d="M14 13 V27 M22 18 H38 M22 22 H34" stroke="#2f6b63" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      }
+      if (kind === 'injection') {
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M6 20 H14 M10 14 V26" stroke="#2f6b63" stroke-width="2.2" stroke-linecap="round"/><rect x="14" y="14" width="30" height="12" rx="2" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><path d="M22 14 V19 M28 14 V19 M34 14 V19" stroke="#2f6b63" stroke-width="1.6"/><path d="M44 17 H50 V23 H44 M50 20 H60" stroke="#1f4a44" stroke-width="2.2" stroke-linecap="round"/></svg>';
+      }
+      if (kind === 'drops') {
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M22 15 H36 V33 A3 3 0 0 1 33 36 H25 A3 3 0 0 1 22 33 Z" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><path d="M25 15 V10 L29 5 L33 10 V15" fill="#2f6b63"/><path d="M46 15 C46 15 52 22 52 26 A6 6 0 1 1 40 26 C40 22 46 15 46 15 Z" fill="#84b4df" stroke="#1f4a44" stroke-width="2"/></svg>';
+      }
+      if (kind === 'inhaler') {
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M24 6 H36 V24 L48 24 V34 H24 A4 4 0 0 1 20 30 V10 A4 4 0 0 1 24 6 Z" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><rect x="26" y="4" width="8" height="5" rx="1" fill="#2f6b63"/><path d="M51 27 H57 M51 31 H56" stroke="#2f6b63" stroke-width="2" stroke-linecap="round"/></svg>';
+      }
+      if (kind === 'patch') {
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="10" y="9" width="44" height="22" rx="7" fill="#f7efd9" stroke="#a5502a" stroke-width="2.2"/><rect x="23" y="13" width="18" height="14" rx="2" fill="#fff" stroke="#a5502a" stroke-width="1.6" stroke-dasharray="3 2"/></svg>';
+      }
+      if (kind === 'suppository') {
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M16 14 H36 C46 14 52 17 52 20 C52 23 46 26 36 26 H16 A4 4 0 0 1 12 22 V18 A4 4 0 0 1 16 14 Z" fill="#ffffff" stroke="#4d5350" stroke-width="2.2"/></svg>';
+      }
+      if (kind === 'liquid') {
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="25" y="4" width="14" height="6" rx="1.5" fill="#2f6b63"/><path d="M26 10 H38 L42 16 V33 A3 3 0 0 1 39 36 H25 A3 3 0 0 1 22 33 V16 Z" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><path d="M23 23 H41 V33 A2 2 0 0 1 39 35 H25 A2 2 0 0 1 23 33 Z" fill="#f6d45b" opacity="0.65"/></svg>';
+      }
+      // powder sachet
+      return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="14" y="6" width="36" height="28" rx="3" fill="#fdfcf9" stroke="#2f6b63" stroke-width="2.2"/><path d="M14 12 H50 M14 28 H50" stroke="#2f6b63" stroke-width="1.5" stroke-dasharray="3 2"/><circle cx="28" cy="20" r="1.5" fill="#2f6b63"/><circle cx="33" cy="22" r="1.5" fill="#2f6b63"/><circle cx="37" cy="19" r="1.5" fill="#2f6b63"/></svg>';
+    }
+
+    const RX_COLORS = {'灰白':'#e9e8e4','乳白':'#fff7e4','淡黃':'#f7e6a0','淺藍':'#b9dafa','深藍':'#416a9b','白':'#ffffff','黃':'#f6d45b','粉':'#eda0b7','橘':'#f1a15c','藍':'#84b4df','綠':'#9bc89d','紅':'#e47b76','棕':'#a67b5a','紫':'#b49bd7','灰':'#b4b7ba','黑':'#484848','透明':'#ffffff'};
+    const RX_COLOR_ZH = {'灰白':'灰白色','乳白':'乳白色','淡黃':'淡黃色','淺藍':'淺藍色','深藍':'深藍色','白':'白色','黃':'黃色','粉':'粉紅色','橘':'橘色','藍':'藍色','綠':'綠色','紅':'紅色','棕':'棕色','紫':'紫色','灰':'灰色','黑':'黑色','透明':'透明'};
+
+    function rxDetectNonOralForm(m, extraText = '') {
+      const s = `${m?.dosageForm || ''} ${m?.nameZh || ''} ${m?.nameEn || ''} ${extraText || ''}`;
+      if (/注射|針劑|針筒|點滴|輸注|安瓿|凍晶|預充|insulin|injection|syringe|ampoule|vial/i.test(s) && !/錠|膠囊|tablet|capsule/i.test(m?.dosageForm || m?.nameZh || '')) return 'injection';
+      if (/貼片|貼布|藥膠布|穿皮|patch/i.test(s)) return 'patch';
+      if (/吸入|定量噴霧|乾粉吸入|inhaler|turbuhaler|ellipta|respimat|evohaler|aerosphere/i.test(s)) return 'inhaler';
+      if (/栓劑|陰道錠|陰道|子彈形|suppository/i.test(s)) return 'suppository';
+      if (/點眼|眼藥水|眼用|耳滴|耳用|鼻噴|鼻用|ophthalmic|eye\s*drop|nasal\s*spray/i.test(s)) return 'drops';
+      if (/軟膏|乳膏|凝膠|口內膏|口內膠|藥膏|乳霜|乳液|洗劑|擦劑|外用|泡沫|cream|ointment|gel|lotion|topical/i.test(s)) return 'ointment';
+      if (/糖漿|口服液|內服液|懸浮液|懸濁液|懸液|藥液|溶液|液劑|滴液|syrup|solution|suspension/i.test(s) && !/錠|膠囊|tablet|capsule/i.test(m?.dosageForm || m?.nameZh || '')) return 'liquid';
+      if (/散劑|粉劑|顆粒|沖泡|粉末|powder|granule/i.test(m?.dosageForm || m?.nameZh || '') && !/錠|膠囊|tablet|capsule/i.test(m?.dosageForm || m?.nameZh || '')) return 'powder';
+      return '';
+    }
+
+    function rxPickStrengthLine(text, m) {
+      const lines = String(text || '').split(/\n+/).map(x => x.trim()).filter(Boolean);
+      if (lines.length <= 1) return lines[0] || '';
+      const nameStr = `${m?.nameZh || ''} ${m?.nameEn || ''}`.normalize('NFKC');
+      const numMatches = [...nameStr.matchAll(/(\d+(?:\.\d+)?)\s*(?:毫克|公絲|微克|mg|mcg|ug|ml|%)/gi)];
+      for (const nm of numMatches) {
+        const val = nm[1];
+        const hit = lines.find(ln => new RegExp(`(?:^|\\D)${val.replace('.','\\.')}\\s*(?:毫克|公絲|微克|mg|mcg|ug|%)`, 'i').test(ln));
+        if (hit) return hit;
+      }
+      return lines[0];
+    }
+
+    function rxParseAppearance(text, m = null) {
+      const raw = String(text || '').normalize('NFKC').trim();
+      if (!raw) return null;
+      if (/^(?:暫無|暫不提供|目前無相關資訊|目前尚無資訊|目前此仿單無此資料|無資料|無|見劑型|請參見.*|\[圖：請見原始仿單\]|［圖：請見原始仿單］|\s|\ufeff)+$/.test(raw)) return null;
+
+      const cleanedRaw = raw.replace(/[\[［]圖[:：]請見原始仿單[\]］]/g, ' ');
+      const t0 = rxPickStrengthLine(cleanedRaw, m);
+
+      // 非口服劑型優先判定（若品名/劑型本身即非口服，或文字描述非口服劑型）
+      const nonOral = rxDetectNonOralForm(m, t0);
+      if (nonOral && !/錠|膠囊|tablet|capsule/i.test(m?.dosageForm || '')) {
+        return { nonOral };
+      }
+
+      // 先剝除「內含白色粉末」「白色粉末充填於...」「印有黑色字樣」避免內容物或油墨顏色干擾外殼顏色
+      let tShell = t0
+        .replace(/[^\s，。；;,]*?(?:粉末|粉體|顆粒|微粒|小球|藥粒|液體|油液|乳劑)\s*(?:充填於|裝於|置於)/g, ' ')
+        .replace(/(?:內含|內裝|充填有?|裝有)[^，。；;\n]*(?:粉末|粉體|顆粒|微粒|小球|藥粒|液體|油液|乳劑)[^，。；;\n]*/g, ' ')
+        .replace(/(?:印有|標示有?|字樣)[^，。；;\n]*(?:黑|白|紅|藍|綠|黃|橘|紫|棕|灰)(?:色)?(?:字|墨|印|油墨)[^，。；;\n]*/g, ' ')
+        .replace(/型/g, '形')
+        .replace(/楕/g, '橢');
+
+      const shapeRules = [
+        ['膠囊', /硬膠囊|軟膠囊|膠囊(?!形錠|形膜衣|形雙凸|狀錠|狀膜衣|狀雙凸|形狀錠|形狀膜衣|形狀之膜衣|形狀雙凸|形藥錠|橢圓形錠)|capsule/i],
+        ['八邊形', /八角形|八邊形|octagonal/i],
+        ['六邊形', /六角形|六邊形|hexagonal/i],
+        ['五邊形', /五角形|五邊形|pentagonal/i],
+        ['三角形', /三角形|三角錠|triangular/i],
+        ['四邊形', /正方形|四方形|四邊形|方形|長方形|矩形|四角形|square|rectangular/i],
+        ['菱形', /菱形|diamond/i],
+        ['長形', /長橢圓形|長條形|長圓形|長圓柱形|圓柱形|桿狀|膠囊形錠|膠囊形膜衣|膠囊狀膜衣|膠囊狀錠|膠囊形狀|膠囊形雙凸|膠囊形藥錠|長形|caplet|oblong/i],
+        ['橢圓形', /橢圓形|橢圓|卵圓形|卵形|蛋形|鵝蛋形|鵝卵形|杏仁形|杏仁狀|橄欖形|心形|水滴形|梨形|蘋果形|淚珠形|瓜子形|oval|olive/i],
+        ['圓形', /圓形|圓扁形|扁圓形|圓凸形|雙凸圓|雙圓形|圓錠|丸面|round/i]
+      ];
+      let shape = '';
+      for (const [sk, pat] of shapeRules) {
+        if (pat.test(tShell)) { shape = sk; break; }
+      }
+      if (!shape) {
+        if (/蓋.*體|帽.*身|頭.*身|CAP.*BODY|膠囊/i.test(tShell)) shape = '膠囊';
+        else if (/錠|片劑|藥片|口溶|咀嚼|裸錠|膜衣|糖衣|腸溶|tablet/i.test(tShell + ' ' + (m?.dosageForm || ''))) shape = '圓形';
+      }
+
+      // 範圍色（如 白色至淡黃色）先簡化為主要第一色
+      const tCol = tShell.replace(/(白色|乳白色|灰白色|類白色|淡黃色|淺黃色|黃色|粉紅色|淡粉紅色|橘色|橙色|紅色|藍色|綠色|棕色|褐色|紫色|灰色)\s*(?:至|到|或|~|～)\s*[^\s，。；、,]+/g, '$1');
+
+      const colorRules = [
+        ['乳白', /乳白色|米白色|象牙白色|象牙色|乳白|米白/gi],
+        ['灰白', /灰白色|類白色|近白色|灰白|類白|微白|off-?white/gi],
+        ['淡黃', /淡黃色|淺黃色|微黃色|鵝黃色|乳黃色|米黃色|淡黃|淺黃|微黃|米色|淺米|light\s*yellow|pale\s*yellow|beige/gi],
+        ['淺藍', /淺藍色|淡藍色|水藍色|天藍色|天空藍|淺青色|淡青色|粉藍色|灰藍色|淺藍|淡藍|水藍|淺青|light\s*blue/gi],
+        ['深藍', /深藍色|寶藍色|暗藍色|深藍|寶藍|dark\s*blue/gi],
+        ['粉', /粉紅色|淡粉紅|淺粉紅|桃紅色|玫瑰紅|玫瑰粉|粉桃色|淡紅色|淺紅色|桃色|粉色|粉紅|pink|peach/gi],
+        ['橘', /橘紅色|橙紅色|橘黃色|橙黃色|粉橘色|粉橙色|淡橘色|淺橘色|淡橙色|淺橙色|橘棕色|棕橘色|柑紅色|柑橘色|柑色|橘色|橙色|桔色|桔紅|膚色|蜜桃色|orange/gi],
+        ['棕', /紅棕色|紅褐色|棕紅色|暗紅褐色|褐紅|咖啡色|巧克力色|淺咖啡|深咖啡|棕色|褐色|茶色|土黃色|黃棕色|黃褐色|brown|tan|coffee/gi],
+        ['紫', /藍紫色|紫紅色|淺紫色|淡紫色|深紫色|薰衣草|紫色|purple|violet|lavender/gi],
+        ['綠', /藍綠色|黃綠色|淺綠色|淡綠色|草綠色|深綠色|暗綠色|灰綠色|橄欖綠|水綠色|明綠|綠色|green/gi],
+        ['藍', /藍色|藍光|blue/gi],
+        ['黃', /金黃色|深黃色|亮黃色|黃色|yellow/gi],
+        ['紅', /深紅色|暗紅色|磚紅色|赭紅色|櫻桃紅|朱紅色|酒紅色|紅色|red/gi],
+        ['灰', /淺灰色|深灰色|灰色|gray|grey/gi],
+        ['黑', /黑色|black/gi],
+        ['透明', /無色透明|透明|無色|clear|transparent/gi],
+        ['白', /白色|純白|white/gi]
+      ];
+      const matches = [];
+      const usedSpans = [];
+      for (const [ck, pat] of colorRules) {
+        let mm;
+        while ((mm = pat.exec(tCol)) !== null) {
+          const s0 = mm.index, s1 = s0 + mm[0].length;
+          if (usedSpans.some(([u0, u1]) => !(s1 <= u0 || s0 >= u1))) continue;
+          usedSpans.push([s0, s1]);
+          matches.push([s0, ck]);
+        }
+      }
+      // 支援簡寫雙色（如：白綠膠囊、綠蓋灰體、藍體、紅白雙色）
+      const shortCaps = [...tCol.matchAll(/([白黃粉橘藍綠紅棕紫灰黑])(?=[白黃粉橘藍綠紅棕紫灰黑]?(?:膠囊|蓋|帽|頭|體|身|雙色|、|\/|,))/g)];
+      for (const sm of shortCaps) {
+        const s0 = sm.index, s1 = s0 + 1;
+        if (!usedSpans.some(([u0, u1]) => !(s1 <= u0 || s0 >= u1))) {
+          usedSpans.push([s0, s1]);
+          matches.push([s0, sm[1]]);
+        }
+      }
+      matches.sort((a, b) => a[0] - b[0]);
+      const cs = [];
+      for (const [, ck] of matches) {
+        if (!cs.includes(ck)) cs.push(ck);
+        if (cs.length === 2) break;
+      }
+
+      const score = /十字(?:刻痕|刻線|凹槽|切線|切割|分線)|刻有\s*[＋+]|十字線/.test(tShell) ? '十字'
+        : /無刻痕|沒有刻痕|無刻線|無分割線|無分半線/.test(tShell) ? ''
+        : /刻痕|刻線|分割線|一字刻痕|剝半線|撥半線|中切線|中線|折半線|切割線|割線|平分線|分半線/.test(tShell) ? '直線' : '';
+
+      if (shape && cs.length) return { color: cs.join(';;;'), shape, score };
+      if (shape && !cs.length) return { color: '白', shape, score, neutralColor: true };
+      if (nonOral) return { nonOral };
+      return null;
+    }
+
+    function rxAppearanceSource(m) {
+      // 1. 藥師自訂外觀
+      const manual = String(m.rxAppearanceManual || '').trim();
+      if (manual) return { text: manual, data: rxParseAppearance(manual, m), source: '藥師自訂' };
+
+      // 2. TFDA 官方外觀資料庫（drugs_meta_part*.json，來自 42_5.json）
+      const oa = m.officialAppearance;
+      if (oa && (oa.color || oa.shape)) {
+        const metaDesc = [oa.color, oa.shape].filter(Boolean).join(' ');
+        const parsedMeta = rxParseAppearance(metaDesc, m);
+        if (parsedMeta) {
+          if (!parsedMeta.score && oa.score) parsedMeta.score = oa.score;
+          return { text: m.appearance || metaDesc, data: parsedMeta, source: 'TFDA 官方外觀' };
+        }
+      }
+
+      // 3. 官方仿單外觀描述（data/appearance_extra.json）
+      const lid = String(m.licenseId || '').normalize('NFKC').trim();
+      const officialLeaf = (lid && RX_LEAF_APPEARANCE[lid]) || '';
+      if (officialLeaf) {
+        const data = rxParseAppearance(officialLeaf, m);
+        if (data) {
+          if (!data.score && RX_SCORE[lid]) data.score = RX_SCORE[lid];
+          return { text: officialLeaf, data, source: '官方仿單外觀' };
+        }
+      }
+
+      // 4. 已載入仿單原文或 m.appearance（如範例藥品）
+      const raw = String(m.rawLeafletText || '');
+      const secMatch = raw.match(/(?:^|\n)\s*(?:[\d.]+\s*)?(?:藥品外觀|外觀描述|外觀|性狀)\s*[:：]?\s*([^\n]+)/);
+      if (secMatch && secMatch[1]) {
+        const data = rxParseAppearance(secMatch[1].trim(), m);
+        if (data) return { text: secMatch[1].trim(), data, source: '官方仿單原文' };
+      }
+      if (m.appearance) {
+        const data = rxParseAppearance(m.appearance, m);
+        if (data) return { text: m.appearance, data, source: '藥品外觀資料' };
+      }
+
+      // 5. 劑型智慧辨識（外用藥、針劑、眼藥水、吸入劑、貼片、栓劑、藥水、藥粉）
+      const nonOral = rxDetectNonOralForm(m);
+      if (nonOral) {
+        return { text: m.dosageForm || RX_NONORAL_I18N[nonOral].zh, data: { nonOral }, source: '劑型自動辨識' };
+      }
+      if (/錠|膠囊|tablet|capsule/i.test(`${m.dosageForm || ''} ${m.nameZh || ''} ${m.nameEn || ''}`)) {
+        const sh = /膠囊|capsule/i.test(`${m.dosageForm || ''} ${m.nameZh || ''} ${m.nameEn || ''}`) ? '膠囊' : '圓形';
+        return { text: m.dosageForm || sh, data: { color: '白', shape: sh, score: RX_SCORE[lid] || '', neutralColor: true }, source: '劑型預設（可自訂顏色）' };
+      }
+      return { text: '', data: null, source: '尚無外觀資料（可手動輸入）' };
+    }
+
+    function rxManualAppearance(id, value, el) {
+      const m = rxFind(id);
+      if (!m) return;
+      m.rxAppearanceManual = value;
+      const app = rxAppearance(m, 'zh');
+      const box = el.closest('.rx-edit');
+      if (box) {
+        const thumb = box.querySelector('.rx-thumb');
+        const res = box.querySelector('.rx-appearance-result');
+        if (thumb) thumb.innerHTML = app.icon + '<span>' + escapeHtml(app.label) + '</span>' + (m.imgUrl ? `<img class="rx-official-photo-mini" src="${escapeAttr(m.imgUrl)}" alt="實拍參考" onerror="this.style.display='none'">` : '');
+        if (res) res.textContent = rxAppearanceSource(m).source + '｜' + app.label;
+      }
+      renderPreview();
+    }
+
+    function rxAppearanceField(m) {
+      const a = rxAppearanceSource(m);
+      const app = rxAppearance(m, 'zh');
+      return `<div class="rx-appearance-note">
+        <div class="rx-appearance-result">${escapeHtml(a.source)}｜${escapeHtml(app.label)}</div>
+        ${a.text && a.source !== '藥師自訂' ? `<details><summary>查看外觀原文</summary><div style="margin-top:3px;color:#374151;">${escapeHtml(a.text)}</div></details>` : ''}
+        <label>自訂外觀（留空則自動帶入官方外觀，可輸入如：白色八角錠、紅白雙色膠囊、外用藥膏）</label>
+        <input type="text" value="${escapeAttr(m.rxAppearanceManual || '')}" placeholder="例：白色圓形錠、藍白膠囊、外用乳膏..." oninput="rxManualAppearance('${m.id}',this.value,this)">
+      </div>`;
+    }
+
+    let rxIconSerial = 0;
+    function rxAppearance(m, lang = 'zh') {
+      const src = rxAppearanceSource(m);
+      const d = src.data || {};
+      if (d.nonOral && RX_NONORAL_I18N[d.nonOral]) {
+        const lbl = RX_NONORAL_I18N[d.nonOral][lang] || RX_NONORAL_I18N[d.nonOral].zh;
+        return { label: lbl, icon: rxNonOralIconSvg(d.nonOral), isNonOral: true, nonOralKind: d.nonOral };
+      }
+      const cs = [...new Set(String(d.color || '').split(/;;;|[、；;/]/).map(x => x.trim()).filter(Boolean))];
+      const ss = [...new Set(String(d.shape || '').split(';;;').map(x => x.trim()).filter(Boolean))];
+      const shapes = {
+        '長形':'<rect x="5" y="9" width="54" height="22" rx="11"/>',
+        '菱形':'<path d="M32 3 L59 20 L32 37 L5 20 Z"/>',
+        '圓形':'<circle cx="32" cy="20" r="15"/>',
+        '橢圓形':'<ellipse cx="32" cy="20" rx="27" ry="13"/>',
+        '膠囊':'<rect x="5" y="8" width="54" height="24" rx="12"/>',
+        '四邊形':'<rect x="15" y="3" width="34" height="34" rx="4"/>',
+        '三角形':'<path d="M32 4 L57 34 H7 Z"/>',
+        '五邊形':'<path d="M32 3 L54 17 L45 36 H19 L10 17 Z"/>',
+        '六邊形':'<path d="M18 4 H46 L59 20 L46 36 H18 L5 20 Z"/>',
+        '八邊形':'<path d="M20 4 H44 L57 13 V27 L44 36 H20 L7 27 V13 Z"/>'
+      };
+      const known = cs.length > 0 && cs.length <= 2 && cs.every(x => RX_COLORS[x]) && ss.length === 1 && shapes[ss[0]];
+      if (!known) {
+        return {
+          label: RX_UNKNOWN[lang] || RX_UNKNOWN.zh,
+          icon: '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="15" y="4" width="34" height="32" rx="5" fill="#f4f2ec" stroke="#8b938e" stroke-dasharray="4 3" stroke-width="2"/><text x="32" y="26" text-anchor="middle" fill="#64706b" font-size="18" font-weight="700">Rx</text></svg>',
+          isNonOral: false
+        };
+      }
+      const shapeNameZh = ss[0].replace('八邊形','八角形').replace('四邊形','方形').replace('長形','長條形');
+      let label = d.neutralColor
+        ? (ss[0] === '膠囊' ? '膠囊' : `${shapeNameZh}錠`)
+        : (cs.map(x => RX_COLOR_ZH[x] || x).join('/') + shapeNameZh);
+
+      if (lang !== 'zh') {
+        const pre = label
+          .replace('淺藍色', ({en:'Light blue ',vi:'Xanh dương nhạt ',id:'Biru muda ',th:'สีฟ้าอ่อน '}[lang]))
+          .replace('深藍色', ({en:'Dark blue ',vi:'Xanh dương đậm ',id:'Biru tua ',th:'สีน้ำเงินเข้ม '}[lang]))
+          .replace('乳白色', ({en:'Off-white ',vi:'Trắng ngà ',id:'Putih krem ',th:'สีขาวนวล '}[lang]))
+          .replace('灰白色', ({en:'Off-white ',vi:'Trắng xám ',id:'Putih abu ',th:'สีขาวอมเทา '}[lang]))
+          .replace('淡黃色', ({en:'Light yellow ',vi:'Vàng nhạt ',id:'Kuning muda ',th:'สีเหลืองอ่อน '}[lang]))
+          .replace('五邊形', ({en:'pentagonal ',vi:'ngũ giác ',id:'segi lima ',th:'ห้าเหลี่ยม '}[lang]))
+          .replace('六邊形', ({en:'hexagonal ',vi:'lục giác ',id:'segi enam ',th:'หกเหลี่ยม '}[lang]));
+        label = translateAppearancePhrase(pre, lang);
+        if (/[\u3400-\u9fff]/.test(label)) label = '';
+      }
+      if (!label) label = RX_UNKNOWN[lang];
+
+      const color = d.neutralColor ? '#f4f2ec' : RX_COLORS[cs[0]];
+      const second = (!d.neutralColor && cs.length === 2) ? RX_COLORS[cs[1]] : null;
+      const uid = 'rxp_' + String(m.id).replace(/[^a-zA-Z0-9_-]/g, '') + '_' + (++rxIconSerial);
+      const grad = second ? `<defs><linearGradient id="${uid}"><stop offset="50%" stop-color="${color}"/><stop offset="50%" stop-color="${second}"/></linearGradient></defs>` : '';
+      const capLine = ss[0] === '膠囊' ? '<path d="M32 8 V32" stroke="#4d5350" stroke-width="1.6" opacity="0.55"/>' : '';
+      const score = (ss[0] !== '膠囊' && (d.score === '直線' || d.score === '十字')) ? '<path d="M25 20 H39" stroke="#555" stroke-width="1.6"/>' : '';
+      const cross = (ss[0] !== '膠囊' && d.score === '十字') ? '<path d="M32 13 V27" stroke="#555" stroke-width="1.6"/>' : '';
+      return {
+        label,
+        icon: `<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true">${grad}<g fill="${second ? 'url(#' + uid + ')' : color}" stroke="#4d5350" stroke-width="2.4">${shapes[ss[0]]}</g>${capLine}${score}${cross}</svg>`,
+        isNonOral: false
+      };
+    }
+
+    function rxState(m) {
+      return m.rx || (m.rx = { freq: '', purpose: '', customPurpose: '', customUnit: '', customFreq: '', rows: [{ slot: '', qty: '', unit: '', extra: '' }], confirmed: false });
+    }
+    function rxFind(id) { return medList.find(m => m.id === id); }
+    function rxSelect(values, value, handler) {
+      return `<select onchange="${handler}"><option value="">請選擇</option>${values.map(([k, v]) => `<option value="${escapeAttr(k)}" ${String(value) === String(k) ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('')}</select>`;
+    }
+    function rxPick(values, value, handler) { return rxSelect(values, value, handler); }
+    function rxNoteState(m, lang) { m.rxNotes ||= {}; return m.rxNotes[lang] ||= { text: '', ok: false }; }
+
+    function rxGuessDefaultPurpose(m) {
+      const s = `${m.generic || ''} ${m.nameZh || ''} ${m.nameEn || ''} ${m.purpose || ''}`.toLowerCase();
+      if (/血壓|amlodipine|losartan|valsartan|irbesartan|telmisartan|olmesartan|nifedipine|enalapril|ramipril|lisinopril|bisoprolol|carvedilol|atenolol|propranolol/i.test(s)) return '降血壓';
+      if (/血糖|metformin|empagliflozin|dapagliflozin|canagliflozin|glimepiride|gliclazide|sitagliptin|linagliptin|vildagliptin|pioglitazone|insulin/i.test(s)) return '降血糖';
+      if (/膽固醇|血脂|atorvastatin|rosuvastatin|simvastatin|pravastatin|pitavastatin|ezetimibe|fenofibrate/i.test(s)) return '降血脂';
+      if (/血塊|血栓|中風|warfarin|apixaban|rivaroxaban|dabigatran|edoxaban|aspirin|clopidogrel|ticagrelor/i.test(s)) return '預防血栓';
+      if (/胃酸|胃潰瘍|胃食道|omeprazole|esomeprazole|lansoprazole|pantoprazole|rabeprazole|famotidine/i.test(s)) return '胃藥／護胃';
+      if (/入睡|安眠|失眠|鎮靜|zolpidem|zopiclone|eszopiclone|alprazolam|lorazepam|clonazepam|estazolam|brotizolam/i.test(s)) return '幫助睡眠';
+      if (/神經痛|麻木|癲癇|pregabalin|gabapentin/i.test(s)) return '神經痛／頭暈';
+      if (/攝護腺|排尿|tamsulosin|silodosin|doxazosin|terazosin/i.test(s)) return '攝護腺／排尿';
+      if (/痛風|尿酸|allopurinol|febuxostat|colchicine|benzbromarone/i.test(s)) return '痛風／降尿酸';
+      if (/抗生素|amoxicillin|cephalexin|cefuroxime|levofloxacin|ciprofloxacin|azithromycin|clarithromycin/i.test(s)) return '抗生素';
+      if (/感冒|綜合感冒|流鼻水|鼻炎|chlorpheniramine|cetirizine|loratadine|fexofenadine|pseudoephedrine/i.test(s)) return '感冒藥';
+      if (/止咳|化痰|dextromethorphan|ambroxol|bromhexine|acetylcysteine|guaifenesin/i.test(s)) return '化痰止咳';
+      if (/退燒|止痛|發炎|關節|acetaminophen|paracetamol|diclofenac|ibuprofen|naproxen|celecoxib|etoricoxib|meloxicam|tramadol/i.test(s)) return '退燒止痛';
+      if (/眼用|點眼|眼藥/i.test(s)) return '眼藥水';
+      if (/軟膏|乳膏|凝膠|外用|貼布|貼片/i.test(s)) return '外用消炎止癢';
+      if (/骨質|alendronate|risedronate/i.test(s)) return '骨質疏鬆';
+      if (/心臟|digoxin|amiodarone/i.test(s)) return '心臟保護';
+      return '';
+    }
+
+    function rxAutoInitMed(m) {
+      const r = rxState(m);
+      const nonOral = rxDetectNonOralForm(m);
+      const defaultUnit = nonOral === 'drops' ? 'drop'
+        : nonOral === 'inhaler' ? 'puff'
+        : nonOral === 'patch' ? 'patch'
+        : nonOral === 'injection' ? 'shot'
+        : nonOral === 'liquid' ? 'ml'
+        : nonOral === 'powder' ? 'pack'
+        : (nonOral === 'ointment' || nonOral === 'suppository') ? 'application'
+        : 'tablet';
+
+      const u = String(m.usage || '');
+      const doseM = u.match(/(半|[0-9]+(?:\.[0-9]+)?)\s*(?:顆|錠|粒|包|滴|噴|貼|支|毫升|mL)/i);
+      const qty = doseM ? (doseM[1] === '半' ? '0.5' : doseM[1]) : '1';
+      const isAC = /飯前|空腹/.test(u);
+      const slots = [];
+      if (/早|三餐/.test(u)) slots.push(isAC ? '0' : '1');
+      if (/午|中|三餐/.test(u)) slots.push(isAC ? '2' : '3');
+      if (/晚|三餐/.test(u)) slots.push(isAC ? '4' : '5');
+      if (/睡前/.test(u)) slots.push('6');
+      if (/需要時|痛時|不適時/.test(u) && !slots.length) slots.push('7');
+      if (!slots.length) slots.push('1');
+
+      const extraDefault = nonOral === 'ointment' ? '塗抹於患部'
+        : nonOral === 'drops' ? '點於患處'
+        : nonOral === 'patch' ? '貼於患處皮膚'
+        : nonOral === 'injection' ? '依醫護指示注射'
+        : nonOral === 'inhaler' ? '口腔吸入使用'
+        : '';
+
+      if (!r.rows.some(x => x.slot !== '')) {
+        r.rows = slots.map(sl => ({ slot: sl, qty, unit: defaultUnit, extra: extraDefault }));
+      }
+      if (!r.freq) {
+        if (slots.includes('7')) r.freq = '4';
+        else if (slots.length >= 1 && slots.length <= 4) r.freq = String(slots.length - 1);
+        else r.freq = '0';
+      }
+      if (!r.purpose) {
+        r.purpose = rxGuessDefaultPurpose(m);
+      }
+
+      // 自動預帶白話注意事項（中文與外語皆自動整理乾淨，不再顯示 |---|---|）
+      const zhNote = rxBuildCleanDraftText(m, 'zh');
+      if (zhNote && !rxNoteState(m, 'zh').text) {
+        rxNoteState(m, 'zh').text = zhNote;
+        rxNoteState(m, 'zh').ok = true;
+      }
+      const curLang = currentPrintLang || 'zh';
+      if (curLang !== 'zh') {
+        const langNote = rxBuildCleanDraftText(m, curLang);
+        if (langNote && !rxNoteState(m, curLang).text) {
+          rxNoteState(m, curLang).text = langNote;
+          rxNoteState(m, curLang).ok = true;
+        }
+      }
+    }
+
+    function rxBuildCleanDraftText(m, lang) {
+      const v = getLocalizedMedView(m, lang);
+      const cats = RX_CATS[lang] || RX_CATS.zh;
+      const optSE = document.getElementById('opt_sideEffects') ? document.getElementById('opt_sideEffects').checked : true;
+      const optLife = document.getElementById('opt_lifestyle') ? document.getElementById('opt_lifestyle').checked : true;
+      const optDiet = document.getElementById('opt_diet') ? document.getElementById('opt_diet').checked : true;
+      const optSpec = document.getElementById('opt_specialAlert') ? document.getElementById('opt_specialAlert').checked : true;
+
+      const items = [];
+      const pushLine = (catIdx, txt) => {
+        if (!txt) return;
+        const clean = cleanMarkdownTablesToProse(txt).replace(/\s+/g, ' ').trim();
+        if (!clean) return;
+        // 外語模式下避免把未翻譯的中文直接塞進去
+        if (lang !== 'zh' && /[\u4e00-\u9fff]/.test(clean)) return;
+        items.push(`${cats[catIdx]}：${clean}`);
+      };
+
+      if (optSpec && v.specialText) {
+        const k = (m.specialAlertKey === 'fall') ? 1 : 5;
+        pushLine(k, v.specialText);
+      }
+      if (optDiet && v.diet) pushLine(0, v.diet);
+      if (optLife && v.lifestyle) {
+        const k = /跌倒|夜燈|起身|fall|ngã|jatuh|หกล้ม/i.test(v.lifestyle) ? 1 : 4;
+        pushLine(k, v.lifestyle);
+      }
+      if (optSE && v.sideEffects) pushLine(4, v.sideEffects);
+
+      return [...new Set(items)].join('\n');
+    }
+
+    function rxCustom(id, k, v, el) {
+      const r = rxState(rxFind(id));
+      r[k] = v;
+      renderPreview();
+    }
+    function rxCustomInput(id, k, v, placeholder) {
+      return `<input class="rx-custom" type="text" value="${escapeAttr(v || '')}" placeholder="${escapeAttr(placeholder)}" oninput="rxCustom('${id}','${k}',this.value,this)">`;
+    }
+    function rxPurpose(r, lang) {
+      const i = RX_PURPOSES.zh.indexOf(r.purpose);
+      if (i === RX_PURPOSES.zh.length - 1) {
+        const cp = String(r.customPurpose || '').trim();
+        if (!cp) return '';
+        if (lang === 'zh') return cp;
+        if (RX_CUSTOM_PURPOSE_I18N[cp] && RX_CUSTOM_PURPOSE_I18N[cp][lang]) return RX_CUSTOM_PURPOSE_I18N[cp][lang];
+        return cp;
+      }
+      return i >= 0 ? (RX_PURPOSES[lang][i] || RX_PURPOSES.zh[i]) : '';
+    }
+    function rxUnit(r, a, units) {
+      return a.unit === 'other' ? (r.customUnit || '') : (units[a.unit] || '');
+    }
+    function rxFrequency(r, lang) {
+      return r.freq === '6' ? (r.customFreq || '') : (RX_FREQ[lang][Number(r.freq)] || '');
+    }
+
+    function rxEditor(m) {
+      const r = rxState(m), id = m.id, lang = currentPrintLang || 'zh', n = rxNoteState(m, lang), a = r.rows[0] || {};
+      const qtys = ['0.25','0.5','0.75','1','1.5','2','2.5','3','4','5','10'];
+      if (a.qty && !qtys.includes(a.qty)) qtys.push(a.qty);
+      const app = rxAppearance(m, 'zh');
+      const isNonOral = Boolean(app.isNonOral || rxDetectNonOralForm(m));
+
+      return `<div class="rx-edit">
+        <div class="rx-compact-head"><strong>處方用法</strong><span>${escapeHtml(m.generic || m.nameEn || '')}</span></div>
+        <div class="rx-status">處方參考：${escapeHtml(m.usage || '未填')}</div>
+        <div class="rx-choices">
+          <div class="rx-thumb">
+            ${app.icon}
+            <span>${escapeHtml(app.label)}</span>
+            ${m.imgUrl ? `<img class="rx-official-photo-mini" src="${escapeAttr(m.imgUrl)}" alt="官方實拍" title="TFDA 官方實拍參考" onerror="this.style.display='none'">` : ''}
+          </div>
+          <div><label>每次用量</label>${rxPick(qtys.map(x => [x, x]).concat([['custom', '其他／自訂']]), a.qty || '', `rxCommonQty('${id}',this.value)`)}</div>
+          <div><label>單位</label>${rxPick(RX_UNITS, a.unit || '', `rxCommon('${id}','unit',this.value)`)}${r.rows.some(x => x.unit === 'other') ? rxCustomInput(id, 'customUnit', r.customUnit, '自行輸入單位') : ''}</div>
+          <div><label>用途（選填）</label>${rxPick(RX_PURPOSES.zh.map(x => [x, x]), r.purpose || '', `rxSet('${id}','purpose',this.value)`)}${r.purpose === '其他' ? rxCustomInput(id, 'customPurpose', r.customPurpose, '自行輸入用途') : ''}</div>
+        </div>
+        ${rxAppearanceField(m)}
+        <div class="rx-chips">${RX_TEXT.zh.slice(2, 11).map((t, i) => {
+          const on = r.rows.some(x => x.slot === String(i));
+          return `<button type="button" class="rx-chip ${on ? 'on' : ''}" aria-pressed="${on}" onclick="rxToggleSlot('${id}',${i})">${rxSlotIconSvg(i)}<span>${t}</span></button>`;
+        }).join('')}</div>
+        <div class="rx-frequency"><label>頻次</label>${rxPick(RX_FREQ.zh.map((x, i) => [i, x]), r.freq, `rxSet('${id}','freq',this.value)`)}</div>
+        ${r.freq === '6' ? rxCustomInput(id, 'customFreq', r.customFreq, '自行輸入頻次') : ''}
+        ${isNonOral ? `<div class="rx-nonoral-box"><label>非口服藥使用方式／塗抹或注射部位（直接顯示於時間表）</label><input type="text" value="${escapeAttr(a.extra || '')}" placeholder="例：薄塗於患處、左眼點1滴、腹部皮下注射..." oninput="rxCommonExtra('${id}',this.value)"></div>` : ''}
+        <details ${r.rows.length > 1 && r.rows.some(x => x.qty !== a.qty) ? 'open' : ''}>
+          <summary>進階：各時段個別劑量或補充說明</summary>
+          ${r.rows.map((x, i) => `<div class="rx-slot">
+            <div><label>${RX_TEXT.zh[Number(x.slot) + 2] || '時間'}</label><input type="text" value="${escapeAttr(x.qty)}" inputmode="decimal" oninput="rxRow('${id}',${i},'qty',this.value,this)"></div>
+            <div><label>單位</label>${rxPick(RX_UNITS, x.unit, `rxRow('${id}',${i},'unit',this.value)`)}</div>
+            <div><label>補充說明</label><input type="text" value="${escapeAttr(x.extra)}" placeholder="選填" oninput="rxRow('${id}',${i},'extra',this.value,this)"></div>
+          </div>`).join('')}
+        </details>
+        <details>
+          <summary>白話注意事項／翻譯（${lang.toUpperCase()}）${n.text.trim() ? ' · 已填' : ''}</summary>
+          <p class="rx-status">每行一重點，可用「${RX_CATS[lang].join('：」「')}：」開頭自動分組。</p>
+          <textarea class="rx-note" oninput="rxNote('${id}','${lang}',this.value,this)">${escapeHtml(n.text)}</textarea>
+          <div class="grounding-actions">
+            <button type="button" class="btn btn-outline btn-sm" onclick="rxDraft('${id}')">📝 帶入參考注意事項</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="rxTranslate('${id}',this)">🤖 AI 白話精簡／翻譯</button>
+          </div>
+        </details>
+      </div>`;
+    }
+
+    function rxCommon(id, k, v) { const r = rxState(rxFind(id)); r.rows.forEach(a => a[k] = v); renderMedEditorList(); renderPreview(); }
+    function rxCommonExtra(id, v) { const r = rxState(rxFind(id)); r.rows.forEach(a => a.extra = v); renderPreview(); }
+    function rxCommonQty(id, v) {
+      if (v === 'custom') { v = prompt('輸入處方每次用量（數字）', ''); if (v === null) { renderMedEditorList(); return; } }
+      rxCommon(id, 'qty', v);
+    }
+    function rxToggleSlot(id, i) {
+      const r = rxState(rxFind(id)), slot = String(i), base = r.rows[0] || { qty: '1', unit: 'tablet', extra: '' };
+      if (r.rows.some(a => a.slot === slot)) {
+        r.rows = r.rows.filter(a => a.slot !== slot);
+        if (!r.rows.length) r.rows = [{ slot: '', qty: base.qty, unit: base.unit, extra: base.extra }];
+      } else {
+        r.rows = r.rows.filter(a => a.slot !== '');
+        r.rows.push({ slot, qty: base.qty || '1', unit: base.unit || 'tablet', extra: base.extra || '' });
+        r.rows.sort((a, b) => Number(a.slot) - Number(b.slot));
+      }
+      if (r.rows.every(a => a.slot !== '') && r.rows.length >= 1 && r.rows.length <= 4 && !['4','5','6'].includes(r.freq)) {
+        r.freq = String(r.rows.length - 1);
+      }
+      renderMedEditorList();
+      renderPreview();
+    }
+    function rxSet(id, k, v) { const r = rxState(rxFind(id)); r[k] = v; renderMedEditorList(); renderPreview(); }
+    function rxRow(id, i, k, v, el) { const r = rxState(rxFind(id)); r.rows[i][k] = v; if (!el) renderMedEditorList(); renderPreview(); }
+    function rxNote(id, lang, v) { const n = rxNoteState(rxFind(id), lang); n.text = v; n.ok = true; renderPreview(); }
+    function rxNoteConfirm(id, lang, v) { const n = rxNoteState(rxFind(id), lang); n.ok = v; renderPreview(); }
+
+    function rxDraft(id) {
+      const m = rxFind(id);
+      if (!m) return;
+      const lang = currentPrintLang || 'zh';
+      const text = rxBuildCleanDraftText(m, lang);
+      if (!text && lang !== 'zh') {
+        alert('此藥品目前無內建外語模板，請點「🤖 AI 白話精簡／翻譯」直接翻譯中文注意事項或官方仿單！');
+        return;
+      }
+      rxNote(id, lang, text);
+      renderMedEditorList();
+    }
+
+    function rxDraftAll() {
+      const lang = currentPrintLang || 'zh';
+      let filled = 0;
+      medList.forEach(m => {
+        const text = rxBuildCleanDraftText(m, lang);
+        if (text) { rxNote(m.id, lang, text); filled++; }
+      });
+      renderMedEditorList();
+      renderPreview();
+      const st = document.getElementById('aiRewriteStatus');
+      if (st) st.textContent = filled ? `✅ 已為 ${filled} 種藥品帶入白話注意事項` : 'ℹ️ 尚無內建模板可帶入，可使用「AI 一鍵翻譯全部注意事項」';
+    }
+
+    async function rxTranslate(id, btn) {
+      const m = rxFind(id), lang = currentPrintLang || 'zh';
+      const raw = String(m.rawLeafletText || '').trim();
+      const zhNote = rxNoteState(m, 'zh').text.trim();
+      const fallbackSrc = zhNote || [m.specialAlertText, m.diet, m.lifestyle, m.sideEffects].filter(Boolean).join('\n');
+      const sourceText = raw || fallbackSrc;
+      if (!sourceText) { alert('請先輸入中文注意事項或貼上官方仿單原文。'); return; }
+      if (btn) btn.disabled = true;
+      try {
+        const langName = { zh:'Traditional Chinese (Taiwan)', en:'simple English', vi:'simple Vietnamese (Tiếng Việt)', id:'simple Indonesian (Bahasa Indonesia)', th:'simple Thai (ภาษาไทย)' }[lang];
+        const res = await callGeminiAPI([{
+          text: `You are a clinical pharmacist writing brief, elderly-friendly medication precautions in ${langName}.
+Strict rules:
+1. Use ONLY facts from the source below. Never invent dosing or unsupported claims.
+2. Convert any Markdown tables or medical jargon into short, plain everyday sentences (one actionable point per line, max 3-4 lines).
+3. Prefix each line with the best-matching category from ${JSON.stringify(RX_CATS[lang])} followed by a colon (e.g. "${RX_CATS[lang][0]}: ...").
+4. Output clean UTF-8 text ONLY in the target language (${langName}).
+Return strict JSON: {"text": "..."}
+
+Medicine: ${m.nameZh} (${m.generic})
+Source:
+${sourceText.slice(0, 4000)}`
+        }]);
+        if (res && typeof res.text === 'string' && rxFind(id)) {
+          rxNote(id, lang, res.text.trim());
+          renderMedEditorList();
+        }
+      } catch (e) {
+        alert('翻譯失敗：' + e.message);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    async function rxTranslateAll(btn) {
+      const meds = medList.filter(m => m.checked);
+      if (!meds.length) { alert('請先加入藥品！'); return; }
+      const st = document.getElementById('aiRewriteStatus');
+      if (btn) btn.disabled = true;
+      let done = 0;
+      for (const m of meds) {
+        if (st) st.textContent = `⏳ 正在處理 (${done + 1}/${meds.length})：${m.nameZh}...`;
+        await rxTranslate(m.id, null);
+        done++;
+      }
+      if (st) st.textContent = `✅ 已完成 ${done} 種藥品注意事項精簡／翻譯！`;
+      if (btn) btn.disabled = false;
+      renderMedEditorList();
+      renderPreview();
+    }
+
+    function rxBuildPrecautionHtmlList(meds, lang) {
+      const esc = escapeHtml;
+      const buckets = Array.from({ length: 6 }, () => new Map());
+      meds.forEach((m, i) => {
+        const n = rxNoteState(m, lang);
+        // 若該語言尚未手動編修，自動嘗試用乾淨本機白話模板即時補上
+        let txt = (n.text || '').trim();
+        if (!txt) {
+          txt = rxBuildCleanDraftText(m, lang);
+        }
+        if (!txt) return;
+        const name = lang === 'zh' ? (m.nameZh || m.nameEn || m.generic) : (m.nameEn || m.generic || m.nameZh);
+        txt.split(/\n+/).filter(x => x.trim()).forEach(line => {
+          const cleanedLine = cleanMarkdownTablesToProse(line).trim();
+          if (!cleanedLine) return;
+          const cats = RX_CATS[lang] || RX_CATS.zh;
+          const pos = cleanedLine.search(/[:：]/);
+          const key = pos >= 0 ? cleanedLine.slice(0, pos).trim() : '';
+          let cat = cats.indexOf(key);
+          if (cat < 0) cat = RX_CATS.zh.indexOf(key);
+          const k = cat < 0 ? 4 : cat;
+          const body = (cat < 0 ? cleanedLine : cleanedLine.slice(pos + 1)).trim();
+          if (!body) return;
+          const norm = body.normalize('NFKC').replace(/\s+/g, ' ').replace(/[。.!！]+$/, '').trim();
+          const bucket = buckets[k];
+          if (!bucket.has(norm)) bucket.set(norm, { body, names: new Set() });
+          bucket.get(norm).names.add(name || String(i + 1));
+        });
+      });
+
+      const itemsHtml = [];
+      buckets.forEach((bucket, k) => {
+        if (!bucket.size) return;
+        const cat = esc((RX_CATS[lang] || RX_CATS.zh)[k]);
+        const entries = [...bucket.values()];
+        if (k >= 4) {
+          entries.forEach(x => {
+            itemsHtml.push(`<div class="rx-tip rx-cat-${k}"><span class="rx-cat">${rxCatIconSvg(k)}<span>${cat}</span></span><span>${esc(x.body)}</span></div>`);
+          });
+        } else {
+          itemsHtml.push(`<div class="rx-tip rx-cat-${k}"><span class="rx-cat">${rxCatIconSvg(k)}<span>${cat}</span></span><ul>${entries.map(x => `<li>${esc(x.body)}</li>`).join('')}</ul></div>`);
+        }
+      });
+      return itemsHtml;
+    }
+
+    function renderPreview() {
+      const sheet = document.getElementById('a4Preview');
+      if (!sheet) return;
+      const lang = currentPrintLang || 'zh';
+      const T = RX_TEXT[lang] || RX_TEXT.zh;
+      const L = LANG_LABELS[lang] || LANG_LABELS.zh;
+      const esc = escapeHtml;
+      const meds = medList.filter(m => m.checked);
+
+      const units = {
+        tablet: T[12], mg: T[13], ml: T[14], application: T[15],
+        drop: T[16], puff: T[17], patch: T[18], pack: T[19], shot: T[20], other: ''
+      };
+      const showApp = document.getElementById('opt_appearance') ? document.getElementById('opt_appearance').checked : true;
+      const showPurpose = document.getElementById('opt_purpose') ? document.getElementById('opt_purpose').checked : true;
+      const showFollowUp = document.getElementById('opt_followUp') ? document.getElementById('opt_followUp').checked : false;
+      const smartFit = document.getElementById('opt_smartFit') ? document.getElementById('opt_smartFit').checked : true;
+      const followUpTxt = (document.getElementById('f_followUpSummary')?.value || '').trim();
+
+      const orgRaw = (document.getElementById('f_orgName')?.value || '').trim();
+      const org = (lang === 'zh' || (orgRaw && orgRaw !== '藥劑部高齡用藥照護')) ? orgRaw : L.defaultOrg;
+      const titleRaw = (document.getElementById('f_sheetTitle')?.value || '').trim();
+      const title = (lang === 'zh' || (titleRaw && titleRaw !== '我的安心用藥提醒單')) ? (titleRaw || L.defaultTitle) : L.defaultTitle;
+
+      const age = (document.getElementById('p_age')?.value || '').trim();
+      const egfr = (document.getElementById('p_egfr')?.value || '').trim();
+      const metaParts = [L.medCount(meds.length)];
+      if (age) metaParts.push(L.ageUnit(age));
+      if (egfr) metaParts.push(`eGFR ${egfr}`);
+      metaParts.push(`${L.dateLabel}：${new Date().toLocaleDateString('zh-TW')}`);
+
+      const headerHtml = `<header class="sheet-header">
+        <div class="sheet-header-left">
+          <h2>${esc(title)}</h2>
+          <p class="meta-line">${esc(metaParts.join(' · '))}</p>
+        </div>
+        ${org ? `<div class="sheet-org">${esc(org)}</div>` : ''}
+      </header>`;
+
+      let followUpHtml = '';
+      if (showFollowUp && followUpTxt) {
+        const flines = followUpTxt.split('\n').map(s => s.trim()).filter(Boolean);
+        followUpHtml = `<div class="patient-reminder-box"><strong>💬 ${esc(L.followUpTitle)}</strong><ul>${flines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></div>`;
+      }
+
+      const makeFooter = (pNum, pTotal) => `<footer class="sheet-footer"><span>${esc(T[23])}</span>${pTotal > 1 ? `<span class="page-num-pill">第 ${pNum} / ${pTotal} 頁</span>` : ''}</footer>`;
+
+      const sizeCls = currentFontSize === 'compact' ? 'rx-small'
+        : currentFontSize === 'lg' ? 'rx-large'
+        : currentFontSize === 'xl' ? 'rx-xlarge' : '';
+
+      sheet.classList.remove('size-compact', 'size-lg', 'size-xl');
+
+      if (!meds.length) {
+        sheet.innerHTML = `<section class="a4-page rx-page ${sizeCls}"><div class="a4-page-body">${headerHtml}${followUpHtml}<div style="text-align:center;padding:60px 20px;color:#7d8784;border:2px dashed #d2ccbf;border-radius:12px;"><div style="font-size:18px;font-weight:700;margin-bottom:6px;">尚未加入藥品</div><div style="font-size:13.5px;">請由左側搜尋藥名／健保碼，或點「📋 載入高齡範例」體驗完整排版。</div></div></div>${makeFooter(1, 1)}</section>`;
+        updatePreviewBadges(1, '', meds);
+        fitMobilePreviewScale();
+        return;
+      }
+
+      // 依時段分組（全部勾選的藥品都會正常顯示，絕不因非口服藥或未勾確認而隱藏！）
+      const groups = Array.from({ length: 9 }, () => []);
+      meds.forEach((m, i) => {
+        const r = rxState(m);
+        const app = rxAppearance(m, lang);
+        const name = lang === 'zh' ? [m.nameZh, m.nameEn].filter(Boolean).join(' ') : (m.nameEn || m.generic || m.nameZh);
+        const titleTxt = esc(name || m.generic || String(i + 1));
+        const purpose = showPurpose ? rxPurpose(r, lang) : '';
+        const freqTxt = ['4', '5', '6'].includes(r.freq) ? rxFrequency(r, lang) : '';
+        const activeRows = (r.rows && r.rows.length) ? r.rows : [{ slot: '1', qty: '1', unit: 'tablet', extra: '' }];
+
+        activeRows.forEach(a => {
+          const slotIdx = a.slot !== '' ? Number(a.slot) : 1;
+          const icon = showApp ? app.icon : '';
+          const look = showApp ? esc(app.label) + ' ' : '';
+          const qtyTxt = a.qty ? esc(a.qty) : '1';
+          const unitTxt = esc(rxUnit(r, a, units) || units.tablet);
+          const extraLine = [freqTxt ? esc(freqTxt) : '', a.extra ? esc(a.extra) : ''].filter(Boolean).join(' · ');
+          groups[slotIdx].push(`<div class="rx-line">${icon}<span class="rx-med-text"><b class="rx-dose">${look}${qtyTxt} ${unitTxt}</b>${purpose ? '：<span class="rx-purpose">' + esc(purpose) + '</span>' : ''}<span class="rx-med-name">${titleTxt}</span>${extraLine ? '<span class="rx-extra">' + extraLine + '</span>' : ''}</span></div>`);
+        });
+      });
+
+      const scheduleRowsHtml = groups.map((g, idx) => {
+        if (!g.length) return '';
+        const pillExtra = idx === 7 ? 'slot-prn' : (idx === 6 ? 'slot-bed' : '');
+        return `<div class="rx-time" data-block="sched"><div class="rx-time-label ${pillExtra}">${rxSlotIconSvg(idx)}<span>${esc(T[idx + 2])}</span></div><div>${g.join('')}</div></div>`;
+      }).filter(Boolean);
+
+      const tipRowsHtml = rxBuildPrecautionHtmlList(meds, lang);
+
+      // 量測單頁高度（優先 1 頁，放不下時自動平順分至第 2 頁，絕不鎖死列印）
+      const A4_SAFE_H = 1076;
+      const renderFullSingle = (extraTier = '') => {
+        sheet.innerHTML = `<section class="a4-page rx-page ${sizeCls} ${extraTier}" id="measurePage">
+          <div class="a4-page-body">
+            ${headerHtml}
+            ${followUpHtml}
+            <div class="rx-part"><h3>${esc(T[0])}</h3>${scheduleRowsHtml.join('') || `<p>${esc(T[21])}</p>`}</div>
+            <div class="rx-part rx-warnings"><h3>${esc(T[1])}</h3>${tipRowsHtml.join('') || `<p style="color:#7d8784;font-size:14px;">${esc(T[22])}</p>`}</div>
+          </div>
+          ${makeFooter(1, 1)}
+        </section>`;
+        const pEl = document.getElementById('measurePage');
+        const prevMin = pEl.style.minHeight;
+        pEl.style.minHeight = '0px';
+        const actualH = pEl.scrollHeight;
+        pEl.style.minHeight = prevMin;
+        return actualH;
+      };
+
+      const naturalH = renderFullSingle('');
+      if (naturalH <= A4_SAFE_H) {
+        updatePreviewBadges(1, '', meds);
+        fitMobilePreviewScale();
+        return;
+      }
+
+      // 若開啟「智慧防留白」且不是特大字體，嘗試輕度緊縮拉回 1 頁
+      if (smartFit && currentFontSize !== 'xl') {
+        const tiers = currentFontSize === 'lg' ? ['rx-tight-1'] : ['rx-tight-1', 'rx-tight-2'];
+        for (const tier of tiers) {
+          if (renderFullSingle(tier) <= A4_SAFE_H) {
+            updatePreviewBadges(1, '✨ 已智慧微調為 1 頁', meds);
+            fitMobilePreviewScale();
+            return;
+          }
+        }
+        renderFullSingle('');
+      }
+
+      // 確定超過 1 頁 → 按「時段列」與「注意事項項目」逐列精準分頁（不裁切、不阻擋列印）
+      const mPage = document.getElementById('measurePage');
+      const csPage = window.getComputedStyle(mPage);
+      const padV = (parseFloat(csPage.paddingTop) || 22) + (parseFloat(csPage.paddingBottom) || 22);
+      const headerEl = mPage.querySelector('.sheet-header');
+      const followEl = mPage.querySelector('.patient-reminder-box');
+      const footerEl = mPage.querySelector('.sheet-footer');
+      const topH = (headerEl ? headerEl.offsetHeight + 10 : 54) + (followEl ? followEl.offsetHeight + 10 : 0);
+      const footerH = footerEl ? footerEl.offsetHeight + 12 : 30;
+      const headingH = 32;
+      const contHeaderH = 42;
+
+      const schedEls = Array.from(mPage.querySelectorAll('.rx-time'));
+      const tipEls = Array.from(mPage.querySelectorAll('.rx-tip'));
+
+      const blocks = [];
+      if (scheduleRowsHtml.length) {
+        schedEls.forEach((el, idx) => blocks.push({ type: 'sched', html: scheduleRowsHtml[idx], h: el.offsetHeight + 2 }));
+      }
+      if (tipRowsHtml.length) {
+        tipEls.forEach((el, idx) => blocks.push({ type: 'tip', html: tipRowsHtml[idx], h: el.offsetHeight + 2 }));
+      }
+
+      const pages = [];
+      let cur = { sched: [], tip: [], used: padV + topH + footerH };
+      let hasSchedHead = false;
+      let hasTipHead = false;
+
+      for (const blk of blocks) {
+        let extraH = blk.h;
+        if (blk.type === 'sched' && !hasSchedHead) extraH += headingH;
+        if (blk.type === 'tip' && !hasTipHead) extraH += headingH + 10;
+
+        const hasItems = cur.sched.length > 0 || cur.tip.length > 0;
+        if (hasItems && cur.used + extraH > A4_SAFE_H) {
+          pages.push(cur);
+          cur = { sched: [], tip: [], used: padV + contHeaderH + footerH };
+          hasSchedHead = false;
+          hasTipHead = false;
+          extraH = blk.h + headingH + (blk.type === 'tip' ? 10 : 0);
+        }
+        if (blk.type === 'sched') { cur.sched.push(blk.html); hasSchedHead = true; }
+        else { cur.tip.push(blk.html); hasTipHead = true; }
+        cur.used += extraH;
+      }
+      if (cur.sched.length || cur.tip.length) pages.push(cur);
+
+      const totalPages = pages.length || 1;
+      sheet.innerHTML = pages.map((pg, idx) => {
+        const pNum = idx + 1;
+        const head = idx === 0
+          ? `${headerHtml}${followUpHtml}`
+          : `<div class="sheet-header-cont"><h3>${esc(title)}（續）</h3><span>${org ? esc(org) + ' · ' : ''}第 ${pNum} / ${totalPages} 頁</span></div>`;
+        const schedBlock = pg.sched.length
+          ? `<div class="rx-part"><h3>${esc(T[0])}${idx > 0 ? '（續）' : ''}</h3>${pg.sched.join('')}</div>`
+          : '';
+        const tipBlock = pg.tip.length
+          ? `<div class="rx-part ${pg.sched.length ? 'rx-warnings' : ''}"><h3>${esc(T[1])}${idx > 0 && pages.slice(0, idx).some(x => x.tip.length) ? '（續）' : ''}</h3>${pg.tip.join('')}</div>`
+          : '';
+        return `<section class="a4-page rx-page ${sizeCls}"><div class="a4-page-body">${head}${schedBlock}${tipBlock}</div>${makeFooter(pNum, totalPages)}</section>`;
+      }).join('');
+
+      updatePreviewBadges(totalPages, '', meds);
+      fitMobilePreviewScale();
+    }
+
+    function rxPrint() {
+      window.print();
+    }
+
+    // 切換語言時同步重繪編輯區與預覽區
+    const rxOriginalLang = setPrintLang;
+    setPrintLang = function(lang, btn) {
+      rxOriginalLang(lang, btn);
+      renderMedEditorList();
+    };
 
     function escapeHtml(str) {
       return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

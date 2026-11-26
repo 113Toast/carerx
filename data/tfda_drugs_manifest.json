@@ -1,1 +1,42 @@
-{"index":"tfda_drugs_index.json","meta_parts":["meta_1.json","meta_2.json","meta_3.json","meta_4.json","meta_5.json","meta_6.json","meta_7.json","meta_8.json","meta_9.json","meta_10.json","meta_11.json","meta_12.json","meta_13.json","meta_14.json","meta_15.json","meta_16.json","meta_17.json","meta_18.json","meta_19.json","meta_20.json","meta_21.json","meta_22.json","meta_23.json","meta_24.json","meta_25.json","meta_26.json","meta_27.json","meta_28.json","meta_29.json","meta_30.json","meta_31.json","meta_32.json","meta_33.json","meta_34.json","meta_35.json","meta_36.json","meta_37.json","meta_38.json","meta_39.json","meta_40.json","meta_41.json","meta_42.json","meta_43.json","meta_44.json","meta_45.json","meta_46.json","meta_47.json","meta_48.json","meta_49.json","meta_50.json","meta_51.json","meta_52.json","meta_53.json","meta_54.json","meta_55.json","meta_56.json","meta_57.json","meta_58.json","meta_59.json","meta_60.json","meta_61.json","meta_62.json","meta_63.json","meta_64.json","meta_65.json","meta_66.json","meta_67.json","meta_68.json","meta_69.json","meta_70.json","meta_71.json","meta_72.json","meta_73.json","meta_74.json","meta_75.json","meta_76.json","meta_77.json","meta_78.json","meta_79.json","meta_80.json","meta_81.json","meta_82.json","meta_83.json","meta_84.json","meta_85.json","meta_86.json","meta_87.json","meta_88.json","meta_89.json","meta_90.json","meta_91.json","meta_92.json","meta_93.json","meta_94.json","meta_95.json","meta_96.json","meta_97.json","meta_98.json","meta_99.json","meta_100.json","meta_101.json","meta_102.json","meta_103.json","meta_104.json","meta_105.json","meta_106.json","meta_107.json","meta_108.json","meta_109.json","meta_110.json","meta_111.json","meta_112.json","meta_113.json","meta_114.json","meta_115.json","meta_116.json","meta_117.json","meta_118.json","meta_119.json","meta_120.json","meta_121.json","meta_122.json","meta_123.json","meta_124.json","meta_125.json","meta_126.json","meta_127.json","meta_128.json","meta_129.json","meta_130.json","meta_131.json","meta_132.json","meta_133.json","meta_134.json","meta_135.json","meta_136.json","meta_137.json","meta_138.json","meta_139.json","meta_140.json","meta_141.json","meta_142.json","meta_143.json","meta_144.json","meta_145.json","meta_146.json","meta_147.json","meta_148.json","meta_149.json","meta_150.json","meta_151.json","meta_152.json","meta_153.json","meta_154.json","meta_155.json","meta_156.json","meta_157.json","meta_158.json","meta_159.json","meta_160.json","meta_161.json","meta_162.json","meta_163.json","meta_164.json","meta_165.json","meta_166.json","meta_167.json","meta_168.json","meta_169.json","meta_170.json","meta_171.json","meta_172.json","meta_173.json","meta_174.json","meta_175.json","meta_176.json","meta_177.json","meta_178.json","meta_179.json","meta_180.json","meta_181.json","meta_182.json","meta_183.json","meta_184.json","meta_185.json","meta_186.json","meta_187.json","meta_188.json","meta_189.json","meta_190.json","meta_191.json","meta_192.json","meta_193.json","meta_194.json","meta_195.json","meta_196.json","meta_197.json","meta_198.json","meta_199.json","meta_200.json","meta_201.json","meta_202.json","meta_203.json","meta_204.json","meta_205.json","meta_206.json"],"leaflet_parts":["leaf_1.json","leaf_2.json","leaf_3.json","leaf_4.json","leaf_5.json","leaf_6.json","leaf_7.json","leaf_8.json","leaf_9.json","leaf_10.json","leaf_11.json","leaf_12.json","leaf_13.json","leaf_14.json","leaf_15.json","leaf_16.json","leaf_17.json","leaf_18.json","leaf_19.json","leaf_20.json","leaf_21.json","leaf_22.json","leaf_23.json","leaf_24.json","leaf_25.json","leaf_26.json","leaf_27.json","leaf_28.json","leaf_29.json","leaf_30.json","leaf_31.json","leaf_32.json","leaf_33.json","leaf_34.json","leaf_35.json","leaf_36.json","leaf_37.json","leaf_38.json","leaf_39.json","leaf_40.json","leaf_41.json","leaf_42.json","leaf_43.json","leaf_44.json","leaf_45.json","leaf_46.json","leaf_47.json","leaf_48.json","leaf_49.json","leaf_50.json","leaf_51.json","leaf_52.json","leaf_53.json","leaf_54.json","leaf_55.json","leaf_56.json","leaf_57.json","leaf_58.json","leaf_59.json","leaf_60.json","leaf_61.json","leaf_62.json","leaf_63.json","leaf_64.json","leaf_65.json","leaf_66.json","leaf_67.json","leaf_68.json","leaf_69.json","leaf_70.json","leaf_71.json","leaf_72.json","leaf_73.json","leaf_74.json","leaf_75.json","leaf_76.json","leaf_77.json","leaf_78.json","leaf_79.json","leaf_80.json","leaf_81.json","leaf_82.json","leaf_83.json","leaf_84.json","leaf_85.json","leaf_86.json","leaf_87.json","leaf_88.json","leaf_89.json","leaf_90.json","leaf_91.json","leaf_92.json","leaf_93.json","leaf_94.json","leaf_95.json","leaf_96.json","leaf_97.json","leaf_98.json","leaf_99.json","leaf_100.json","leaf_101.json","leaf_102.json","leaf_103.json","leaf_104.json","leaf_105.json","leaf_106.json","leaf_107.json","leaf_108.json","leaf_109.json","leaf_110.json","leaf_111.json","leaf_112.json","leaf_113.json","leaf_114.json","leaf_115.json","leaf_116.json","leaf_117.json","leaf_118.json","leaf_119.json","leaf_120.json","leaf_121.json","leaf_122.json","leaf_123.json","leaf_124.json","leaf_125.json","leaf_126.json","leaf_127.json","leaf_128.json","leaf_129.json","leaf_130.json","leaf_131.json","leaf_132.json","leaf_133.json","leaf_134.json","leaf_135.json","leaf_136.json","leaf_137.json","leaf_138.json","leaf_139.json","leaf_140.json","leaf_141.json","leaf_142.json","leaf_143.json","leaf_144.json","leaf_145.json","leaf_146.json","leaf_147.json","leaf_148.json","leaf_149.json","leaf_150.json","leaf_151.json","leaf_152.json","leaf_153.json","leaf_154.json","leaf_155.json","leaf_156.json","leaf_157.json","leaf_158.json","leaf_159.json","leaf_160.json","leaf_161.json","leaf_162.json","leaf_163.json","leaf_164.json","leaf_165.json","leaf_166.json","leaf_167.json","leaf_168.json","leaf_169.json","leaf_170.json","leaf_171.json","leaf_172.json","leaf_173.json","leaf_174.json","leaf_175.json","leaf_176.json","leaf_177.json","leaf_178.json","leaf_179.json","leaf_180.json","leaf_181.json","leaf_182.json","leaf_183.json","leaf_184.json","leaf_185.json","leaf_186.json","leaf_187.json","leaf_188.json","leaf_189.json","leaf_190.json","leaf_191.json","leaf_192.json","leaf_193.json","leaf_194.json","leaf_195.json","leaf_196.json","leaf_197.json","leaf_198.json","leaf_199.json","leaf_200.json","leaf_201.json","leaf_202.json","leaf_203.json","leaf_204.json","leaf_205.json","leaf_206.json"]}
+{
+  "schema_version": 2,
+  "generated_at": "2026-11-23T07:26:40.694988+00:00",
+  "counts": {
+    "total_drugs": 24049,
+    "structured_leaflets": 1595,
+    "pdf_only_drugs": 14977,
+    "meta_parts_count": 13,
+    "leaflet_parts_count": 13
+  },
+  "index": "tfda_drugs_index.json",
+  "meta_parts": [
+    "drugs_meta_part1.json",
+    "drugs_meta_part2.json",
+    "drugs_meta_part3.json",
+    "drugs_meta_part4.json",
+    "drugs_meta_part5.json",
+    "drugs_meta_part6.json",
+    "drugs_meta_part7.json",
+    "drugs_meta_part8.json",
+    "drugs_meta_part9.json",
+    "drugs_meta_part10.json",
+    "drugs_meta_part11.json",
+    "drugs_meta_part12.json",
+    "drugs_meta_part13.json"
+  ],
+  "leaflet_parts": [
+    "leaflets_part1.json",
+    "leaflets_part2.json",
+    "leaflets_part3.json",
+    "leaflets_part4.json",
+    "leaflets_part5.json",
+    "leaflets_part6.json",
+    "leaflets_part7.json",
+    "leaflets_part8.json",
+    "leaflets_part9.json",
+    "leaflets_part10.json",
+    "leaflets_part11.json",
+    "leaflets_part12.json",
+    "leaflets_part13.json"
+  ]
+}

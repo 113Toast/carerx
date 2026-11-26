@@ -1,21 +1,32 @@
 {
-  "name": "安心用藥｜高齡用藥安全與衛教",
+  "id": "./",
+  "name": "長者用藥小卡｜高齡多重用藥檢核與衛教系統",
   "short_name": "安心用藥",
+  "description": "2023 AGS Beers Criteria 高齡多重用藥檢核與衛教單張系統",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "theme_color": "#15304D",
-  "background_color": "#E8ECF1",
+  "orientation": "any",
+  "background_color": "#f4f2ec",
+  "theme_color": "#1f4a44",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
