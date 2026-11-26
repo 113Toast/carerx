@@ -1589,6 +1589,8 @@
   .rx-page .sheet-header-left h2 { font-size: 22px; color: var(--primary-dark); margin: 0; letter-spacing: 0.02em; }
   .rx-page .sheet-header-left .meta-line { font-size: 12.5px; color: #4d5a57; margin: 3px 0 0; }
   .rx-page .sheet-org { font-size: 12.5px; color: var(--primary-dark); font-weight: 700; }
+  .rx-page .patient-reminder-box { font-size: 14.5px; line-height: 1.48; padding: 8px 11px; margin: 0; border-radius: 10px; }
+  .rx-page .patient-reminder-box ul { margin: 4px 0 0; padding-left: 18px; }
 
   .rx-part { min-height: 0; overflow: visible; }
   .rx-part h3 { font-size: 17px; color: var(--primary-dark); margin: 0 0 6px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
@@ -1722,6 +1724,7 @@
   .rx-page.rx-small .rx-tier-card { padding: 6px 9px; margin-bottom: 5px; }
   .rx-page.rx-small .rx-tier-title { font-size: 13px; margin-bottom: 3px; }
   .rx-page.rx-small .rx-tier-list { font-size: 12.8px; line-height: 1.38; }
+  .rx-page.rx-small .patient-reminder-box { font-size: 12.8px; line-height: 1.38; padding: 6px 9px; }
 
   /* 2. 放大 A+（明顯比標準大一階，且絕不被智慧防留白縮回標準字！） */
   .rx-page.rx-large .sheet-header-left h2 { font-size: 25px; }
@@ -1736,6 +1739,7 @@
   .rx-page.rx-large .rx-tier-card { padding: 9px 13px; margin-bottom: 8px; }
   .rx-page.rx-large .rx-tier-title { font-size: 17px; margin-bottom: 6px; }
   .rx-page.rx-large .rx-tier-list { font-size: 17.2px; line-height: 1.5; }
+  .rx-page.rx-large .patient-reminder-box { font-size: 17.2px; line-height: 1.5; padding: 9px 13px; }
 
   /* 3. 特大 A++（長輩老花專用超大字） */
   .rx-page.rx-xlarge .sheet-header-left h2 { font-size: 28px; }
@@ -1750,6 +1754,7 @@
   .rx-page.rx-xlarge .rx-tier-card { padding: 10px 14px; margin-bottom: 9px; }
   .rx-page.rx-xlarge .rx-tier-title { font-size: 19px; margin-bottom: 6px; }
   .rx-page.rx-xlarge .rx-tier-list { font-size: 19.5px; line-height: 1.52; }
+  .rx-page.rx-xlarge .patient-reminder-box { font-size: 19.5px; line-height: 1.52; padding: 10px 14px; }
 
   /* 僅縮減外距與留白（完全不縮小字體，供「放大 A+」與「標準」第一階段防留白使用） */
   .rx-page.rx-pad-tight { padding: 4.2mm 5.8mm; gap: 5px; }
@@ -1761,6 +1766,7 @@
   .rx-page.rx-pad-tight .rx-line { padding: 2px 0; }
   .rx-page.rx-pad-tight .rx-tier-card { padding: 6px 10px; margin-bottom: 5px; }
   .rx-page.rx-pad-tight .rx-tier-list li { margin-bottom: 2px; }
+  .rx-page.rx-pad-tight .patient-reminder-box { padding: 6px 9px; }
 
   /* 僅供「標準」模式微幅緊縮以拉回 1 頁（絕不套用於放大/特大！） */
   .rx-page.rx-tight-1 { padding: 4.2mm 5.8mm; gap: 5px; }
@@ -1775,6 +1781,7 @@
   .rx-page.rx-tight-1 .rx-tier-card { padding: 6px 10px; margin-bottom: 5px; }
   .rx-page.rx-tight-1 .rx-tier-title { font-size: 13.8px; margin-bottom: 3px; }
   .rx-page.rx-tight-1 .rx-tier-list { font-size: 13.8px; line-height: 1.4; }
+  .rx-page.rx-tight-1 .patient-reminder-box { font-size: 13.8px; line-height: 1.4; padding: 6px 9px; }
 
   @media print {
     @page { size: A4 portrait; margin: 4mm; }
@@ -2012,9 +2019,12 @@
           </div>
 
           <div id="followUpEditorWrap" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed #d2ccbf;">
-            <label>頂部「藥師貼心回診提醒」（選用；平常已自動整合進下方 🟢 綠色區塊）</label>
-            <textarea id="f_followUpSummary" style="min-height:56px;" placeholder="例如：部分藥品易頭暈想睡，請勿自行停藥，下次看診請帶著這張單子與醫師討論。" oninput="renderPreview()"></textarea>
-            <button type="button" class="btn btn-outline btn-sm" style="margin-top:5px;" onclick="autoFillGentleFollowUp()">✨ 依檢核結果自動產生</button>
+            <label>頂部「藥師貼心回診提醒」（選用；會隨列印語言自動翻譯，亦可手動修改）</label>
+            <textarea id="f_followUpSummary" style="min-height:56px;" placeholder="例如：部分藥品易頭暈想睡，請勿自行停藥，下次看診請帶著這張單子與醫師討論。" oninput="onManualFollowUpInput()"></textarea>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:5px;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="autoFillGentleFollowUp()">✨ 依檢核結果自動產生（自動對應語言）</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="aiTranslateFollowUpBox(this)">🌐 AI 翻譯此欄</button>
+            </div>
           </div>
         </div>
 
@@ -2312,6 +2322,13 @@
         id: { tag: 'TANDA KERACUNAN', text: 'Hentikan dan hubungi dokter jika diare berat, muntah, atau otot lemah. Hindari grapefruit/jeruk bali.' },
         th: { tag: 'เตือนอาการเป็นพิษ', text: 'หากท้องเสียรุนแรง อาเจียน หรือกล้ามเนื้ออ่อนแรงให้หยุดยาและพบแพทย์ งดส้มโอและเกรปฟรุต' }
       },
+      ntg: {
+        zh: { tag: '急救與禁忌', text: '胸痛時先坐下再噴／含舌下；絕對不可與威而鋼、犀利士等壯陽藥併用！' },
+        en: { tag: 'URGENT & CONTRAINDICATION', text: 'Sit down before using for chest pain; NEVER combine with ED medicines (Viagra/Cialis)!' },
+        vi: { tag: 'CẤP CỨU & CẤM DÙNG CHUNG', text: 'Ngồi xuống trước khi xịt/ngậm dưới lưỡi khi đau ngực; TUYỆT ĐỐI không dùng chung thuốc cường dương!' },
+        id: { tag: 'DARURAT & LARANGAN', text: 'Duduk dulu sebelum semprot/letakkan di bawah lidah; JANGAN diminum bersama obat kuat (Viagra/Cialis)!' },
+        th: { tag: 'ยาฉุกเฉินและข้อห้าม', text: 'นั่งลงก่อนพ่น/อมใต้ลิ้นเมื่อเจ็บหน้าอก ห้ามใช้ร่วมกับยาเพิ่มสมรรถภาพทางเพศเด็ดขาด!' }
+      },
       lithium: {
         zh: { tag: '濃度追蹤警訊', text: '每天喝足量水、飲食鹹淡維持固定；若嚴重手抖、拉肚子或意識混亂請立刻就醫' },
         en: { tag: 'LEVEL ALERT', text: 'Drink enough water and keep salt intake steady. Seek urgent care for severe tremor, diarrhea, or confusion.' },
@@ -2450,6 +2467,23 @@
     }
 
     // 精簡擷取仿單章節給衛教單卡片顯示（自動清洗 Markdown 表格 |---|---| 與官樣長句，不留亂碼與半截括號）
+    // 偵測是否為臨床試驗統計表格／數據雜訊（避免 PVC 21/7 (N=143) 安慰劑... 這類專業表格殘骸誤入衛教單）
+    function rxIsGarbledClinicalTableText(text) {
+      const s = String(text || '').trim();
+      if (!s) return true;
+      // 樣本數、安慰劑組、臨床試驗表格表頭、百分比統計表
+      if (/\(\s*[Nn]\s*=\s*\d+\s*\)|\b[Nn]\s*=\s*\d+/.test(s)) return true;
+      if (/安慰劑|placebo|受試者|試驗組|對照組|有不良事件的病人數|病人數\s*\(%?\)|治療組|雙盲|隨機分派|臨床試驗中|發生率\s*[≥>=<≤]\s*\d/i.test(s)) return true;
+      if (/\b\d+\s*x\s*\/\s*week\b|\b\d+\/\d+\s*\([Nn]=/i.test(s)) return true;
+      if (/^(?:表|Table)\s*\d+/i.test(s)) return true;
+      // 連續出現多個數字百分比（例如 14 (9.8%) 22 (15.4%)）
+      const pctMatches = s.match(/\d+(?:\.\d+)?\s*%/g);
+      if (pctMatches && pctMatches.length >= 2) return true;
+      // 過度截斷且含有大量英文縮寫/數字的殘句（例如「PVC 21/7 ... 全身…」）
+      if (/[…\.]{1,3}$/.test(s) && (/\b[A-Z]{2,}\s+\d/.test(s) || /\(\s*%\s*\)/.test(s))) return true;
+      return false;
+    }
+
     function cleanMarkdownTablesToProse(text) {
       if (!text) return '';
       const rawLines = String(text).replace(/\r/g, '').split('\n');
@@ -2466,19 +2500,24 @@
         if (!ln) { flushTable(); continue; }
         // 忽略 Markdown 表格分隔線 |---|---|
         if (/^\|?[\s:\-—–]+\|[\s:\-—–|]+$/.test(ln)) continue;
+        // 略過臨床試驗統計表格與表頭
+        if (rxIsGarbledClinicalTableText(ln)) continue;
         // 處理 Markdown 表格資料列 | 皮膚 | 發疹、發紅 |
         if (ln.includes('|')) {
           const cells = ln.split('|').map(c => c.trim()).filter(Boolean);
           if (!cells.length) continue;
-          // 略過常見表頭（身體部位｜副作用、器官系統｜不良反應等）
-          if (cells.length >= 2 && /^(?:身體部位|部位|器官|系統|器官系統|不良反應分類|分類|項目|類別)$/.test(cells[0]) && /(?:副作用|不良反應|症狀|反應|發生率|說明)/.test(cells[1])) {
+          // 若多數欄位是純數字/百分比/括號數據，判定為臨床統計數據列，直接忽略
+          const numericCells = cells.filter(c => /^[\d.,\s()%<>≤≥±\-–—/]+$/.test(c)).length;
+          if (numericCells >= 2 || (cells.length >= 3 && numericCells >= 1)) continue;
+          // 略過常見表頭
+          if (cells.length >= 2 && /^(?:身體部位|部位|器官|系統|器官系統|不良反應分類|分類|項目|類別|系統器官分類|SOC)$/i.test(cells[0]) && /(?:副作用|不良反應|症狀|反應|發生率|說明|頻率|組別)/.test(cells.slice(1).join(' '))) {
             continue;
           }
           if (cells.length >= 2) {
             const k = cells[0].replace(/[：:]+$/, '');
             const v = cells.slice(1).join('、').replace(/[。．.]+$/, '');
-            if (v) tableItems.push(`${k}：${v}`);
-          } else {
+            if (v && !rxIsGarbledClinicalTableText(v)) tableItems.push(`${k}：${v}`);
+          } else if (!rxIsGarbledClinicalTableText(cells[0])) {
             tableItems.push(cells[0].replace(/[。．.]+$/, ''));
           }
           continue;
@@ -2507,7 +2546,7 @@
         .replace(/([：:])\1+/g, '$1')
         .replace(/\s{2,}/g, ' ')
         .trim();
-      if (!cleanInfoField(compact)) return '';
+      if (!cleanInfoField(compact) || rxIsGarbledClinicalTableText(compact)) return '';
       if (compact.length <= maxLen) return compact.replace(/[，,、]+$/, '。');
 
       const lookAheadLimit = maxLen + 28;
@@ -2612,6 +2651,9 @@
       }
       if (/\b(warfarin|apixaban|rivaroxaban|dabigatran|edoxaban|aspirin|clopidogrel|prasugrel|ticagrelor)/i.test(s)) {
         return { key: 'bleed', ...SPECIAL_ALERT_I18N.bleed.zh };
+      }
+      if (/\b(nitroglycerin|glytrin|nitrolingual|nitrostat)/i.test(s)) {
+        return { key: 'ntg', tag: '急救與併用禁忌', text: '胸痛時先坐下再噴／含舌下；絕對不可與威而鋼、犀利士等壯陽藥併用！' };
       }
       if (/\b(diclofenac|ibuprofen|naproxen|meloxicam|celecoxib|etoricoxib|indomethacin|ketorolac|piroxicam)/i.test(s)) {
         return { key: 'girenal', ...SPECIAL_ALERT_I18N.girenal.zh };
@@ -3306,28 +3348,137 @@
       }).join('');
     }
 
+    let followUpEditedByUser = false;
+
+    function buildAutoGentleFollowUp(lang = 'zh') {
+      const i18n = {
+        safe: {
+          zh: '您目前的用藥組合整體安全，請持續按時服藥，定期回診追蹤。',
+          en: 'Your current medicines look safe overall. Please keep taking them on time and attend regular checkups.',
+          vi: 'Đơn thuốc hiện tại của bạn tương đối an toàn. Hãy tiếp tục uống đúng giờ và tái khám định kỳ.',
+          id: 'Kombinasi obat Anda saat ini relatif aman. Terus minum obat tepat waktu dan kontrol secara rutin.',
+          th: 'ยาที่ใช้อยู่โดยรวมปลอดภัยดี กรุณารับประทานยาตรงเวลาและมาพบแพทย์ตามนัดสม่ำเสมอ'
+        },
+        dup: {
+          zh: '藥袋裡有相同成分的藥，請將全部藥袋帶給醫師或藥師確認，避免重複吃到過量',
+          en: 'Some bags contain the same ingredient—bring all bags to your doctor/pharmacist to avoid doubling up',
+          vi: 'Có thuốc trùng hoạt chất—hãy mang toàn bộ túi thuốc cho bác sĩ hoặc dược sĩ kiểm tra để tránh uống quá liều',
+          id: 'Ada obat dengan kandungan yang sama—bawa semua obat ke dokter/apoteker agar tidak diminum ganda',
+          th: 'มียาบางรายการที่มีตัวยาซ้ำกัน กรุณานำซองยาทั้งหมดไปให้แพทย์หรือเภสัชกรตรวจสอบเพื่อป้องกันการกินซ้ำ'
+        },
+        fall: {
+          zh: '部分藥品容易讓人頭暈或想睡，起身動作請放慢，半夜起來開小夜燈防跌倒',
+          en: 'Some medicines may cause dizziness or drowsiness—stand up slowly and use a nightlight to prevent falls',
+          vi: 'Một số thuốc có thể gây chóng mặt hoặc buồn ngủ—hãy đứng dậy từ từ và bật đèn ngủ ban đêm để tránh té ngã',
+          id: 'Beberapa obat bisa membuat pusing atau mengantuk—berdiri pelan dan nyalakan lampu malam agar tidak jatuh',
+          th: 'ยาบางชนิดอาจทำให้เวียนศีรษะหรือง่วงซึม ควรลุกยืนช้า ๆ และเปิดไฟกลางคืนเพื่อป้องกันการหกล้ม'
+        },
+        bleed: {
+          zh: '請留意牙齦流血、解黑便或大片不明瘀青等出血情形',
+          en: 'Watch for bleeding signs such as gum bleeding, black stools, or unusual bruising',
+          vi: 'Chú ý dấu hiệu chảy máu như chảy máu nướu, phân đen hoặc vết bầm lớn bất thường',
+          id: 'Waspadai tanda perdarahan seperti gusi berdarah, BAB hitam, atau memar luas tanpa sebab',
+          th: 'สังเกตอาการเลือดออกผิดปกติ เช่น เลือดออกตามไรฟัน ถ่ายดำ หรือรอยฟกช้ำขนาดใหญ่'
+        },
+        hypo: {
+          zh: '請留意手抖、冒冷汗等低血糖症狀，出門隨身帶幾顆糖果',
+          en: 'Watch for low blood sugar signs (shaking, cold sweats) and carry candy when going out',
+          vi: 'Chú ý dấu hiệu hạ đường huyết (run tay, vã mồ hôi lạnh) và luôn mang theo kẹo khi ra ngoài',
+          id: 'Waspadai gula darah rendah (gemetar, keringat dingin) dan selalu bawa permen saat keluar rumah',
+          th: 'ระวังอาการน้ำตาลในเลือดต่ำ (มือสั่น เหงื่อออกตัวเย็น) และควรพกลูกอมติดตัวเวลาออกนอกบ้าน'
+        },
+        renal: {
+          zh: '下次看診請向醫師確認目前的顆數是否適合您的腎臟功能',
+          en: 'Ask your doctor at your next visit whether your current doses fit your kidney function',
+          vi: 'Lần tái khám tới hãy hỏi bác sĩ xem liều hiện tại có phù hợp với chức năng thận của bạn không',
+          id: 'Saat kontrol berikutnya, pastikan kepada dokter apakah dosis saat ini sesuai dengan fungsi ginjal Anda',
+          th: 'วันนัดครั้งหน้ากรุณาสอบถามแพทย์ว่าขนาดยาปัจจุบันเหมาะสมกับการทำงานของไตหรือไม่'
+        },
+        general: {
+          zh: '部分藥品需要多留意身體反應',
+          en: 'Please watch closely how your body responds to some of these medicines',
+          vi: 'Một số thuốc cần theo dõi kỹ phản ứng của cơ thể',
+          id: 'Beberapa obat perlu dipantau lebih cermat terhadap reaksi tubuh Anda',
+          th: 'ยาบางชนิดควรสังเกตอาการตอบสนองของร่างกายอย่างใกล้ชิด'
+        },
+        closing: {
+          zh: '切勿自行停藥，下次看診請帶著這張單子與醫師討論是否需要調整。',
+          en: 'Do NOT stop any medicine on your own—bring this guide to your next visit to discuss adjustments with your doctor.',
+          vi: 'Tuyệt đối không tự ý ngừng thuốc; hãy mang tờ hướng dẫn này khi tái khám để trao đổi với bác sĩ.',
+          id: 'Jangan menghentikan obat sendiri; bawa lembar ini saat kontrol berikutnya untuk berdiskusi dengan dokter.',
+          th: 'ห้ามหยุดยาเองเด็ดขาด กรุณานำเอกสารนี้ไปปรึกษาแพทย์ในวันนัดครั้งหน้า'
+        },
+        sep: { zh: '；', en: '; ', vi: '; ', id: '; ', th: ' / ' },
+        endDot: { zh: '。', en: '. ', vi: '. ', id: '. ', th: ' ' }
+      };
+
+      const lg = i18n.safe[lang] ? lang : 'zh';
+      if (!latestBeersAlerts.length) return i18n.safe[lg];
+
+      const keys = [];
+      const addKey = k => { if (!keys.includes(k)) keys.push(k); };
+      latestBeersAlerts.forEach(a => {
+        if (a.level === 'dup') addKey('dup');
+        if (/跌倒|中樞|安眠|抗組織胺|抗膽鹼/.test(a.title + a.detail)) addKey('fall');
+        if (/出血|Warfarin|Aspirin|Rivaroxaban|NSAID/i.test(a.title + a.detail)) addKey('bleed');
+        if (/低血糖|Sulfonylurea/i.test(a.title + a.detail)) addKey('hypo');
+        if (/腎功能/.test(a.tableTag)) addKey('renal');
+      });
+      const detail = keys.length
+        ? keys.map(k => i18n[k][lg]).join(i18n.sep[lg]) + i18n.endDot[lg]
+        : i18n.general[lg] + i18n.endDot[lg];
+      return `${detail}${i18n.closing[lg]}`;
+    }
+
+    function onManualFollowUpInput() {
+      const box = document.getElementById('f_followUpSummary');
+      const cur = (box?.value || '').trim();
+      const autoNow = buildAutoGentleFollowUp(currentPrintLang || 'zh').trim();
+      const autoZh = buildAutoGentleFollowUp('zh').trim();
+      followUpEditedByUser = Boolean(cur && cur !== autoNow && cur !== autoZh);
+      renderPreview();
+    }
+
     function autoFillGentleFollowUp(goToDesign = false) {
       const box = document.getElementById('f_followUpSummary');
-      if (!latestBeersAlerts.length) {
-        box.value = '您目前的用藥組合整體安全，請持續按時服藥，定期回診追蹤。';
-      } else {
-        const tips = new Set();
-        latestBeersAlerts.forEach(a => {
-          if (a.level === 'dup') tips.add('您的藥袋中有含相同成分的藥品，建議將全部藥袋帶給醫師或藥師確認，避免重複吃下過量藥物');
-          if (/跌倒|中樞|安眠|抗組織胺|抗膽鹼/.test(a.title + a.detail)) tips.add('部分藥品可能讓您容易想睡或頭暈，起身請放慢動作避免跌倒');
-          if (/出血|Warfarin|Aspirin|Rivaroxaban|NSAID/i.test(a.title + a.detail)) tips.add('留意牙齦出血、黑便或不明瘀青等出血情形');
-          if (/低血糖|Sulfonylurea/i.test(a.title + a.detail)) tips.add('注意手抖、冒冷汗等低血糖症狀，隨身可備糖果');
-          if (/腎功能/.test(a.tableTag)) tips.add('請於下次看診時向醫師確認目前劑量是否適合您的腎臟功能');
-        });
-        const detail = tips.size ? Array.from(tips).join('；') + '。' : '部分藥品在高齡長輩身上需要更密切留意身體反應。';
-        box.value = `${detail}切勿自行停藥，建議下次看診時帶著這張單子與醫師討論是否需要調整。`;
-      }
+      followUpEditedByUser = false;
+      if (box) box.value = buildAutoGentleFollowUp(currentPrintLang || 'zh');
       document.getElementById('opt_followUp').checked = true;
       document.getElementById('followUpEditorWrap').style.display = 'block';
       renderPreview();
       if (goToDesign) {
         switchTab('design', document.getElementById('tabBtnDesign'));
-        box.focus();
+        if (box) box.focus();
+      }
+    }
+
+    async function aiTranslateFollowUpBox(btn) {
+      const box = document.getElementById('f_followUpSummary');
+      const src = (box?.value || '').trim();
+      const lang = currentPrintLang || 'zh';
+      if (!src) {
+        autoFillGentleFollowUp(false);
+        return;
+      }
+      if (!followUpEditedByUser) {
+        box.value = buildAutoGentleFollowUp(lang);
+        renderPreview();
+        return;
+      }
+      const langName = { zh:'Traditional Chinese (Taiwan)', en:'simple English', vi:'simple Vietnamese (Tiếng Việt)', id:'simple Indonesian (Bahasa Indonesia)', th:'simple Thai (ภาษาไทย)' }[lang];
+      if (btn) btn.disabled = true;
+      try {
+        const res = await callGeminiAPI([{
+          text: `Translate this short pharmacist follow-up note for an elderly patient into ${langName}. Keep it warm, short, and accurate. Return strict JSON: {"text": "..."}.\n\nNote:\n${src}`
+        }]);
+        if (res && res.text) {
+          box.value = String(res.text).trim();
+          renderPreview();
+        }
+      } catch (e) {
+        alert('翻譯失敗：' + e.message);
+      } finally {
+        if (btn) btn.disabled = false;
       }
     }
 
@@ -3591,6 +3742,31 @@
         id: { purpose: 'Memperlambat pengeroposan tulang untuk osteoporosis', sideEffects: 'Iritasi kerongkongan/lambung (lapor dokter jika nyeri rahang)', lifestyle: 'Minum saat bangun tidur dengan 1 gelas air putih; tetap duduk/berdiri minimal 30 menit', diet: 'Tunggu minimal 30 menit sebelum sarapan, kopi, susu, atau kalsium' },
         th: { purpose: 'ชะลอการสลายกระดูก รักษาโรคกระดูกพรุนและป้องกันกระดูกหัก', sideEffects: 'ระคายเคืองหลอดอาหารหรือกระเพาะ (แจ้งแพทย์หากปวดกราม)', lifestyle: 'กินตอนตื่นนอนพร้อมน้ำเปล่า 1 แก้วเต็ม แล้วนั่งหรือยืนตัวตรงอย่างน้อย 30 นาที ห้ามนอนราบ', diet: 'รออย่างน้อย 30 นาทีจึงค่อยกินอาหารเช้า กาแฟ นม หรือแคลเซียม' }
       }
+,
+      {
+        key: 'vaginal_estrogen', re: /(?:premarin|conjugated\s*estrogen|estradiol|estriol|普力馬林|雌激素).*(?:陰道|vaginal)|(?:陰道|vaginal).*(?:premarin|estrogen|estradiol|estriol|普力馬林|雌激素)/i,
+        zh: { purpose: '局部補充女性荷爾蒙，改善陰道乾澀或萎縮不適', sideEffects: '少數人局部微癢或分泌物稍多；若異常陰道出血請回診', lifestyle: '建議睡前平躺使用較不易流出，塗藥器用後請以溫水洗淨晾乾', diet: '一般飲食無特別禁忌；定期接受婦科追蹤檢查' },
+        en: { purpose: 'Local estrogen cream to relieve vaginal dryness', sideEffects: 'Mild local irritation or discharge; see doctor for unusual vaginal bleeding', lifestyle: 'Best used lying down at bedtime; wash applicator with warm water after use', diet: 'No special food restrictions; keep routine gynecology checkups' },
+        vi: { purpose: 'Bổ sung estrogen tại chỗ giảm khô rát âm đạo', sideEffects: 'Hơi ngứa nhẹ hoặc ra dịch; đi khám nếu chảy máu âm đạo bất thường', lifestyle: 'Nên bôi khi nằm trước khi ngủ; rửa sạch dụng cụ bơm bằng nước ấm sau khi dùng', diet: 'Không kiêng ăn đặc biệt; tái khám phụ khoa định kỳ' },
+        id: { purpose: 'Krim hormon lokal untuk meredakan kekeringan vagina', sideEffects: 'Sedikit gatal/keputihan; ke dokter jika ada perdarahan vagina tidak normal', lifestyle: 'Gunakan sambil berbaring sebelum tidur; cuci aplikator dengan air hangat setelah dipakai', diet: 'Tidak ada pantangan makanan khusus; kontrol kandungan secara rutin' },
+        th: { purpose: 'ครีมฮอร์โมนเฉพาะที่ บรรเทาอาการช่องคลอดแห้ง', sideEffects: 'อาจระคายเคืองเล็กน้อย หากมีเลือดออกผิดปกติทางช่องคลอดให้พบแพทย์', lifestyle: 'ควรใช้ขณะนอนก่อนนอน และล้างอุปกรณ์ด้วยน้ำอุ่นให้สะอาดหลังใช้', diet: 'ไม่มีข้อห้ามด้านอาหาร ควรตรวจติดตามกับสูตินรีแพทย์ตามนัด' }
+      },
+      {
+        key: 'ntg_emergency', re: /\b(nitroglycerin|glytrin|nitrolingual|nitrostat)/i,
+        zh: { purpose: '急救緩解心絞痛（胸悶、胸痛）', sideEffects: '短暫頭痛、臉潮紅或頭暈', lifestyle: '胸痛時先「坐下」再噴／含於舌下（勿吸入或吞下）；隔 5 分鐘未緩解可再用 1 次，仍痛請立刻叫救護車', diet: '絕對不可與威而鋼、犀利士等壯陽藥併用，避免喝酒' },
+        en: { purpose: 'Quick relief for chest pain (angina)', sideEffects: 'Brief headache, flushing, or dizziness', lifestyle: 'Sit down before spraying/placing under tongue (do not inhale); repeat once after 5 min, call emergency if pain persists', diet: 'NEVER combine with Viagra/Cialis (ED drugs); avoid alcohol' },
+        vi: { purpose: 'Cấp cứu giảm đau thắt ngực', sideEffects: 'Đau đầu nhẹ thoáng qua, đỏ mặt hoặc chóng mặt', lifestyle: 'Ngồi xuống trước khi xịt/ngậm dưới lưỡi (không hít); lặp lại sau 5 phút nếu còn đau, gọi cấp cứu nếu không đỡ', diet: 'TUYỆT ĐỐI không dùng chung thuốc cường dương (Viagra/Cialis); tránh rượu bia' },
+        id: { purpose: 'Pereda cepat nyeri dada (angina)', sideEffects: 'Sakit kepala sebentar, wajah memerah, atau pusing', lifestyle: 'Duduk dulu sebelum semprot/letakkan di bawah lidah; ulangi setelah 5 menit, segera ke UGD jika nyeri tidak hilang', diet: 'JANGAN pernah gabungkan dengan obat kuat (Viagra/Cialis); hindari alkohol' },
+        th: { purpose: 'บรรเทาอาการเจ็บแน่นหน้าอกเฉียบพลัน', sideEffects: 'อาจปวดศีรษะชั่วคราว หน้าแดง หรือเวียนหัว', lifestyle: 'นั่งลงก่อนพ่น/อมใต้ลิ้น (ห้ามสูดดม) หาก 5 นาทีไม่ดีขึ้นใช้ซ้ำได้ 1 ครั้ง ถ้ายังเจ็บให้เรียกรถพยาบาลทันที', diet: 'ห้ามใช้ร่วมกับยาเพิ่มสมรรถภาพทางเพศเด็ดขาด และงดแอลกอฮอล์' }
+      },
+      {
+        key: 'inhaler_respiratory', re: /\b(salbutamol|albuterol|budesonide|fluticasone|tiotropium|formoterol|salmeterol|vilanterol|umeclidinium|ipratropium|beclometasone|beclomethasone|ciclesonide|symbicort|seretide|spiriva|relvar|anoro|trelegy)/i,
+        zh: { purpose: '放鬆支氣管、改善氣喘或喘氣不順', sideEffects: '可能聲音沙啞、口乾或手微抖', lifestyle: '每次吸完請立刻用清水漱口並吐掉，避免嘴巴發炎長白斑；按時規律吸入', diet: '避免抽菸與二手菸' },
+        en: { purpose: 'Opens airways for asthma or COPD breathing', sideEffects: 'Hoarse voice, dry mouth, or mild hand shaking', lifestyle: 'Rinse mouth with water and spit out right after inhaling to prevent mouth thrush', diet: 'Avoid smoking and secondhand smoke' },
+        vi: { purpose: 'Giãn phế quản, giảm khó thở do hen/COPD', sideEffects: 'Khàn tiếng, khô miệng hoặc run tay nhẹ', lifestyle: 'Súc miệng bằng nước sạch và nhổ bỏ ngay sau khi hít để tránh nấm miệng', diet: 'Tránh hút thuốc và khói thuốc lá' },
+        id: { purpose: 'Melegakan saluran napas untuk asma atau PPOK', sideEffects: 'Suara serak, mulut kering, atau tangan sedikit gemetar', lifestyle: 'Segera berkumur air dan buang setelah menghirup untuk mencegah sariawan jamur', diet: 'Hindari merokok dan asap rokok' },
+        th: { purpose: 'ขยายหลอดลม บรรเทาอาการหอบหืดหรือหายใจลำบาก', sideEffects: 'เสียงแหบ ปากแห้ง หรือมือสั่นเล็กน้อย', lifestyle: 'กลั้วปากด้วยน้ำเปล่าแล้วบ้วนทิ้งทันทีหลังพ่น เพื่อป้องกันเชื้อราในช่องปาก', diet: 'หลีกเลี่ยงการสูบบุหรี่และควันบุหรี่' }
+      }
     ];
 
     const GENERIC_FALLBACK_I18N = {
@@ -3728,6 +3904,13 @@
 
       document.getElementById('opt_followUp').addEventListener('change', (e) => {
         document.getElementById('followUpEditorWrap').style.display = e.target.checked ? 'block' : 'none';
+        if (e.target.checked) {
+          const fuBox = document.getElementById('f_followUpSummary');
+          if (fuBox && !fuBox.value.trim()) {
+            followUpEditedByUser = false;
+            fuBox.value = buildAutoGentleFollowUp(currentPrintLang || 'zh');
+          }
+        }
         renderPreview();
       });
 
@@ -5124,7 +5307,7 @@ ${JSON.stringify(items)}
       const drug = document.getElementById('rep_drug').value.trim() || '（未指定）';
       const desc = document.getElementById('rep_desc').value.trim();
       const contact = document.getElementById('rep_contact').value.trim() || '（未填寫）';
-      const env = `CareRx-v43 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
+      const env = `CareRx-v44 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
       return { type, drug, desc, contact, env, plainText: `【類型】${type}\n【藥品】${drug}\n【描述】${desc}\n【聯絡】${contact}\n【環境】${env}` };
     }
 
@@ -5224,11 +5407,11 @@ ${JSON.stringify(items)}
     ];
 
     const RX_PURPOSES = {
-      zh:['降血壓','降血糖','降血脂','心臟保護','預防血栓','退燒止痛','感冒藥','化痰止咳','過敏／流鼻水','胃藥／護胃','幫助睡眠','神經痛／頭暈','攝護腺／排尿','痛風／降尿酸','抗生素','外用消炎止癢','眼藥水','骨質疏鬆','其他'],
-      en:['Lower blood pressure','Lower blood sugar','Lower cholesterol','Heart protection','Prevent blood clots','Fever & pain relief','Cold medicine','Cough & phlegm','Allergy / runny nose','Stomach medicine','Help with sleep','Nerve pain / dizziness','Prostate / urination','Gout / uric acid','Antibiotic','Topical anti-itch / relief','Eye drops','Osteoporosis','Other'],
-      vi:['Hạ huyết áp','Hạ đường huyết','Hạ mỡ máu','Bảo vệ tim','Ngừa cục máu đông','Hạ sốt giảm đau','Thuốc cảm','Giảm ho long đờm','Dị ứng / sổ mũi','Thuốc dạ dày','Hỗ trợ giấc ngủ','Đau thần kinh / chóng mặt','Tuyến tiền liệt / tiểu tiện','Gút / axit uric','Kháng sinh','Thuốc bôi ngoài da','Thuốc nhỏ mắt','Loãng xương','Khác'],
-      id:['Menurunkan tekanan darah','Menurunkan gula darah','Menurunkan kolesterol','Pelindung jantung','Mencegah bekuan darah','Demam & pereda nyeri','Obat flu','Batuk & dahak','Alergi / pilek','Obat lambung','Membantu tidur','Nyeri saraf / pusing','Prostat / berkemih','Asam urat','Antibiotik','Obat oles kulit','Tetes mata','Osteoporosis','Lainnya'],
-      th:['ลดความดันโลหิต','ลดน้ำตาลในเลือด','ลดไขมันในเลือด','บำรุงและปกป้องหัวใจ','ป้องกันลิ่มเลือด','ลดไข้แก้ปวด','ยาแก้หวัด','แก้ไอละลายเสมหะ','แก้แพ้ / น้ำมูกไหล','ยารักษาโรคกระเพาะ','ช่วยให้นอนหลับ','ปวดปลายประสาท / เวียนหัว','ต่อมลูกหมาก / ปัสสาวะ','โรคเกาต์ / ลดกรดยูริก','ยาปฏิชีวนะ','ยาทาภายนอกแก้คัน/อักเสบ','ยาหยอดตา','โรคกระดูกพรุน','อื่น ๆ']
+      zh:['降血壓','降血糖','降血脂','心臟／護心','預防血栓','退燒止痛','感冒藥','化痰止咳','氣喘／支氣管','過敏／流鼻水','胃藥／護胃','幫助睡眠','神經痛／頭暈','攝護腺／排尿','痛風／降尿酸','抗生素','荷爾蒙／更年期','外用消炎止癢','眼藥水／眼膏','骨質疏鬆','其他'],
+      en:['Lower blood pressure','Lower blood sugar','Lower cholesterol','Heart / chest pain','Prevent blood clots','Fever & pain relief','Cold medicine','Cough & phlegm','Asthma / breathing','Allergy / runny nose','Stomach medicine','Help with sleep','Nerve pain / dizziness','Prostate / urination','Gout / uric acid','Antibiotic','Hormone therapy','Topical skin relief','Eye drops / ointment','Osteoporosis','Other'],
+      vi:['Hạ huyết áp','Hạ đường huyết','Hạ mỡ máu','Tim mạch / đau ngực','Ngừa cục máu đông','Hạ sốt giảm đau','Thuốc cảm','Giảm ho long đờm','Hen suyễn / hô hấp','Dị ứng / sổ mũi','Thuốc dạ dày','Hỗ trợ giấc ngủ','Đau thần kinh / chóng mặt','Tuyến tiền liệt / tiểu tiện','Gút / axit uric','Kháng sinh','Nội tiết / mãn kinh','Thuốc bôi ngoài da','Thuốc nhỏ / tra mắt','Loãng xương','Khác'],
+      id:['Menurunkan tekanan darah','Menurunkan gula darah','Menurunkan kolesterol','Jantung / nyeri dada','Mencegah bekuan darah','Demam & pereda nyeri','Obat flu','Batuk & dahak','Asma / pernapasan','Alergi / pilek','Obat lambung','Membantu tidur','Nyeri saraf / pusing','Prostat / berkemih','Asam urat','Antibiotik','Terapi hormon','Obat oles kulit','Tetes / salep mata','Osteoporosis','Lainnya'],
+      th:['ลดความดันโลหิต','ลดน้ำตาลในเลือด','ลดไขมันในเลือด','หัวใจ / เจ็บหน้าอก','ป้องกันลิ่มเลือด','ลดไข้แก้ปวด','ยาแก้หวัด','แก้ไอละลายเสมหะ','หอบหืด / หลอดลม','แก้แพ้ / น้ำมูกไหล','ยารักษาโรคกระเพาะ','ช่วยให้นอนหลับ','ปวดปลายประสาท / เวียนหัว','ต่อมลูกหมาก / ปัสสาวะ','โรคเกาต์ / ลดกรดยูริก','ยาปฏิชีวนะ','ฮอร์โมน / วัยทอง','ยาทาภายนอก','ยาหยอด / ป้ายตา','โรคกระดูกพรุน','อื่น ๆ']
     };
 
     const RX_CUSTOM_PURPOSE_I18N = {
@@ -5255,14 +5438,22 @@ ${JSON.stringify(items)}
     };
 
     const RX_NONORAL_I18N = {
-      ointment:    { zh:'外用藥膏', en:'Topical cream/ointment', vi:'Thuốc bôi ngoài da', id:'Salep / krim oles', th:'ยาทาภายนอก' },
-      injection:   { zh:'注射針劑', en:'Injection', vi:'Thuốc tiêm', id:'Obat suntik', th:'ยาฉีด' },
-      drops:       { zh:'點眼／滴劑', en:'Eye / ear drops', vi:'Thuốc nhỏ mắt / tai', id:'Obat tetes', th:'ยาหยอดตา/หู' },
-      inhaler:     { zh:'吸入劑', en:'Inhaler', vi:'Thuốc hít', id:'Inhaler', th:'ยาพ่นสูด' },
-      patch:       { zh:'外用貼片', en:'Skin patch', vi:'Miếng dán ngoài da', id:'Koyo / patch kulit', th:'แผ่นแปะผิวหนัง' },
-      suppository: { zh:'栓劑', en:'Suppository', vi:'Thuốc đặt', id:'Supositoria', th:'ยาเหน็บ' },
-      liquid:      { zh:'口服藥水', en:'Oral liquid', vi:'Thuốc nước uống', id:'Obat cair / sirup', th:'ยาน้ำรับประทาน' },
-      powder:      { zh:'藥粉／顆粒', en:'Powder / granules', vi:'Thuốc bột / cốm', id:'Obat bubuk / granul', th:'ยาผง/แกรนูล' }
+      oral_spray:    { zh:'口腔／舌下噴霧', en:'Oral / sublingual spray', vi:'Xịt miệng / dưới lưỡi', id:'Semprot mulut / bawah lidah', th:'สเปรย์พ่นช่องปาก / ใต้ลิ้น' },
+      nasal_spray:   { zh:'鼻噴劑', en:'Nasal spray', vi:'Thuốc xịt mũi', id:'Semprot hidung', th:'สเปรย์พ่นจมูก' },
+      inhaler:       { zh:'口腔吸入劑', en:'Inhaler', vi:'Thuốc hít', id:'Inhaler', th:'ยาพ่นสูดทางปาก' },
+      vaginal_cream: { zh:'陰道乳膏／凝膠', en:'Vaginal cream / gel', vi:'Kem / gel bôi âm đạo', id:'Krim / gel vagina', th:'ครีม / เจลทาช่องคลอด' },
+      eye_ointment:  { zh:'眼藥膏', en:'Eye ointment', vi:'Thuốc mỡ tra mắt', id:'Salep mata', th:'ยาขี้ผึ้งป้ายตา' },
+      eye_drops:     { zh:'眼藥水', en:'Eye drops', vi:'Thuốc nhỏ mắt', id:'Tetes mata', th:'ยาหยอดตา' },
+      ear_drops:     { zh:'耳滴劑', en:'Ear drops', vi:'Thuốc nhỏ tai', id:'Tetes telinga', th:'ยาหยอดหู' },
+      enema:         { zh:'灌腸劑', en:'Enema', vi:'Thuốc thụt trực tràng', id:'Enema / pencahar dubur', th:'ยาสวนทวาร' },
+      suppository:   { zh:'塞劑／栓劑', en:'Suppository', vi:'Thuốc đặt', id:'Supositoria', th:'ยาเหน็บ' },
+      topical_spray: { zh:'外用噴劑', en:'Topical spray', vi:'Thuốc xịt ngoài da', id:'Semprot luar kulit', th:'สเปรย์พ่นภายนอก' },
+      mouthwash:     { zh:'漱口水', en:'Mouthwash / gargle', vi:'Nước súc miệng', id:'Obat kumur', th:'น้ำยาบ้วนปาก' },
+      ointment:      { zh:'外用藥膏', en:'Topical cream / ointment', vi:'Thuốc bôi ngoài da', id:'Salep / krim oles', th:'ยาทาภายนอก' },
+      patch:         { zh:'外用貼片', en:'Skin patch', vi:'Miếng dán ngoài da', id:'Koyo / patch kulit', th:'แผ่นแปะผิวหนัง' },
+      injection:     { zh:'注射針劑', en:'Injection', vi:'Thuốc tiêm', id:'Obat suntik', th:'ยาฉีด' },
+      liquid:        { zh:'口服藥水', en:'Oral liquid / syrup', vi:'Thuốc nước uống', id:'Obat cair / sirup', th:'ยาน้ำรับประทาน' },
+      powder:        { zh:'藥粉／顆粒包', en:'Powder / granules', vi:'Thuốc bột / cốm', id:'Obat bubuk / granul', th:'ยาผง / แกรนูล' }
     };
 
     const RX_UNKNOWN = {
@@ -5387,27 +5578,66 @@ ${JSON.stringify(items)}
       return wrap('<circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/>'); // 就醫
     }
 
-    // 非口服劑型 SVG 圖示
+    // 非口服與特殊劑型專屬 SVG 圖示（16 類精準區分，絕不再張冠李戴）
     function rxNonOralIconSvg(kind) {
+      if (kind === 'oral_spray') {
+        // 口腔／舌下長噴嘴噴霧瓶＋向右噴霧點
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="12" y="14" width="18" height="22" rx="3.5" fill="#e4efec" stroke="#2f6b63" stroke-width="2.1"/><rect x="16" y="7" width="10" height="7" rx="1.5" fill="#2f6b63"/><path d="M26 9.5 H44" stroke="#1f4a44" stroke-width="3" stroke-linecap="round"/><circle cx="49" cy="9.5" r="1.4" fill="#d97706"/><circle cx="53" cy="6.5" r="1.2" fill="#d97706"/><circle cx="53" cy="12.5" r="1.2" fill="#d97706"/><circle cx="57" cy="9.5" r="1.1" fill="#f59e0b"/><path d="M15 21 H27 M15 26 H25" stroke="#2f6b63" stroke-width="1.5" stroke-linecap="round"/></svg>';
+      }
+      if (kind === 'nasal_spray') {
+        // 鼻噴劑：直立錐形噴嘴＋向上噴霧點
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="21" y="21" width="22" height="15" rx="3.5" fill="#e4efec" stroke="#2f6b63" stroke-width="2.1"/><path d="M25 21 L29 10 H35 L39 21 Z" fill="#2f6b63"/><path d="M22 21 H42" stroke="#1f4a44" stroke-width="2.2"/><circle cx="32" cy="5.5" r="1.4" fill="#0284c7"/><circle cx="27.5" cy="7" r="1.2" fill="#38bdf8"/><circle cx="36.5" cy="7" r="1.2" fill="#38bdf8"/></svg>';
+      }
+      if (kind === 'inhaler') {
+        // 口腔定量吸入劑（L 形）
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M22 7 H34 V23 L47 23 V34 H22 A4 4 0 0 1 18 30 V11 A4 4 0 0 1 22 7 Z" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><rect x="24" y="4" width="8" height="5" rx="1" fill="#2f6b63"/><path d="M51 26 H57 M51 30 H56" stroke="#2f6b63" stroke-width="2" stroke-linecap="round"/></svg>';
+      }
+      if (kind === 'vaginal_cream') {
+        // 陰道乳膏：軟膏鋁管＋細長給藥器（與栓劑完全區隔！）
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="6" y="7" width="32" height="12" rx="2.5" fill="#fce7f3" stroke="#9d174d" stroke-width="2"/><path d="M38 9.5 L44 11 V15 L38 16.5 Z" fill="#9d174d"/><rect x="11" y="7" width="4" height="12" fill="#f9a8d4" opacity="0.65"/><rect x="16" y="25" width="38" height="6" rx="3" fill="#ffffff" stroke="#9d174d" stroke-width="1.8"/><path d="M8 28 H16 M48 25 V31" stroke="#9d174d" stroke-width="2" stroke-linecap="round"/></svg>';
+      }
+      if (kind === 'eye_ointment') {
+        // 眼藥膏：細長尖嘴小軟膏管＋小眼睛
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="7" y="14" width="28" height="11" rx="2.5" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/><path d="M35 16.5 L45 18.5 V20.5 L35 22.5 Z" fill="#0369a1"/><path d="M46 29 Q53 23 60 29 Q53 35 46 29 Z" fill="#ffffff" stroke="#0369a1" stroke-width="1.6"/><circle cx="53" cy="29" r="2.2" fill="#0369a1"/></svg>';
+      }
+      if (kind === 'eye_drops') {
+        // 眼藥水：滴眼瓶＋藍色水滴＋小眼睛
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M16 15 H30 V33 A3 3 0 0 1 27 36 H19 A3 3 0 0 1 16 33 Z" fill="#e0f2fe" stroke="#0369a1" stroke-width="2.1"/><path d="M19 15 V10 L23 5 L27 10 V15" fill="#0369a1"/><path d="M40 8 C40 8 45 14 45 17 A5 5 0 1 1 35 17 C35 14 40 8 40 8 Z" fill="#38bdf8" stroke="#0369a1" stroke-width="1.6"/><path d="M36 29 Q47 22 58 29 Q47 36 36 29 Z" fill="#ffffff" stroke="#0369a1" stroke-width="1.8"/><circle cx="47" cy="29" r="2.6" fill="#0369a1"/></svg>';
+      }
+      if (kind === 'ear_drops') {
+        // 耳滴劑：滴管瓶＋琥珀水滴
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M18 15 H32 V33 A3 3 0 0 1 29 36 H21 A3 3 0 0 1 18 33 Z" fill="#fef3c7" stroke="#b45309" stroke-width="2.1"/><path d="M21 15 V10 L25 5 L29 10 V15" fill="#b45309"/><path d="M45 14 C45 14 51 21 51 25 A6 6 0 1 1 39 25 C39 21 45 14 45 14 Z" fill="#f59e0b" stroke="#92400e" stroke-width="1.8"/></svg>';
+      }
+      if (kind === 'enema') {
+        // 灌腸劑：球瓶＋細長彎嘴
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M12 20 C12 12 22 10 30 13 L36 16 V24 L30 27 C22 30 12 28 12 20 Z" fill="#e4efec" stroke="#2f6b63" stroke-width="2.1"/><path d="M36 18.5 H54 C56 18.5 57 19.2 57 20 C57 20.8 56 21.5 54 21.5 H36 Z" fill="#2f6b63"/></svg>';
+      }
+      if (kind === 'suppository') {
+        // 塞劑／栓劑：圓滑子彈形
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M16 14 H36 C46 14 52 17 52 20 C52 23 46 26 36 26 H16 A4 4 0 0 1 12 22 V18 A4 4 0 0 1 16 14 Z" fill="#ffffff" stroke="#4d5350" stroke-width="2.2"/></svg>';
+      }
+      if (kind === 'topical_spray') {
+        // 外用噴劑：直立按壓噴瓶＋側向噴霧
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="16" y="15" width="18" height="21" rx="3" fill="#fef3c7" stroke="#b45309" stroke-width="2.1"/><rect x="20" y="8" width="10" height="7" rx="1.5" fill="#b45309"/><path d="M30 10.5 H37" stroke="#92400e" stroke-width="2.6" stroke-linecap="round"/><circle cx="43" cy="10.5" r="1.4" fill="#d97706"/><circle cx="47" cy="7.5" r="1.2" fill="#d97706"/><circle cx="47" cy="13.5" r="1.2" fill="#d97706"/></svg>';
+      }
+      if (kind === 'mouthwash') {
+        // 漱口水：藥水瓶＋漱口小杯
+        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="14" y="4" width="10" height="5" rx="1" fill="#0d9488"/><path d="M14 9 H24 L27 14 V33 A2.5 2.5 0 0 1 24.5 35.5 H13.5 A2.5 2.5 0 0 1 11 33 V14 Z" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><path d="M37 19 H53 L50.5 35 H39.5 Z" fill="#ffffff" stroke="#0f766e" stroke-width="2"/><path d="M38.5 26 H51.5 L50.3 34 H39.7 Z" fill="#5eead4"/></svg>';
+      }
       if (kind === 'ointment') {
+        // 外用藥膏／軟膏／口內膏鋁管
         return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="8" y="13" width="38" height="14" rx="3" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><path d="M46 16 L54 17.5 V22.5 L46 24 Z" fill="#2f6b63"/><rect x="54" y="16" width="5" height="8" rx="1.5" fill="#1f4a44"/><path d="M14 13 V27 M22 18 H38 M22 22 H34" stroke="#2f6b63" stroke-width="1.8" stroke-linecap="round"/></svg>';
       }
       if (kind === 'injection') {
+        // 注射針劑／針筒
         return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M6 20 H14 M10 14 V26" stroke="#2f6b63" stroke-width="2.2" stroke-linecap="round"/><rect x="14" y="14" width="30" height="12" rx="2" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><path d="M22 14 V19 M28 14 V19 M34 14 V19" stroke="#2f6b63" stroke-width="1.6"/><path d="M44 17 H50 V23 H44 M50 20 H60" stroke="#1f4a44" stroke-width="2.2" stroke-linecap="round"/></svg>';
       }
-      if (kind === 'drops') {
-        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M22 15 H36 V33 A3 3 0 0 1 33 36 H25 A3 3 0 0 1 22 33 Z" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><path d="M25 15 V10 L29 5 L33 10 V15" fill="#2f6b63"/><path d="M46 15 C46 15 52 22 52 26 A6 6 0 1 1 40 26 C40 22 46 15 46 15 Z" fill="#84b4df" stroke="#1f4a44" stroke-width="2"/></svg>';
-      }
-      if (kind === 'inhaler') {
-        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M24 6 H36 V24 L48 24 V34 H24 A4 4 0 0 1 20 30 V10 A4 4 0 0 1 24 6 Z" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><rect x="26" y="4" width="8" height="5" rx="1" fill="#2f6b63"/><path d="M51 27 H57 M51 31 H56" stroke="#2f6b63" stroke-width="2" stroke-linecap="round"/></svg>';
-      }
       if (kind === 'patch') {
+        // 外用貼片／貼布
         return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="10" y="9" width="44" height="22" rx="7" fill="#f7efd9" stroke="#a5502a" stroke-width="2.2"/><rect x="23" y="13" width="18" height="14" rx="2" fill="#fff" stroke="#a5502a" stroke-width="1.6" stroke-dasharray="3 2"/></svg>';
       }
-      if (kind === 'suppository') {
-        return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M16 14 H36 C46 14 52 17 52 20 C52 23 46 26 36 26 H16 A4 4 0 0 1 12 22 V18 A4 4 0 0 1 16 14 Z" fill="#ffffff" stroke="#4d5350" stroke-width="2.2"/></svg>';
-      }
       if (kind === 'liquid') {
+        // 口服藥水／糖漿瓶
         return '<svg class="rx-pill-icon" viewBox="0 0 64 40" aria-hidden="true"><rect x="25" y="4" width="14" height="6" rx="1.5" fill="#2f6b63"/><path d="M26 10 H38 L42 16 V33 A3 3 0 0 1 39 36 H25 A3 3 0 0 1 22 33 V16 Z" fill="#e4efec" stroke="#2f6b63" stroke-width="2.2"/><path d="M23 23 H41 V33 A2 2 0 0 1 39 35 H25 A2 2 0 0 1 23 33 Z" fill="#f6d45b" opacity="0.65"/></svg>';
       }
       // powder sachet
@@ -5418,16 +5648,42 @@ ${JSON.stringify(items)}
     const RX_COLOR_ZH = {'灰白':'灰白色','乳白':'乳白色','淡黃':'淡黃色','淺藍':'淺藍色','深藍':'深藍色','白':'白色','黃':'黃色','粉':'粉紅色','橘':'橘色','藍':'藍色','綠':'綠色','紅':'紅色','棕':'棕色','紫':'紫色','灰':'灰色','黑':'黑色','透明':'透明'};
 
     function rxDetectNonOralForm(m, extraText = '') {
-      const s = `${m?.dosageForm || ''} ${m?.nameZh || ''} ${m?.nameEn || ''} ${extraText || ''}`;
-      if (/注射|針劑|針筒|點滴|輸注|安瓿|凍晶|預充|insulin|injection|syringe|ampoule|vial/i.test(s) && !/錠|膠囊|tablet|capsule/i.test(m?.dosageForm || m?.nameZh || '')) return 'injection';
-      if (/貼片|貼布|藥膠布|穿皮|patch/i.test(s)) return 'patch';
-      if (/吸入|定量噴霧|乾粉吸入|inhaler|turbuhaler|ellipta|respimat|evohaler|aerosphere/i.test(s)) return 'inhaler';
-      if (/栓劑|陰道錠|陰道|子彈形|suppository/i.test(s)) return 'suppository';
-      if (/點眼|眼藥水|眼用|耳滴|耳用|鼻噴|鼻用|ophthalmic|eye\s*drop|nasal\s*spray/i.test(s)) return 'drops';
-      if (/軟膏|乳膏|凝膠|口內膏|口內膠|藥膏|乳霜|乳液|洗劑|擦劑|外用|泡沫|cream|ointment|gel|lotion|topical/i.test(s)) return 'ointment';
-      if (/糖漿|口服液|內服液|懸浮液|懸濁液|懸液|藥液|溶液|液劑|滴液|syrup|solution|suspension/i.test(s) && !/錠|膠囊|tablet|capsule/i.test(m?.dosageForm || m?.nameZh || '')) return 'liquid';
-      if (/散劑|粉劑|顆粒|沖泡|粉末|powder|granule/i.test(m?.dosageForm || m?.nameZh || '') && !/錠|膠囊|tablet|capsule/i.test(m?.dosageForm || m?.nameZh || '')) return 'powder';
-      return '';
+      const df = String(m?.dosageForm || '');
+      const nm = `${m?.nameZh || ''} ${m?.nameEn || ''}`;
+      const primary = `${df} ${nm}`.trim();
+      const full = `${primary} ${extraText || ''}`.trim();
+
+      const classify = (s, strictOralGuard) => {
+        if (!s) return '';
+        const isSolidOral = strictOralGuard && /(?:膜衣錠|口溶錠|咀嚼錠|腸溶錠|持續性藥效錠|緩釋錠|舌下錠|發泡錠|裸錠|糖衣錠|錠劑|硬膠囊|軟膠囊|膠囊劑|tablet|capsule)/i.test(df || nm)
+          && !/(?:陰道錠|陰道膠囊|陰道塞|吸入用膠囊|吸入膠囊|外用膠囊|栓劑)/i.test(s);
+
+        // 1. 具體特殊劑型優先判定（順序極重要：陰道乳膏必須在栓劑之前！口腔/鼻噴霧必須在液劑之前！）
+        if (/(?:陰道.*(?:乳膏|軟膏|凝膠|乳霜|藥膏))|(?:(?:乳膏|軟膏|凝膠|乳霜).*陰道)|vaginal\s*(?:cream|gel|ointment)/i.test(s)) return 'vaginal_cream';
+        if (/(?:眼用.*(?:軟膏|凝膠|藥膏))|眼藥膏|眼軟膏|ophthalmic\s*(?:ointment|gel)|eye\s*(?:ointment|gel)/i.test(s)) return 'eye_ointment';
+        if (/(?:口腔|舌下|咽喉|喉嚨)[^\s，。]{0,4}噴|噴[^\s，。]{0,4}(?:口腔|舌下)|(?:oral|sublingual|mouth|throat|buccal)\s*spray|\bglytrin\b|\bnitrolingual\b/i.test(s)) return 'oral_spray';
+        if (/鼻[^\s，。]{0,4}噴|噴鼻|nasal\s*spray/i.test(s)) return 'nasal_spray';
+        if (/吸入|定量噴霧|乾粉吸入|氣霧劑|霧化吸入|inhaler|inhalation|nebuli|turbuhaler|ellipta|respimat|evohaler|aerosphere|diskus|accuhaler|breezhaler/i.test(s)) return 'inhaler';
+        if (/點眼|眼藥水|眼用(?:液|懸|滴)|人工淚液|ophthalmic\s*(?:solution|suspension|drops)?|eye\s*drop/i.test(s)) return 'eye_drops';
+        if (/點耳|耳用|耳滴|otic|ear\s*drop/i.test(s)) return 'ear_drops';
+        if (/灌腸|浣腸|直腸用(?:液|灌)|enema|rectal\s*(?:solution|foam|gel)/i.test(s)) return 'enema';
+        if (/(?:栓劑|塞劑|陰道錠|陰道片|陰道球|陰道膠囊|肛門栓|子彈形|suppositor|pessary|vaginal\s*(?:tablet|ovule|insert|capsule))/i.test(s)
+            && !/(?:乳膏|軟膏|凝膠|乳霜|洗液|cream|ointment|gel)/i.test(s)) return 'suppository';
+        if (/貼片|貼布|穿皮|藥膠布|水性貼|油布|patch|plaster|cataplasm|transdermal/i.test(s)) return 'patch';
+        if (/漱口|含漱|口內洗|gargle|mouthwash/i.test(s)) return 'mouthwash';
+        if (/(?:外用|皮膚|局部)[^\s，。]{0,4}噴|噴液劑|噴霧劑|\bspray\b/i.test(s)) return 'topical_spray';
+
+        // 2. 注射／外用軟膏／藥粉／口服藥水（排除純口服錠劑與膠囊）
+        if (isSolidOral) return '';
+        if (/注射|針劑|針筒|點滴|輸注|安瓿|凍晶|預充|靜脈|皮下|肌肉注射|insulin|injection|syringe|ampoule|vial|infusion/i.test(s)) return 'injection';
+        if (/軟膏|乳膏|凝膠|口內膏|口內膠|藥膏|油膏|乳霜|乳液|洗劑|擦劑|外用液|外用泡沫|泡沫劑|洗髮精|膏狀|cream|ointment|gel|lotion|liniment|shampoo|topical/i.test(s)) return 'ointment';
+        if (/散劑|粉劑|顆粒劑?|細粒|沖泡|發泡粉|懸液用粉|粉末|powder|granule|sachet/i.test(s)) return 'powder';
+        if (/糖漿|口服液|內服液|內服懸|口服懸|懸浮液|懸濁液|懸液劑|口服滴液|酏劑|合劑|syrup|elixir|oral\s*(?:solution|suspension|liquid|drops)|(?<!外用|點眼|點耳|鼻用|口腔|噴|灌腸|注射)液劑/i.test(s)) return 'liquid';
+        return '';
+      };
+
+      // 先以藥品本身劑型與名稱精準判斷，沒命中才看仿單外觀補充敘述（避免「內含白色粉末」誤判成散劑）
+      return classify(primary, true) || classify(full, true);
     }
 
     function rxPickStrengthLine(text, m) {
@@ -5453,7 +5709,7 @@ ${JSON.stringify(items)}
 
       // 非口服劑型優先判定（若品名/劑型本身即非口服，或文字描述非口服劑型）
       const nonOral = rxDetectNonOralForm(m, t0);
-      if (nonOral && !/錠|膠囊|tablet|capsule/i.test(m?.dosageForm || '')) {
+      if (nonOral) {
         return { nonOral };
       }
 
@@ -5697,6 +5953,10 @@ ${JSON.stringify(items)}
 
     function rxGuessDefaultPurpose(m) {
       const s = `${m.generic || ''} ${m.nameZh || ''} ${m.nameEn || ''} ${m.purpose || ''}`.toLowerCase();
+      if (/nitroglycerin|glytrin|nitrolingual|nitrostat|isosorbide|心絞痛|digoxin|amiodarone/i.test(s)) return '心臟／護心';
+      if (/premarin|conjugated\s*estrogen|estradiol|estriol|progesterone|普力馬林|雌激素|荷爾蒙|更年期/i.test(s)) return '荷爾蒙／更年期';
+      if (/鼻噴|鼻用|nasal\s*spray/i.test(s)) return '過敏／流鼻水';
+      if (/salbutamol|albuterol|budesonide|fluticasone|tiotropium|formoterol|salmeterol|vilanterol|umeclidinium|ipratropium|氣喘|支氣管|肺阻塞|吸入/i.test(s)) return '氣喘／支氣管';
       if (/血壓|amlodipine|losartan|valsartan|irbesartan|telmisartan|olmesartan|nifedipine|enalapril|ramipril|lisinopril|bisoprolol|carvedilol|atenolol|propranolol/i.test(s)) return '降血壓';
       if (/血糖|metformin|empagliflozin|dapagliflozin|canagliflozin|glimepiride|gliclazide|sitagliptin|linagliptin|vildagliptin|pioglitazone|insulin/i.test(s)) return '降血糖';
       if (/膽固醇|血脂|atorvastatin|rosuvastatin|simvastatin|pravastatin|pitavastatin|ezetimibe|fenofibrate/i.test(s)) return '降血脂';
@@ -5707,13 +5967,12 @@ ${JSON.stringify(items)}
       if (/攝護腺|排尿|tamsulosin|silodosin|doxazosin|terazosin/i.test(s)) return '攝護腺／排尿';
       if (/痛風|尿酸|allopurinol|febuxostat|colchicine|benzbromarone/i.test(s)) return '痛風／降尿酸';
       if (/抗生素|amoxicillin|cephalexin|cefuroxime|levofloxacin|ciprofloxacin|azithromycin|clarithromycin/i.test(s)) return '抗生素';
-      if (/感冒|綜合感冒|流鼻水|鼻炎|chlorpheniramine|cetirizine|loratadine|fexofenadine|pseudoephedrine/i.test(s)) return '感冒藥';
+      if (/感冒|綜合感冒|流鼻水|鼻炎|鼻噴|chlorpheniramine|cetirizine|loratadine|fexofenadine|pseudoephedrine/i.test(s)) return '過敏／流鼻水';
       if (/止咳|化痰|dextromethorphan|ambroxol|bromhexine|acetylcysteine|guaifenesin/i.test(s)) return '化痰止咳';
       if (/退燒|止痛|發炎|關節|acetaminophen|paracetamol|diclofenac|ibuprofen|naproxen|celecoxib|etoricoxib|meloxicam|tramadol/i.test(s)) return '退燒止痛';
-      if (/眼用|點眼|眼藥/i.test(s)) return '眼藥水';
-      if (/軟膏|乳膏|凝膠|外用|貼布|貼片/i.test(s)) return '外用消炎止癢';
+      if (/眼用|點眼|眼藥|眼膏/i.test(s)) return '眼藥水／眼膏';
       if (/骨質|alendronate|risedronate/i.test(s)) return '骨質疏鬆';
-      if (/心臟|digoxin|amiodarone/i.test(s)) return '心臟保護';
+      if (/軟膏|乳膏|凝膠|外用|貼布|藥膠布/i.test(s) && !/陰道|vaginal|rivastigmine|fentanyl|nitroglycerin|estradiol/i.test(s)) return '外用消炎止癢';
       return '';
     }
 
@@ -5823,13 +6082,14 @@ ${JSON.stringify(items)}
     function rxAutoInitMed(m) {
       const r = rxState(m);
       const nonOral = rxDetectNonOralForm(m);
-      const defaultUnit = nonOral === 'drops' ? 'drop'
-        : nonOral === 'inhaler' ? 'puff'
+      const defaultUnit = (nonOral === 'eye_drops' || nonOral === 'ear_drops') ? 'drop'
+        : (nonOral === 'inhaler' || nonOral === 'oral_spray' || nonOral === 'nasal_spray' || nonOral === 'topical_spray') ? 'puff'
         : nonOral === 'patch' ? 'patch'
-        : nonOral === 'injection' ? 'shot'
-        : nonOral === 'liquid' ? 'ml'
+        : (nonOral === 'injection' || nonOral === 'enema') ? 'shot'
+        : (nonOral === 'liquid' || nonOral === 'mouthwash') ? 'ml'
         : nonOral === 'powder' ? 'pack'
-        : (nonOral === 'ointment' || nonOral === 'suppository') ? 'application'
+        : nonOral === 'suppository' ? 'tablet'
+        : (nonOral === 'ointment' || nonOral === 'vaginal_cream' || nonOral === 'eye_ointment') ? 'application'
         : 'tablet';
 
       const u = String(m.usage || '');
@@ -5846,12 +6106,22 @@ ${JSON.stringify(items)}
       if (/需要時|痛時|不適時/.test(u) && !slots.length) slots.push('7');
       if (!slots.length) slots.push('1');
 
-      const extraDefault = nonOral === 'ointment' ? '塗抹於患部'
-        : nonOral === 'drops' ? '點於患處'
-        : nonOral === 'patch' ? '貼於患處皮膚'
+      const extraDefault = nonOral === 'oral_spray' ? '噴於舌下／口腔，勿吸入'
+        : nonOral === 'nasal_spray' ? '噴於鼻腔內'
+        : nonOral === 'inhaler' ? '口腔吸入使用（含類固醇請漱口）'
+        : nonOral === 'vaginal_cream' ? '依指示塗抹／置入陰道'
+        : nonOral === 'eye_ointment' ? '擠少量點於下眼瞼內側'
+        : nonOral === 'eye_drops' ? '點於患眼，瓶口勿碰眼睛'
+        : nonOral === 'ear_drops' ? '側躺滴入耳道'
+        : nonOral === 'enema' ? '依指示由肛門灌入'
+        : nonOral === 'suppository' ? '拆包裝後塞入患處，勿吞服'
+        : nonOral === 'topical_spray' ? '噴於患部皮膚'
+        : nonOral === 'mouthwash' ? '含漱後吐掉，勿吞服'
+        : nonOral === 'ointment' ? '薄塗於患部'
+        : nonOral === 'patch' ? '貼於清潔乾燥皮膚'
         : nonOral === 'injection' ? '依醫護指示注射'
-        : nonOral === 'inhaler' ? '口腔吸入使用'
-        : '';
+        : (/舌下錠/.test(`${m.dosageForm || ''} ${m.nameZh || ''}`) ? '含於舌下溶解，不可吞服'
+        : (/發泡錠/.test(`${m.dosageForm || ''} ${m.nameZh || ''}`) ? '先泡水完全溶解再喝' : ''));
 
       if (!r.rows.some(x => x.slot !== '')) {
         r.rows = slots.map(sl => ({ slot: sl, qty, unit: defaultUnit, extra: extraDefault }));
@@ -5896,6 +6166,17 @@ ${JSON.stringify(items)}
     // =========================================================================
     const RX_SEMANTIC_THEMES = [
       // 🔴 第一級：特別小心（防跌・急救）
+      {
+        key: 'ntg_chest', tier: 'red',
+        re: /威而鋼|犀利士|壯陽藥|胸痛時先.*坐下|噴於舌下|含於舌下|ED medicines|Viagra|Cialis|chest pain/i,
+        i18n: {
+          zh: '心絞痛急救注意：胸痛先坐下再噴／含舌下（勿吸入）；絕對別和威而鋼、犀利士併用！',
+          en: 'Chest pain safety: Sit down before spraying/placing under tongue; NEVER mix with Viagra/Cialis!',
+          vi: 'Cấp cứu đau ngực: Ngồi xuống trước khi xịt/ngậm dưới lưỡi; TUYỆT ĐỐI không dùng chung Viagra/Cialis!',
+          id: 'Nyeri dada: Duduk dulu sebelum pakai di bawah lidah; JANGAN campur dengan Viagra/Cialis!',
+          th: 'ฉุกเฉินเจ็บหน้าอก: นั่งลงก่อนพ่น/อมใต้ลิ้น ห้ามใช้ร่วมกับไวอากร้าหรือยาเพิ่มสมรรถภาพเด็ดขาด!'
+        }
+      },
       {
         key: 'mtx_weekly', tier: 'red',
         re: /每週.*1\s*次|ONCE A WEEK|1 LẦN\/TUẦN|1 KALI SEMINGGU|สัปดาห์ละ\s*1\s*ครั้ง/i,
@@ -6155,7 +6436,7 @@ ${JSON.stringify(items)}
 
       const processClause = (rawClause, catIdx = 4) => {
         const clause = cleanMarkdownTablesToProse(rawClause).replace(/^[\s•・\-–—]+/, '').trim();
-        if (!clause || clause.length < 3) return;
+        if (!clause || clause.length < 3 || rxIsGarbledClinicalTableText(clause)) return;
         let matchedAny = false;
         for (const th of RX_SEMANTIC_THEMES) {
           if (th.re.test(clause)) {
@@ -6646,9 +6927,14 @@ ${sourceText.slice(0, 4000)}`
       </header>`;
 
       let followUpHtml = '';
-      if (showFollowUp && followUpTxt) {
-        const flines = followUpTxt.split('\n').map(s => s.trim()).filter(Boolean);
-        followUpHtml = `<div class="patient-reminder-box"><strong>💬 ${esc(L.followUpTitle)}</strong><ul>${flines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></div>`;
+      if (showFollowUp) {
+        const effectiveFollowUp = followUpEditedByUser
+          ? followUpTxt
+          : (followUpTxt ? buildAutoGentleFollowUp(lang) : buildAutoGentleFollowUp(lang));
+        if (effectiveFollowUp) {
+          const flines = effectiveFollowUp.split('\n').map(s => s.trim()).filter(Boolean);
+          followUpHtml = `<div class="patient-reminder-box"><strong>💬 ${esc(L.followUpTitle)}</strong><ul>${flines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></div>`;
+        }
       }
 
       const makeFooter = (pNum, pTotal) => `<footer class="sheet-footer"><span>${esc(T[23])}</span>${pTotal > 1 ? `<span class="page-num-pill">第 ${pNum} / ${pTotal} 頁</span>` : ''}</footer>`;
@@ -6811,6 +7097,12 @@ ${sourceText.slice(0, 4000)}`
       if (!finalNotesDirty) {
         finalNotes = rxGenerateMergedFinalNotes(currentPrintLang);
         finalNotesLang = currentPrintLang;
+      }
+      if (!followUpEditedByUser) {
+        const fuBox = document.getElementById('f_followUpSummary');
+        if (fuBox && (fuBox.value.trim() || document.getElementById('opt_followUp')?.checked)) {
+          fuBox.value = buildAutoGentleFollowUp(currentPrintLang);
+        }
       }
       renderFinalNotesEditor();
       renderMedEditorList();
