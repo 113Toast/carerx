@@ -1516,6 +1516,10 @@
 }
 
 </style>
+
+<style>
+.rx-edit{padding:12px;background:#fdfcf9;border-bottom:1px solid var(--primary-border)}.rx-edit .grid-2{gap:8px}.rx-edit .rx-slot{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:5px;align-items:end;margin:6px 0}.rx-edit label{font-size:12px}.rx-note{width:100%;min-height:45px}.rx-edit details{margin-top:8px}.rx-status{font-size:12px;color:#a5502a;margin:6px 0}.rx-page.a4-page{height:289mm;min-height:289mm;padding:6mm 7mm;display:grid;grid-template-rows:auto minmax(0,2fr) minmax(0,1fr) auto;gap:7px;box-sizing:border-box}.rx-page .sheet-header{margin:0}.rx-part{min-height:0;overflow:visible}.rx-part h3{font-size:19px;color:var(--primary-dark);margin:0 0 6px}.rx-part.rx-warnings{border-top:2px solid var(--primary);padding-top:7px}.rx-time{display:grid;grid-template-columns:112px 1fr;gap:10px;border-bottom:1px dashed var(--primary-border);padding:5px 0;align-items:start}.rx-time-label{background:var(--primary);color:white;border-radius:7px;padding:6px;text-align:center;font-weight:700;font-size:15px}.rx-line{display:flex;align-items:center;gap:7px;padding:2px 0;font-size:16px;line-height:1.35;overflow-wrap:anywhere}.rx-line img{width:42px;height:33px;object-fit:contain;flex:none}.rx-line b{font-weight:700}.rx-tip{font-size:15px;line-height:1.4;margin:3px 0;overflow-wrap:anywhere}.rx-tip strong{color:#a5502a}.rx-page .sheet-footer{margin:0;font-size:11px}.rx-page.rx-small .rx-line,.rx-page.rx-small .rx-tip{font-size:13px}.rx-page.rx-small .rx-time{padding:3px 0}.rx-page.rx-small .rx-line img{width:34px;height:25px}.rx-page.rx-large .rx-line,.rx-page.rx-large .rx-tip{font-size:18px}.rx-print-block{display:none}.rx-page.rx-invalid{outline:2px solid #a5502a}.rx-page.rx-invalid .rx-part{overflow:auto}.rx-page.rx-invalid .rx-part::after{content:none}@media print{@page{size:A4 portrait;margin:3.5mm}.rx-page.a4-page{width:100%!important;min-width:0!important;height:289mm!important;min-height:289mm!important;padding:4mm 5mm!important;break-after:auto!important;page-break-after:auto!important}.rx-page.rx-invalid{display:none!important}body.rx-blocked .rx-print-block{display:block!important;font-size:18px}body.rx-blocked #a4Preview{display:none!important}.preview-scale-wrap{transform:none!important}.rx-page .rx-part{overflow:visible!important}}
+</style>
 </head>
 <body>
 
@@ -1704,14 +1708,14 @@
             <button type="button" class="lang-btn" data-lang="id" onclick="setPrintLang('id', this)">印尼文</button>
             <button type="button" class="lang-btn" data-lang="th" onclick="setPrintLang('th', this)">泰文</button>
           </div>
-          <div id="aiRewriteStatus" style="font-size:12px; color:var(--primary); margin-top:6px;"></div>
+          <div style="margin-top:8px;font-size:12px;color:var(--primary-dark)">新版：每種藥請先確認處方及選定語言的精簡注意事項；原始仿單不直接列印。A4 超出容量時會阻擋列印。</div><div id="aiRewriteStatus" style="font-size:12px; color:var(--primary); margin-top:6px;"></div>
         </div>
 
         <div class="section-box">
           <h3>要印給長輩的欄位與版面</h3>
           <div class="section-sub-label">主要區塊與排版</div>
           <div class="check-grid">
-            <label class="check-pill"><input type="checkbox" id="opt_schedule" checked onchange="renderPreview()" />用藥時間表（早/中/晚/睡前）</label>
+            <label class="check-pill"><input type="checkbox" id="opt_schedule" checked disabled onchange="renderPreview()" />用藥時間表（固定顯示）</label>
             <label class="check-pill"><input type="checkbox" id="opt_specialAlert" checked onchange="renderPreview()" />特別警示（防跌/低血糖/出血）</label>
             <label class="check-pill"><input type="checkbox" id="opt_followUp" onchange="renderPreview()" />附上白話「回診討論提醒」</label>
             <label class="check-pill"><input type="checkbox" id="opt_smartFit" checked onchange="renderPreview()" />✨ 智慧防留白（優先 1 頁）</label>
@@ -1789,13 +1793,13 @@
         </div>
       </div>
       <div style="display:flex; gap:6px; flex-wrap:wrap;">
-        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">🖨️ 列印 / 匯出 PDF</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="rxPrint()">🖨️ 列印 / 匯出 PDF</button>
       </div>
     </div>
 
     <div class="preview-scroll" id="previewScroll">
       <div class="preview-scale-wrap" id="previewScaleWrap">
-        <article class="a4-sheet" id="a4Preview"></article>
+        <article class="a4-sheet" id="a4Preview"></article><div class="rx-print-block">列印已阻擋：請確認處方、衛教翻譯及單頁版面後再列印。</div>
       </div>
     </div>
   </main>
@@ -2200,7 +2204,7 @@
       return summarizeLeafletSection(target, 90);
     }
 
-    // 將 v2 結構化仿單 sections 整理成清晰可讀的完整原文（供藥師檢視與 AI 零幻覺接地使用）
+    // 將 v2 結構化仿單 sections 整理成清晰可讀的完整原文（供藥師檢視與 AI 需藥師核對接地使用）
     function buildStructuredLeafletText(leaflet) {
       if (!leaflet || !leaflet.sections) return '';
       const s = leaflet.sections;
@@ -3790,6 +3794,8 @@
       const m = medList.find(x => x.id === id);
       if (!m) return;
       m[field] = val;
+      if (["usage","nameZh","nameEn","generic"].includes(field) && m.rx) m.rx.confirmed = false;
+      if (m.rxNotes) m.rxNotes = {};
       if (field === 'generic' || field === 'nameZh' || field === 'nameEn') {
         runBeersCriteria2023();
       }
@@ -3948,11 +3954,12 @@
                 <button type="button" class="btn btn-danger btn-sm" onclick="removeMed('${m.id}')">刪除</button>
               </div>
             </div>
+            ${rxEditor(m)}
             <div class="med-editor-body">
               <div class="grounding-box ${st.color === 'red' ? 'unverified' : ''}">
                 <div style="font-weight:700; color:${st.color === 'red' ? 'var(--danger)' : 'var(--primary-dark)'};">
                   ${hasRaw
-                    ? '✅ 已具備官方仿單原文（AI 改寫將嚴格限定依此原文生成，零幻覺）'
+                    ? '✅ 已具備官方仿單原文（AI 改寫將嚴格限定依此原文生成，需藥師核對）'
                     : (isPdfOnly
                       ? '📄 本品項官方仿單為 PDF 格式，請點下方按鈕檢視衛福部官方仿單 PDF，或複製文字貼於下方進行 AI 接地生成。'
                       : (st.color === 'red'
@@ -3967,7 +3974,7 @@
                 </div>
                 ${structuredSecHtml}
                 <label style="margin-top:6px;">📄 官方仿單原文（${hasRaw ? `已載入 ${m.rawLeafletText.length.toLocaleString()} 字` : '尚未載入，請從上方官方仿單複製貼上'}）</label>
-                <textarea style="min-height:48px; font-size:11.5px;" placeholder="貼上 TFDA 官方仿單的適應症、用法、警語與副作用原文，即可啟動無幻覺 AI 接地生成..." oninput="updateMedField('${m.id}', 'rawLeafletText', this.value)">${escapeHtml(m.rawLeafletText || '')}</textarea>
+                <textarea style="min-height:48px; font-size:11.5px;" placeholder="貼上 TFDA 官方仿單的適應症、用法、警語與副作用原文，即可啟動依原文 AI 接地生成..." oninput="updateMedField('${m.id}', 'rawLeafletText', this.value)">${escapeHtml(m.rawLeafletText || '')}</textarea>
               </div>
 
               <div class="grid-2">
@@ -3997,11 +4004,11 @@
               <input type="text" value="${escapeAttr(m.storage || '')}" placeholder="例如：室溫 25°C 以下避光保存..." oninput="updateMedField('${m.id}', 'storage', this.value)" />
               <label style="color:var(--danger);">⚠️ 特別警示（如防跌、防低血糖、防出血、每週一次，留空則不印紅框）</label>
               <input type="text" value="${escapeAttr(m.specialAlertText || '')}" placeholder="例如：易頭暈想睡，起床放慢動作防跌倒" oninput="updateMedField('${m.id}', 'specialAlertText', this.value)" />
-              <label>服藥時段（對應上方「用藥時間表」）</label>
+              <label>舊版時段（新版請使用上方處方時段）</label>
               <div class="check-grid">
                 ${[['morning','早餐後'],['noon','午餐後'],['evening','晚餐後'],['bedtime','睡前'],['prn','需要時']].map(([tk, tl]) => `
                   <label class="check-pill" style="font-size:11px; padding:2px 7px;">
-                    <input type="checkbox" ${(m.timings || []).includes(tk) ? 'checked' : ''} onchange="toggleMedTiming('${m.id}', '${tk}', this.checked)" />${tl}
+                    <input type="checkbox" ${(m.timings || []).includes(tk) ? 'checked' : ''} disabled />${tl}
                   </label>
                 `).join('')}
               </div>
@@ -4054,7 +4061,7 @@
       `;
     }
 
-    function renderPreview() {
+    function renderLegacyPreview() {
       const sheet = document.getElementById('a4Preview');
       const lang = currentPrintLang || 'zh';
       const L = LANG_LABELS[lang] || LANG_LABELS.zh;
@@ -4419,7 +4426,7 @@
       return JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text || '{}');
     }
 
-    // 單一藥品：強制僅依「官方仿單原文」生成白話衛教（零幻覺接地）
+    // 單一藥品：強制僅依「官方仿單原文」生成白話衛教（需藥師核對接地）
     async function aiGenerateSingleFromLeaflet(id) {
       const m = medList.find(x => x.id === id);
       if (!m) return;
@@ -4744,6 +4751,39 @@ ${JSON.stringify(items)}
     }
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeHelpModal(); closeReportModal(); } });
+
+    // V2: structured prescription and one-page patient handout. Original clinical engine retained.
+    const RX_TEXT = {
+      zh:['每日用藥時間表','重要注意事項','早餐前','早餐後','午餐前','午餐後','晚餐前','晚餐後','睡前','需要時','其他時間','每次','顆','毫克','毫升','次','外用','請依處方使用','尚無已確認注意事項','請勿自行停藥或改變劑量，若有疑問請詢問藥師。'],
+      en:['Daily medication schedule','Important precautions','Before breakfast','After breakfast','Before lunch','After lunch','Before dinner','After dinner','Bedtime','As needed','Other time','Each dose','tablet(s)','mg','mL','time(s)','Topical','Use as prescribed','No reviewed precautions yet','Do not stop or change your dose without asking your doctor or pharmacist.'],
+      vi:['Lịch dùng thuốc','Lưu ý quan trọng','Trước ăn sáng','Sau ăn sáng','Trước ăn trưa','Sau ăn trưa','Trước ăn tối','Sau ăn tối','Trước khi ngủ','Khi cần','Giờ khác','Mỗi lần','viên','mg','mL','lần','Dùng ngoài','Dùng theo đơn','Chưa có lưu ý được xác nhận','Không tự ý ngừng thuốc hoặc đổi liều. Hỏi bác sĩ hoặc dược sĩ.'],
+      id:['Jadwal penggunaan obat','Perhatian penting','Sebelum sarapan','Sesudah sarapan','Sebelum makan siang','Sesudah makan siang','Sebelum makan malam','Sesudah makan malam','Sebelum tidur','Bila perlu','Waktu lain','Setiap dosis','tablet','mg','mL','kali','Obat luar','Gunakan sesuai resep','Belum ada perhatian yang ditinjau','Jangan menghentikan atau mengubah dosis tanpa bertanya kepada dokter atau apoteker.'],
+      th:['ตารางการใช้ยา','ข้อควรระวังสำคัญ','ก่อนอาหารเช้า','หลังอาหารเช้า','ก่อนอาหารกลางวัน','หลังอาหารกลางวัน','ก่อนอาหารเย็น','หลังอาหารเย็น','ก่อนนอน','เมื่อจำเป็น','เวลาอื่น','ครั้งละ','เม็ด','มก.','มล.','ครั้ง','ใช้ภายนอก','ใช้ตามใบสั่งยา','ยังไม่มีข้อควรระวังที่ตรวจสอบแล้ว','อย่าหยุดยาหรือเปลี่ยนขนาดยาเอง โปรดสอบถามแพทย์หรือเภสัชกร']
+    };
+    const RX_FREQ = {zh:['每日一次','每日兩次','每日三次','每日四次','需要時','每週一次','其他（依處方）'],en:['Once daily','Twice daily','Three times daily','Four times daily','As needed','Once weekly','Other (as prescribed)'],vi:['1 lần/ngày','2 lần/ngày','3 lần/ngày','4 lần/ngày','Khi cần','1 lần/tuần','Khác (theo đơn)'],id:['1 kali sehari','2 kali sehari','3 kali sehari','4 kali sehari','Bila perlu','1 kali seminggu','Lainnya (sesuai resep)'],th:['วันละครั้ง','วันละ 2 ครั้ง','วันละ 3 ครั้ง','วันละ 4 ครั้ง','เมื่อจำเป็น','สัปดาห์ละครั้ง','อื่น ๆ (ตามใบสั่งยา)']};
+    function rxState(m){return m.rx||(m.rx={freq:'',route:'',rows:[{slot:'',qty:'',unit:'',extra:''}],confirmed:false});}
+    function rxFind(id){return medList.find(m=>m.id===id);}
+    function rxSelect(values,value,handler){return `<select onchange="${handler}"><option value="">請選擇</option>${values.map(([k,v])=>`<option value="${k}" ${String(value)===String(k)?'selected':''}>${escapeHtml(v)}</option>`).join('')}</select>`;}
+    function rxNoteState(m,lang){m.rxNotes ||= {};return m.rxNotes[lang] ||= {text:'',ok:false};}
+    function rxEditor(m){const r=rxState(m), id=m.id, lang=currentPrintLang||'zh', n=rxNoteState(m,lang);return `<div class="rx-edit"><strong>處方用法（請依醫師處方確認）</strong><div class="rx-status">原始用法參考／掃描文字：${escapeHtml(m.usage||'未填')}</div><div class="grid-2"><div><label>頻次</label>${rxSelect(RX_FREQ.zh.map((x,i)=>[i,x]),r.freq,`rxSet('${id}','freq',this.value)`)}</div><div><label>給藥途徑</label>${rxSelect([['oral','口服'],['topical','外用'],['other','其他（依處方）']],r.route,`rxSet('${id}','route',this.value)`)}</div></div>${r.rows.map((a,i)=>`<div class="rx-slot"><div><label>時間</label>${rxSelect(RX_TEXT.zh.slice(2,11).map((x,j)=>[j,x]),a.slot,`rxRow('${id}',${i},'slot',this.value)`)}</div><div><label>每次劑量</label><input type="text" inputmode="decimal" value="${escapeAttr(a.qty)}" placeholder="例 0.5" oninput="rxRow('${id}',${i},'qty',this.value,this)"></div><div><label>單位</label>${rxSelect([['tablet','顆／錠'],['mg','mg'],['ml','mL'],['application','次'],['other','其他']],a.unit,`rxRow('${id}',${i},'unit',this.value)`)}</div><button type="button" class="btn btn-outline btn-sm" onclick="rxRemove('${id}',${i})">×</button></div><input type="text" value="${escapeAttr(a.extra)}" placeholder="處方補充：如星期一、間隔、必要時上限（請用列印語言）" oninput="rxRow('${id}',${i},'extra',this.value,this)">`).join('')}<button type="button" class="btn btn-outline btn-sm" onclick="rxAdd('${id}')">＋ 新增時段／不同劑量</button><label class="check-pill"><input type="checkbox" ${r.confirmed?'checked':''} onchange="rxConfirm('${id}',this.checked)">已核對處方（含頻次、途徑、劑量與時間）</label><details><summary>精簡注意事項／翻譯（${lang}）${n.ok?' ✓':''}</summary><p class="rx-status">請保留重要警語與就醫條件。原始仿單仍在下方編輯區。</p><textarea class="rx-note" oninput="rxNote('${id}','${lang}',this.value,this)">${escapeHtml(n.text)}</textarea><div class="grounding-actions"><button type="button" class="btn btn-outline btn-sm" onclick="rxDraft('${id}')">帶入參考注意事項</button><button type="button" class="btn btn-outline btn-sm" onclick="rxTranslate('${id}',this)">AI 精簡／翻譯</button></div><label class="check-pill"><input type="checkbox" ${n.ok?'checked':''} onchange="rxNoteConfirm('${id}','${lang}',this.checked)">已核對此語言注意事項（空白亦須確認）</label></details></div>`;}
+    function rxSet(id,k,v){let r=rxState(rxFind(id));r[k]=v;r.confirmed=false;renderMedEditorList();renderPreview();}
+    function rxRow(id,i,k,v,el){let r=rxState(rxFind(id));r.rows[i][k]=v;r.confirmed=false;if(el){el.closest(".rx-edit").querySelector("input[type=checkbox]").checked=false;}else renderMedEditorList();renderPreview();}
+    function rxAdd(id){let r=rxState(rxFind(id));r.rows.push({slot:'',qty:'',unit:'',extra:''});r.confirmed=false;renderMedEditorList();renderPreview();}
+    function rxRemove(id,i){let r=rxState(rxFind(id));if(r.rows.length>1)r.rows.splice(i,1);r.confirmed=false;renderMedEditorList();renderPreview();}
+    function rxValid(r){return r.freq!==''&&r.route&&r.rows.length&&r.rows.every(a=>a.slot!==''&&Number(a.qty)>0&&Number.isFinite(Number(a.qty))&&a.unit&&((a.slot==='7'||a.slot==='8'||a.unit==='other'||r.freq==='4'||r.freq==='5'||r.freq==='6'||r.route==='other')?a.extra.trim():true))&&(!['0','1','2','3'].includes(r.freq)||r.rows.length===Number(r.freq)+1);}
+    function rxConfirm(id,v){let r=rxState(rxFind(id));r.confirmed=v&&!!rxValid(r);if(v&&!r.confirmed)alert('請完整填寫每次劑量、時間、途徑及頻次；每日次數須與時段數一致。需要時、每週或其他用法請補充完整處方。');renderMedEditorList();renderPreview();}
+    function rxNote(id,lang,v,el){let n=rxNoteState(rxFind(id),lang);n.text=v;n.ok=false;if(el)el.closest("details").querySelector("input[type=checkbox]").checked=false;renderPreview();}
+    function rxNoteConfirm(id,lang,v){let n=rxNoteState(rxFind(id),lang);n.ok=v;renderPreview();}
+    function rxDraft(id){let m=rxFind(id),lang=currentPrintLang||'zh',v=getLocalizedMedView(m,lang);let text=[v.specialText,v.sideEffects,v.interactions,v.specialPop,v.diet,v.lifestyle,v.storage].filter(Boolean).join('\n');if(lang!=='zh'&&/[\u3400-\u9fff]/.test(text)){alert('部分內容尚無翻譯，請使用 AI 精簡／翻譯或手動輸入。');return;}rxNote(id,lang,text);renderMedEditorList();}
+    async function rxTranslate(id,btn){const m=rxFind(id),lang=currentPrintLang||'zh';const raw=String(m.rawLeafletText||'').trim();const note=rxNoteState(m,'zh');if(!raw&&!note.ok){alert('請先提供官方仿單原文，或確認中文注意事項。');return;}btn.disabled=true;try{const res=await callGeminiAPI([{text:'Translate or summarize the supplied medication precautions into '+({zh:'Traditional Chinese',en:'English',vi:'Vietnamese',id:'Indonesian',th:'Thai'}[lang])+'. Use only the supplied source, plain language, preserve urgent warnings and conditions, never invent dosing or change advice. Return JSON {"text":"..."}. Source: '+(note.ok?note.text:raw)}]);if(res&&typeof res.text==='string'&&rxFind(id)){rxNote(id,lang,res.text);renderMedEditorList();}}catch(e){alert(e.message);}finally{btn.disabled=false;}}
+    function renderPreview(){const sheet=document.getElementById('a4Preview');if(!sheet)return;const lang=currentPrintLang||'zh',T=RX_TEXT[lang],L=LANG_LABELS[lang],meds=medList.filter(m=>m.checked);let issues=[];let groups=Array.from({length:9},()=>[]);let tips=[];const esc=escapeHtml;const units={tablet:T[12],mg:T[13],ml:T[14],application:T[15],other:''};const routes={zh:['口服','外用','其他'],en:['Oral','Topical','Other'],vi:['Uống','Dùng ngoài','Khác'],id:['Oral','Obat luar','Lainnya'],th:['รับประทาน','ใช้ภายนอก','อื่น ๆ']}[lang];
+      meds.forEach((m,i)=>{const r=rxState(m),n=rxNoteState(m,lang);const name=lang==='zh'?(m.nameZh||m.nameEn||m.generic):(m.nameEn||m.generic||m.nameZh);const title=esc(name);if(!r.confirmed||!rxValid(r))issues.push(`${i+1}. 處方待核對`);else r.rows.forEach(a=>{if(lang!=='zh'&&/[\u3400-\u9fff]/.test(a.extra))issues.push(`${i+1}. 處方補充仍含中文`);const img=m.imgUrl&&document.getElementById('opt_appearance').checked?`<img src="${escapeAttr(m.imgUrl)}" alt="" onload="rxMeasure()" onerror="this.style.display='none';rxMeasure()">`:'';groups[Number(a.slot)].push(`<div class="rx-line">${img}<span><b>${i+1}. ${title}</b> · ${T[11]} ${esc(a.qty)} ${units[a.unit]} · ${routes[['oral','topical','other'].indexOf(r.route)]} · ${RX_FREQ[lang][Number(r.freq)]}${a.extra?' · '+esc(a.extra):''}</span></div>`);});if(!n.ok)issues.push(`${i+1}. ${lang} 注意事項待核對`);if(n.ok&&n.text.trim()){if(lang!=='zh'&&/[\u3400-\u9fff]/.test(n.text))issues.push(`${i+1}. 注意事項仍含中文`);tips.push(`<div class="rx-tip"><strong>${i+1}. ${title}：</strong>${esc(n.text).replace(/\n/g,'<br>')}</div>`);}});
+      const schedule=groups.map((g,i)=>g.length?`<div class="rx-time"><div class="rx-time-label">${T[i+2]}</div><div>${g.join('')}</div></div>`:'').join('');sheet.classList.remove('size-compact','size-lg','size-xl');const size=currentFontSize==='compact'?'rx-small':currentFontSize==='lg'||currentFontSize==='xl'?'rx-large':'';const org=document.getElementById('f_orgName').value.trim();const rawTitle=document.getElementById('f_sheetTitle').value.trim();const title=lang==='zh'?(rawTitle||L.defaultTitle):L.defaultTitle;sheet.innerHTML=`<section class="a4-page rx-page ${size}"><header class="sheet-header"><div class="sheet-header-left"><h2>${esc(title)}</h2><p class="meta-line">${esc(L.medCount(meds.length))} · ${new Date().toLocaleDateString()}</p></div><div class="sheet-org">${esc(lang==='zh'?org:org==='藥劑部高齡用藥照護'?L.defaultOrg:org)}</div></header><div class="rx-part"><h3>${T[0]}</h3>${schedule||`<p>${T[17]}</p>`}</div><div class="rx-part rx-warnings"><h3>${T[1]}</h3>${tips.join('')||`<p>${T[18]}</p>`}</div><footer class="sheet-footer">${T[19]}</footer></section>`;updatePreviewBadges(1,"",meds);sheet.dataset.rxIssues=issues.join('；');sheet.dataset.rxCount=meds.length;rxMeasure();fitMobilePreviewScale();}
+    function rxMeasure(){const sheet=document.getElementById('a4Preview'),page=sheet?.querySelector('.rx-page');if(!page)return;let overflow=[...page.querySelectorAll('.rx-part')].some(x=>x.clientHeight>0&&x.scrollHeight>x.clientHeight+1);if(overflow&&!page.classList.contains('rx-small')&&currentFontSize==='normal'){page.classList.add('rx-small');overflow=[...page.querySelectorAll('.rx-part')].some(x=>x.clientHeight>0&&x.scrollHeight>x.clientHeight+1);}const why=[sheet.dataset.rxIssues,overflow?'A4 容量不足，請精簡已核對內容（勿刪重要警語）':'',Number(sheet.dataset.rxCount)?'':'尚未加入藥品'].filter(Boolean).join('；');document.body.classList.toggle('rx-blocked',!!why);page.classList.toggle('rx-invalid',!!why);const badge=document.getElementById('pageEstimateBadge');badge.className='page-badge '+(why?'warn':'ok');badge.textContent=why||'共 1 頁 A4 · 2/3 時間表 + 1/3 注意事項';}
+    function rxPrint(){rxMeasure();if(document.body.classList.contains('rx-blocked')){alert(document.getElementById('pageEstimateBadge').textContent);return;}window.print();}
+    window.addEventListener('beforeprint',rxMeasure);window.addEventListener('resize',rxMeasure);document.fonts?.ready.then(rxMeasure);
+    // Refresh per-language editor when switching languages.
+    const rxOriginalLang=setPrintLang;setPrintLang=function(lang,btn){rxOriginalLang(lang,btn);renderMedEditorList();};
 
     function escapeHtml(str) {
       return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
