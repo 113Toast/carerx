@@ -2467,20 +2467,38 @@
     }
 
     // 精簡擷取仿單章節給衛教單卡片顯示（自動清洗 Markdown 表格 |---|---| 與官樣長句，不留亂碼與半截括號）
-    // 偵測是否為臨床試驗統計表格／數據雜訊（避免 PVC 21/7 (N=143) 安慰劑... 這類專業表格殘骸誤入衛教單）
+    // 4 層「高齡衛教單防雜訊閘門」：攔截臨床試驗統計表、MedDRA 官樣套話、掃描 PDF OCR 亂碼、截斷殘句與無意義廢話
+    const RX_SIMP_OCR_RE = /[专严为产仅们价众优会伟传伤伦伪体关养农剂动医压发处备复头学实对导将属岁带帮广庆应废开张弹强归当录彻态总恶惊惧惨惯戏战执扩扫扬扰护报担拟拥择挂挡挤挥损换据断无时显晒晓暂术杂来极构标检欢气氢氧灭灵灾烧热爱爷牵独猫环现电疗疮疯痒瘫监盖盘确离种积称稳穷窃笔简篮类粮紧线组细织终经绘给络绝统继绩绪续维综绿缓编缠缩网罗罚罢职联胶脏脑脱脸腾节范荡荣药莲获营萧萨葱补装裤见观规视览觉计订认讨让训议讯记讲许论设访证评识诉诊词译试诗话询详语误诱说请诸读课谁调谅谈谢谨谱贝贞负财责贤败货质贪购贯贱贴贵贷贸费贺贼贾资赋赌赏赐赔赖赛赞赠赢赵赶趋跃践踊踪车轧轨轩转轮软轰轻载较辅辆辈辉辑输辞边达迁迅过迈迎运返还这进远违连迟适逃选逊递逢逻逼遍遗遥遭邓邮邻郑释针钉钙钟钠钢钥钦钩钱钳钻铁铃铅铜铝银铸铺链销锁锅锋错锡锦键镇镜长门闪闭问闯闲间闷闹闻阀阁阅阳阴阵阶际陆陈险陪陵陶陷隅隆随隐难雏雕雾霉静韵页顶项顺须顽顾顿颁颂预颅领颇颈频颗题颜额颠颤风飘飞饥饭饮饰饱饲饶饺饼马驱驳驻驾驿骂骄验骏骑骗骚骤鱼鲁鲜鲤鸡鸣鸭鸿鹅鹤鹰麦齐齿龄龙龟]/g;
+
     function rxIsGarbledClinicalTableText(text) {
       const s = String(text || '').trim();
       if (!s) return true;
-      // 樣本數、安慰劑組、臨床試驗表格表頭、百分比統計表
+
+      // 第 1 層：臨床試驗統計表格與數據（N=143、安慰劑、發生率、病人數 %）
       if (/\(\s*[Nn]\s*=\s*\d+\s*\)|\b[Nn]\s*=\s*\d+/.test(s)) return true;
-      if (/安慰劑|placebo|受試者|試驗組|對照組|有不良事件的病人數|病人數\s*\(%?\)|治療組|雙盲|隨機分派|臨床試驗中|發生率\s*[≥>=<≤]\s*\d/i.test(s)) return true;
+      if (/安慰劑|placebo|受試者|試驗組|對照組|有不良事件的病人數|病人數\s*\(%?\)|治療組|雙盲|隨機分派|臨床試驗|發生率\s*[≥>=<≤]\s*\d|發生頻率|統計學|顯著差異/i.test(s)) return true;
       if (/\b\d+\s*x\s*\/\s*week\b|\b\d+\/\d+\s*\([Nn]=/i.test(s)) return true;
-      if (/^(?:表|Table)\s*\d+/i.test(s)) return true;
-      // 連續出現多個數字百分比（例如 14 (9.8%) 22 (15.4%)）
+      if (/(?:表|Table)\s*\d+|如下表|詳見表|見下表/i.test(s)) return true;
       const pctMatches = s.match(/\d+(?:\.\d+)?\s*%/g);
       if (pctMatches && pctMatches.length >= 2) return true;
-      // 過度截斷且含有大量英文縮寫/數字的殘句（例如「PVC 21/7 ... 全身…」）
-      if (/[…\.]{1,3}$/.test(s) && (/\b[A-Z]{2,}\s+\d/.test(s) || /\(\s*%\s*\)/.test(s))) return true;
+      if (/[≥>=<≤]\s*1\s*\/\s*10|1\s*\/\s*100|1\s*\/\s*1000/.test(s)) return true;
+
+      // 第 2 層：MedDRA / 仿單法規套話（老人家完全不需要知道 MedDRA 或器官分類排序方式）
+      if (/MedDRA|國際醫學用語詞典|系統器官分類|依據發生頻率|依序往下排列|進行排名|上市後監測|上市後經驗|自發性通報|安全性資料來自|安全性概況|頻率定義|極常見|不常見|未知頻率|依文獻記載|本藥品核准|藥品許可證|詳見.*章節/i.test(s)) return true;
+
+      // 第 3 層：舊版掃描仿單 PDF 的 OCR 辨識錯字與亂碼（如：本劑俊、虛豹、低血基、治廉量、封硝酸題、腰心噪吐、萱白、香顾、混入簡體字、異常中點・與中文夾空白）
+      if (/本劑俊|虛豹|低血基|治廉量|封硝酸|硝酸題|降反鷹|腰心噪吐|噪吐|萱白|香顾|站立不勒|持籍|眩量|很屬害/.test(s)) return true;
+      const simpHits = s.match(RX_SIMP_OCR_RE);
+      if (simpHits && simpHits.length >= 2) return true;
+      const dotHits = s.match(/[・‧]/g);
+      if (dotHits && dotHits.length >= 2 && s.length >= 18) return true;
+      const cjkSpaceHits = s.match(/[\u4e00-\u9fff]\s+[\u4e00-\u9fff]/g);
+      if (cjkSpaceHits && cjkSpaceHits.length >= 2) return true;
+
+      // 第 4 層：截斷殘句（結尾為…或...）或沒有實質幫助的客套話
+      if (/[…]$|\.\.\.$/.test(s)) return true;
+      if (/^(?:多數人耐受良好|多數人耐受佳|正常劑量下安全性高|一般飲食無特別禁忌|無特別禁忌|無已知副作用|尚無資料)[。．.]?$/.test(s)) return true;
+
       return false;
     }
 
@@ -2652,7 +2670,7 @@
       if (/\b(warfarin|apixaban|rivaroxaban|dabigatran|edoxaban|aspirin|clopidogrel|prasugrel|ticagrelor)/i.test(s)) {
         return { key: 'bleed', ...SPECIAL_ALERT_I18N.bleed.zh };
       }
-      if (/\b(nitroglycerin|glytrin|nitrolingual|nitrostat)/i.test(s)) {
+      if (/\b(nitroglycerin|glytrin|nitrolingual|nitrostat|isosorbide|imdur|isordil)/i.test(s)) {
         return { key: 'ntg', tag: '急救與併用禁忌', text: '胸痛時先坐下再噴／含舌下；絕對不可與威而鋼、犀利士等壯陽藥併用！' };
       }
       if (/\b(diclofenac|ibuprofen|naproxen|meloxicam|celecoxib|etoricoxib|indomethacin|ketorolac|piroxicam)/i.test(s)) {
@@ -3744,7 +3762,7 @@
       }
 ,
       {
-        key: 'vaginal_estrogen', re: /(?:premarin|conjugated\s*estrogen|estradiol|estriol|普力馬林|雌激素).*(?:陰道|vaginal)|(?:陰道|vaginal).*(?:premarin|estrogen|estradiol|estriol|普力馬林|雌激素)/i,
+        key: 'vaginal_estrogen', re: /(?:premarin|conjugated\s*estrogens?|estrogens?\s*conjugated|estradiol|estriol|普力馬林|雌激素).*(?:陰道|vaginal)|(?:陰道|vaginal).*(?:premarin|estrogens?|estradiol|estriol|普力馬林|雌激素)/i,
         zh: { purpose: '局部補充女性荷爾蒙，改善陰道乾澀或萎縮不適', sideEffects: '少數人局部微癢或分泌物稍多；若異常陰道出血請回診', lifestyle: '建議睡前平躺使用較不易流出，塗藥器用後請以溫水洗淨晾乾', diet: '一般飲食無特別禁忌；定期接受婦科追蹤檢查' },
         en: { purpose: 'Local estrogen cream to relieve vaginal dryness', sideEffects: 'Mild local irritation or discharge; see doctor for unusual vaginal bleeding', lifestyle: 'Best used lying down at bedtime; wash applicator with warm water after use', diet: 'No special food restrictions; keep routine gynecology checkups' },
         vi: { purpose: 'Bổ sung estrogen tại chỗ giảm khô rát âm đạo', sideEffects: 'Hơi ngứa nhẹ hoặc ra dịch; đi khám nếu chảy máu âm đạo bất thường', lifestyle: 'Nên bôi khi nằm trước khi ngủ; rửa sạch dụng cụ bơm bằng nước ấm sau khi dùng', diet: 'Không kiêng ăn đặc biệt; tái khám phụ khoa định kỳ' },
@@ -3752,7 +3770,7 @@
         th: { purpose: 'ครีมฮอร์โมนเฉพาะที่ บรรเทาอาการช่องคลอดแห้ง', sideEffects: 'อาจระคายเคืองเล็กน้อย หากมีเลือดออกผิดปกติทางช่องคลอดให้พบแพทย์', lifestyle: 'ควรใช้ขณะนอนก่อนนอน และล้างอุปกรณ์ด้วยน้ำอุ่นให้สะอาดหลังใช้', diet: 'ไม่มีข้อห้ามด้านอาหาร ควรตรวจติดตามกับสูตินรีแพทย์ตามนัด' }
       },
       {
-        key: 'ntg_emergency', re: /\b(nitroglycerin|glytrin|nitrolingual|nitrostat)/i,
+        key: 'ntg_emergency', re: /\b(nitroglycerin|glytrin|nitrolingual|nitrostat|isosorbide|imdur|isordil|monoket)/i,
         zh: { purpose: '急救緩解心絞痛（胸悶、胸痛）', sideEffects: '短暫頭痛、臉潮紅或頭暈', lifestyle: '胸痛時先「坐下」再噴／含於舌下（勿吸入或吞下）；隔 5 分鐘未緩解可再用 1 次，仍痛請立刻叫救護車', diet: '絕對不可與威而鋼、犀利士等壯陽藥併用，避免喝酒' },
         en: { purpose: 'Quick relief for chest pain (angina)', sideEffects: 'Brief headache, flushing, or dizziness', lifestyle: 'Sit down before spraying/placing under tongue (do not inhale); repeat once after 5 min, call emergency if pain persists', diet: 'NEVER combine with Viagra/Cialis (ED drugs); avoid alcohol' },
         vi: { purpose: 'Cấp cứu giảm đau thắt ngực', sideEffects: 'Đau đầu nhẹ thoáng qua, đỏ mặt hoặc chóng mặt', lifestyle: 'Ngồi xuống trước khi xịt/ngậm dưới lưỡi (không hít); lặp lại sau 5 phút nếu còn đau, gọi cấp cứu nếu không đỡ', diet: 'TUYỆT ĐỐI không dùng chung thuốc cường dương (Viagra/Cialis); tránh rượu bia' },
@@ -3766,6 +3784,31 @@
         vi: { purpose: 'Giãn phế quản, giảm khó thở do hen/COPD', sideEffects: 'Khàn tiếng, khô miệng hoặc run tay nhẹ', lifestyle: 'Súc miệng bằng nước sạch và nhổ bỏ ngay sau khi hít để tránh nấm miệng', diet: 'Tránh hút thuốc và khói thuốc lá' },
         id: { purpose: 'Melegakan saluran napas untuk asma atau PPOK', sideEffects: 'Suara serak, mulut kering, atau tangan sedikit gemetar', lifestyle: 'Segera berkumur air dan buang setelah menghirup untuk mencegah sariawan jamur', diet: 'Hindari merokok dan asap rokok' },
         th: { purpose: 'ขยายหลอดลม บรรเทาอาการหอบหืดหรือหายใจลำบาก', sideEffects: 'เสียงแหบ ปากแห้ง หรือมือสั่นเล็กน้อย', lifestyle: 'กลั้วปากด้วยน้ำเปล่าแล้วบ้วนทิ้งทันทีหลังพ่น เพื่อป้องกันเชื้อราในช่องปาก', diet: 'หลีกเลี่ยงการสูบบุหรี่และควันบุหรี่' }
+      }
+,
+      {
+        key: 'oral_steroid', re: /\b(prednisolone|prednisone|methylprednisolone|dexamethasone|hydrocortisone|betamethasone|fludrocortisone)/i,
+        zh: { purpose: '消炎、抗過敏或調節免疫', sideEffects: '飯後吃較不傷胃；長期使用留意血糖血壓升高或臉腫', lifestyle: '長期服用切勿突然停藥，需由醫師慢慢減量；建議早上飯後吃較不影響睡眠', diet: '飲食少鹽少糖，避免喝酒' },
+        en: { purpose: 'Reduces inflammation or calms immune reactions', sideEffects: 'Take with food to protect stomach; watch blood sugar/BP with long use', lifestyle: 'Do not stop suddenly after long use; morning after breakfast is best for sleep', diet: 'Eat less salt and sugar; avoid alcohol' },
+        vi: { purpose: 'Chống viêm, chống dị ứng hoặc điều hòa miễn dịch', sideEffects: 'Uống sau ăn đỡ hại dạ dày; theo dõi đường huyết, huyết áp khi dùng lâu', lifestyle: 'Không tự ý ngừng đột ngột khi dùng kéo dài; nên uống sau ăn sáng', diet: 'Ăn nhạt, ít đường; tránh rượu bia' },
+        id: { purpose: 'Meredakan radang, alergi, atau mengatur imun', sideEffects: 'Minum setelah makan agar tidak sakit maag; pantau gula & tensi bila dipakai lama', lifestyle: 'Jangan berhenti mendadak bila dipakai lama; paling baik setelah sarapan', diet: 'Kurangi garam dan gula; hindari alkohol' },
+        th: { purpose: 'ลดการอักเสบ แก้แพ้ หรือกดภูมิคุ้มกัน', sideEffects: 'กินหลังอาหารช่วยลดกัดกระเพาะ หากใช้นานควรติดตามน้ำตาลและความดัน', lifestyle: 'ห้ามหยุดยากะทันหันหากใช้ต่อเนื่อง ควรกินหลังอาหารเช้าเพื่อไม่ให้นอนไม่หลับ', diet: 'ลดเค็มลดหวาน และงดแอลกอฮอล์' }
+      },
+      {
+        key: 'ssri_snri', re: /\b(escitalopram|citalopram|sertraline|fluoxetine|paroxetine|fluvoxamine|duloxetine|venlafaxine|desvenlafaxine|mirtazapine)/i,
+        zh: { purpose: '穩定情緒、改善焦慮或憂鬱（部分可緩解神經痛）', sideEffects: '初期可能頭暈、想睡或輕微噁心；起身放慢動作防跌倒', lifestyle: '通常需連續吃 2–4 週才穩定見效；切勿突然停藥，需由醫師慢慢減量', diet: '避免喝酒，以免頭暈嗜睡加重' },
+        en: { purpose: 'Helps mood, anxiety, or nerve pain', sideEffects: 'Mild dizziness, drowsiness, or nausea at first; stand up slowly', lifestyle: 'Takes 2–4 weeks for full effect; never stop abruptly without your doctor', diet: 'Avoid alcohol as it worsens drowsiness and dizziness' },
+        vi: { purpose: 'Ổn định tâm trạng, giảm lo âu hoặc đau thần kinh', sideEffects: 'Có thể hơi chóng mặt, buồn ngủ lúc đầu; đứng dậy từ từ', lifestyle: 'Thường cần 2–4 tuần để ổn định; không tự ý ngừng thuốc đột ngột', diet: 'Tránh rượu bia vì làm tăng buồn ngủ và chóng mặt' },
+        id: { purpose: 'Menstabilkan suasana hati, cemas, atau nyeri saraf', sideEffects: 'Awalnya bisa sedikit pusing atau mengantuk; berdiri pelan', lifestyle: 'Butuh 2–4 minggu untuk hasil penuh; jangan hentikan mendadak', diet: 'Hindari alkohol karena memperparah kantuk dan pusing' },
+        th: { purpose: 'ปรับอารมณ์ ลดความวิตกกังวล หรือบรรเทาปวดปลายประสาท', sideEffects: 'ช่วงแรกอาจเวียนหัวหรือง่วงเล็กน้อย ควรลุกยืนช้า ๆ', lifestyle: 'มักต้องกินต่อเนื่อง 2–4 สัปดาห์จึงเห็นผลเต็มที่ ห้ามหยุดยากะทันหัน', diet: 'งดดื่มแอลกอฮอล์เพราะจะทำให้ง่วงและเวียนหัวมากขึ้น' }
+      },
+      {
+        key: 'eye_drops_care', re: /\b(latanoprost|travoprost|bimatoprost|timolol|brimonidine|dorzolamide|brinzolamide|pilocarpine)|點眼液|眼藥水/i,
+        zh: { purpose: '保護眼睛、降眼壓或舒緩眼睛不適', sideEffects: '剛點時可能短暫微刺或視線微模糊', lifestyle: '點眼藥水瓶口別碰到眼睛；若要點兩種以上眼藥水，中間請間隔 5 分鐘', diet: '一般飲食無特別禁忌' },
+        en: { purpose: 'Protects eyes, lowers eye pressure, or soothes irritation', sideEffects: 'Brief mild stinging or blurred vision right after drops', lifestyle: 'Do not let dropper tip touch eye; wait 5 minutes between different eye drops', diet: 'No special food restrictions' },
+        vi: { purpose: 'Bảo vệ mắt, hạ nhãn áp hoặc làm dịu mắt', sideEffects: 'Có thể hơi cay nhẹ hoặc mờ thoáng qua ngay sau khi nhỏ', lifestyle: 'Không để đầu lọ chạm vào mắt; cách nhau 5 phút nếu nhỏ nhiều loại', diet: 'Không kiêng ăn đặc biệt' },
+        id: { purpose: 'Melindungi mata, menurunkan tekanan mata, atau meredakan iritasi', sideEffects: 'Mungkin sedikit perih atau buram sebentar setelah ditetes', lifestyle: 'Ujung botol jangan menyentuh mata; beri jeda 5 menit antar tetes mata', diet: 'Tidak ada pantangan makanan khusus' },
+        th: { purpose: 'ดูแลดวงตา ลดความดันตา หรือบรรเทาอาการระคายเคืองตา', sideEffects: 'อาจแสบตาเล็กน้อยหรือตามัวชั่วคราวหลังหยอด', lifestyle: 'อย่าให้ปลายขวดโดนตา หากใช้ยาหยอดตาหลายชนิดให้เว้นห่างกัน 5 นาที', diet: 'ไม่มีข้อห้ามด้านอาหาร' }
       }
     ];
 
@@ -3807,16 +3850,17 @@
         };
       }
 
-      // 適應症防呆：若 detail.indication 為空，優先採用 leaflet?.sections?.indication_raw
+      // 適應症防呆：若 detail.indication 為空，優先採用 leaflet?.sections?.indication_raw（且須通過防亂碼閘門）
+      // ⚠️ 關鍵原則：未收錄白話模板的藥品，絕不直接把 TFDA 原始專業副作用／OCR 仿單文字自動印上長輩單張！
+      //    完整官方仿單分節仍保留於左側「📑 展開檢視 TFDA 官方結構化仿單分節」，供藥師檢視或一鍵 AI 轉白話。
       const rawInd = cleanInfoField(d.indication) || cleanInfoField(sec.indication_raw);
       const shortInd = rawInd ? summarizeLeafletSection(rawInd, 88) : '';
-      const shortSE = summarizeLeafletSection(sec.side_effects_raw, 88);
       return {
         templateKeys: [],
         isCombo,
         sourceLevel: hasRawLeaflet ? 'leaflet_ready' : 'unverified',
         purpose: shortInd,
-        sideEffects: shortSE,
+        sideEffects: '',
         lifestyle: '',
         diet: '',
         specialPop,
@@ -5307,7 +5351,7 @@ ${JSON.stringify(items)}
       const drug = document.getElementById('rep_drug').value.trim() || '（未指定）';
       const desc = document.getElementById('rep_desc').value.trim();
       const contact = document.getElementById('rep_contact').value.trim() || '（未填寫）';
-      const env = `CareRx-v44 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
+      const env = `CareRx-v45 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
       return { type, drug, desc, contact, env, plainText: `【類型】${type}\n【藥品】${drug}\n【描述】${desc}\n【聯絡】${contact}\n【環境】${env}` };
     }
 
@@ -6143,6 +6187,21 @@ ${JSON.stringify(items)}
       }
     }
 
+    // 非口服／特殊劑型安全衛教提醒（當藥品未命中白話模板時，自動補上正確好懂的使用提醒，絕不傾倒原始仿單亂碼）
+    const RX_FORM_CARE_TIPS = {
+      oral_spray:    { tier: 'amber', zh: '口腔噴霧用法：朝舌下或口腔患處噴，不要用力吸氣或馬上吞水。', en: 'Oral spray tip: Spray under tongue or in mouth—do not inhale or drink right away.', vi: 'Cách xịt miệng: Xịt dưới lưỡi hoặc trong miệng, không hít vào hay uống nước ngay.', id: 'Semprot mulut: Semprot di bawah lidah/mulut—jangan dihirup atau langsung minum.', th: 'วิธีใช้สเปรย์ช่องปาก: พ่นใต้ลิ้นหรือในช่องปาก ห้ามสูดดมหรือรีบดื่มน้ำตาม' },
+      nasal_spray:   { tier: 'green', zh: '鼻噴劑用法：使用前先輕輕擤鼻涕並搖勻，噴嘴朝鼻翼外側噴不要戳鼻中隔。', en: 'Nasal spray tip: Gently blow nose and shake well; aim slightly outward away from center.', vi: 'Cách xịt mũi: Xì mũi nhẹ và lắc đều; hướng đầu xịt hơi chếch ra ngoài vách mũi.', id: 'Semprot hidung: Bersihkan hidung & kocok botol; arahkan sedikit ke sisi luar.', th: 'วิธีพ่นจมูก: สั่งน้ำมูกเบา ๆ และเขย่าขวด พ่นเฉียงออกด้านข้างเล็กน้อย' },
+      inhaler:       { tier: 'amber', zh: '吸完藥馬上漱口：每次吸入後請用清水漱口並吐掉，避免嘴巴發炎長白斑。', en: 'Rinse after inhaling: Always rinse mouth with water and spit out after using your inhaler.', vi: 'Súc miệng sau khi hít: Luôn súc miệng bằng nước sạch và nhổ bỏ ngay sau khi hít thuốc.', id: 'Kumur setelah inhaler: Selalu berkumur air dan buang setelah menghirup obat.', th: 'กลั้วปากหลังพ่นยา: บ้วนปากด้วยน้ำเปล่าแล้วบ้วนทิ้งทุกครั้งหลังพ่นสูด' },
+      vaginal_cream: { tier: 'green', zh: '陰道乳膏用法：建議睡前平躺使用較不易流出，塗藥器用後以溫水洗淨晾乾。', en: 'Vaginal cream tip: Use lying down at bedtime; wash applicator with warm water after use.', vi: 'Kem bôi âm đạo: Dùng khi nằm trước khi ngủ; rửa sạch dụng cụ bằng nước ấm sau khi dùng.', id: 'Krim vagina: Gunakan sambil berbaring sebelum tidur; cuci aplikator dengan air hangat.', th: 'วิธีใช้ครีมทาช่องคลอด: ใช้ขณะนอนก่อนนอน และล้างอุปกรณ์ด้วยน้ำอุ่นหลังใช้' },
+      eye_drops:     { tier: 'green', zh: '點眼藥水提醒：瓶口別碰到眼睛；若點兩種以上眼藥水，中間間隔 5 分鐘。', en: 'Eye drops tip: Do not touch eye with tip; wait 5 minutes between different eye drops.', vi: 'Nhỏ mắt an toàn: Không để đầu lọ chạm mắt; cách nhau 5 phút nếu dùng nhiều loại.', id: 'Tetes mata: Jangan sentuhkan ujung botol ke mata; jeda 5 menit antar tetes mata.', th: 'วิธีหยอดตา: อย่าให้ปลายขวดโดนตา หากใช้หลายขวดให้เว้นห่างกัน 5 นาที' },
+      eye_ointment:  { tier: 'green', zh: '點眼藥膏提醒：擠米粒大小於下眼瞼內側，閉眼轉動眼球；若兼點藥水請先水後膏。', en: 'Eye ointment tip: Apply a small amount inside lower lid; use drops first, ointment last.', vi: 'Tra mỡ mắt: Bóp lượng nhỏ vào mí dưới; nếu có thuốc nhỏ mắt thì nhỏ nước trước, tra mỡ sau.', id: 'Salep mata: Oles sedikit di kelopak bawah; gunakan tetes mata dulu baru salep.', th: 'วิธีป้ายตา: บีบเล็กน้อยในเปลือกตาล่าง หากใช้ร่วมกับยาหยอดตาให้หยอดก่อนแล้วค่อยป้าย' },
+      ear_drops:     { tier: 'green', zh: '耳滴劑提醒：滴前可先用手心溫熱瓶身，側躺滴入後靜躺約 5 分鐘。', en: 'Ear drops tip: Warm bottle in hand first; lie on your side for 5 minutes after drops.', vi: 'Nhỏ tai: Làm ấm lọ trong lòng bàn tay trước; nằm nghiêng khoảng 5 phút sau khi nhỏ.', id: 'Tetes telinga: Hangatkan botol di tangan; berbaring miring 5 menit setelah meneteskan.', th: 'วิธีหยอดหู: กำขวดให้อุ่นก่อนหยอด นอนตะแคงหยอดแล้วนอนนิ่งประมาณ 5 นาที' },
+      suppository:   { tier: 'amber', zh: '塞劑不可吞服：請先拆開外包裝再塞入患處；若藥體偏軟可先冰冰箱變硬再拆。', en: 'Suppository: Unwrap before inserting—do NOT swallow. Chill briefly if too soft.', vi: 'Thuốc đặt: Bóc vỏ trước khi đặt—KHÔNG được nuốt. Để tủ lạnh vài phút nếu thuốc mềm.', id: 'Supositoria: Buka kemasan sebelum dimasukkan—JANGAN ditelan.', th: 'ยาเหน็บห้ามกลืน: แกะเปลือกก่อนเหน็บ หากยานิ่มให้แช่ตู้เย็นสักครู่ก่อนแกะ' },
+      enema:         { tier: 'green', zh: '灌腸劑提醒：拆蓋後輕緩擠入肛門，盡量忍耐 5–10 分鐘再上廁所效果較好。', en: 'Enema tip: Gently insert and hold for 5–10 minutes before using the bathroom.', vi: 'Thuốc thụt: Bơm nhẹ nhàng và cố giữ 5–10 phút trước khi đi vệ sinh.', id: 'Enema: Masukkan perlahan dan tahan 5–10 menit sebelum ke toilet.', th: 'ยาสวนทวาร: สวนอย่างเบามือและกลั้นไว้ประมาณ 5–10 นาทีก่อนเข้าห้องน้ำ' },
+      patch:         { tier: 'amber', zh: '貼片別貼重複位置：貼在乾淨無毛皮膚，每次換新貼片務必撕掉舊片並換位置貼。', en: 'Skin patch tip: Remove old patch first and rotate to a clean new skin spot each time.', vi: 'Miếng dán: Nhớ bóc miếng cũ trước khi dán miếng mới và đổi vị trí dán mỗi lần.', id: 'Koyo/patch: Lepas patch lama dulu dan tempel di area kulit baru yang bersih.', th: 'แผ่นแปะยา: แกะแผ่นเก่าออกก่อนแปะแผ่นใหม่ทุกครั้ง และเปลี่ยนตำแหน่งที่แปะ' },
+      mouthwash:     { tier: 'amber', zh: '漱口水勿吞服：含漱後請吐掉，使用後 30 分鐘內先別喝水或吃東西。', en: 'Mouthwash: Swish and spit out—do NOT swallow; avoid eating/drinking for 30 min.', vi: 'Nước súc miệng: Súc rồi nhổ bỏ—KHÔNG nuốt; tránh ăn uống trong 30 phút sau đó.', id: 'Obat kumur: Kumur lalu buang—JANGAN ditelan; hindari makan/minum 30 menit.', th: 'น้ำยาบ้วนปากห้ามกลืน: กลั้วแล้วบ้วนทิ้ง งดดื่มน้ำหรือกินอาหาร 30 นาทีหลังใช้' }
+    };
+
     function rxBuildCleanDraftText(m, lang) {
       const v = getLocalizedMedView(m, lang);
       const cats = RX_CATS[lang] || RX_CATS.zh;
@@ -6150,7 +6209,7 @@ ${JSON.stringify(items)}
       const pushLine = (catIdx, txt) => {
         if (!txt) return;
         const clean = cleanMarkdownTablesToProse(txt).replace(/\s+/g, ' ').trim();
-        if (!clean) return;
+        if (!clean || rxIsGarbledClinicalTableText(clean)) return;
         if (lang !== 'zh' && /[\u4e00-\u9fff]/.test(clean)) return;
         items.push(`${cats[catIdx]}：${clean}`);
       };
@@ -6158,23 +6217,31 @@ ${JSON.stringify(items)}
       if (v.diet) pushLine(0, v.diet);
       if (v.lifestyle) pushLine(/跌倒|夜燈|起身|fall|ngã|jatuh|หกล้ม/i.test(v.lifestyle) ? 1 : 3, v.lifestyle);
       if (v.sideEffects) pushLine(4, v.sideEffects);
+
+      // 若為特殊非口服劑型，補上乾淨的白話使用小提醒
+      const nonOral = rxDetectNonOralForm(m);
+      if (nonOral && RX_FORM_CARE_TIPS[nonOral]) {
+        const ft = RX_FORM_CARE_TIPS[nonOral];
+        const ftTxt = ft[lang] || ft.zh;
+        if (ftTxt) pushLine(ft.tier === 'amber' ? 4 : 3, ftTxt);
+      }
       return [...new Set(items)].join('\n');
     }
 
     // =========================================================================
-    // 智慧語意合併引擎（v43 超白話短句版：每條 1 句話，自動合併相近意思不重複）
+    // 智慧語意合併引擎（v45 完整 38 組高齡超白話主題：零漏網、零亂碼、精準紅黃綠分級）
     // =========================================================================
     const RX_SEMANTIC_THEMES = [
-      // 🔴 第一級：特別小心（防跌・急救）
+      // 🔴 第一級：特別小心（防跌・急救・勿驟停・嚴重警訊）
       {
         key: 'ntg_chest', tier: 'red',
-        re: /威而鋼|犀利士|壯陽藥|胸痛時先.*坐下|噴於舌下|含於舌下|ED medicines|Viagra|Cialis|chest pain/i,
+        re: /威而鋼|犀利士|壯陽藥|胸痛時先.*坐下|噴於舌下|含於舌下|叫救護車|ED medicines|Viagra|Cialis|chest pain/i,
         i18n: {
-          zh: '心絞痛急救注意：胸痛先坐下再噴／含舌下（勿吸入）；絕對別和威而鋼、犀利士併用！',
-          en: 'Chest pain safety: Sit down before spraying/placing under tongue; NEVER mix with Viagra/Cialis!',
-          vi: 'Cấp cứu đau ngực: Ngồi xuống trước khi xịt/ngậm dưới lưỡi; TUYỆT ĐỐI không dùng chung Viagra/Cialis!',
-          id: 'Nyeri dada: Duduk dulu sebelum pakai di bawah lidah; JANGAN campur dengan Viagra/Cialis!',
-          th: 'ฉุกเฉินเจ็บหน้าอก: นั่งลงก่อนพ่น/อมใต้ลิ้น ห้ามใช้ร่วมกับไวอากร้าหรือยาเพิ่มสมรรถภาพเด็ดขาด!'
+          zh: '胸痛急救注意：先坐下再噴／含舌下（勿吸入）；5 分鐘沒好再用 1 次，仍痛快叫救護車，絕不可併吃威而鋼等壯陽藥！',
+          en: 'Chest pain alert: Sit before using under tongue (do not inhale); call emergency if pain persists after 5 min. NEVER mix with Viagra/Cialis!',
+          vi: 'Cấp cứu đau ngực: Ngồi xuống trước khi dùng dưới lưỡi; gọi cấp cứu nếu 5 phút không đỡ. CẤM dùng chung Viagra/Cialis!',
+          id: 'Darurat nyeri dada: Duduk dulu sebelum pakai di bawah lidah; segera ke UGD bila 5 menit tidak hilang. JANGAN campur Viagra/Cialis!',
+          th: 'ฉุกเฉินเจ็บหน้าอก: นั่งลงก่อนพ่น/อมใต้ลิ้น หาก 5 นาทีไม่ดีขึ้นให้เรียกรถพยาบาล ห้ามใช้ร่วมกับยาเพิ่มสมรรถภาพเด็ดขาด!'
         }
       },
       {
@@ -6190,7 +6257,7 @@ ${JSON.stringify(items)}
       },
       {
         key: 'fall_dizzy', tier: 'red',
-        re: /跌倒|夜燈|頭暈|嗜睡|想睡|腳步不穩|走路不穩|記憶力變差|站起來.*放慢|起身.*放慢|dizziness|drowsiness|nightlight|unsteady|stand.*slowly|chóng mặt|buồn ngủ|té ngã|pusing|mengantuk|jatuh|เวียนหัว|เวียนศีรษะ|ง่วงซึม|หกล้ม/i,
+        re: /防跌|跌倒|夜燈|頭暈|嗜睡|想睡|腳步不穩|走路不穩|記憶力變差|站起來.*放慢|起身.*放慢|睡前躺好再吃|建議睡前吃|dizziness|drowsiness|nightlight|unsteady|stand.*slowly|chóng mặt|buồn ngủ|té ngã|pusing|mengantuk|jatuh|เวียนหัว|เวียนศีรษะ|ง่วงซึม|หกล้ม/i,
         i18n: {
           zh: '小心跌倒：容易頭暈想睡；睡前躺好再吃，起床先坐一下再站，半夜開夜燈。',
           en: 'Prevent falls: May cause dizziness/drowsiness. Stand up slowly and use a nightlight.',
@@ -6212,46 +6279,90 @@ ${JSON.stringify(items)}
       },
       {
         key: 'bleed_alert', tier: 'red',
-        re: /黑便|血尿|流血不止|牙齦.*出血|瘀青|拔牙.*手術|black stool|red urine|bruising|bleeding|phân đen|tiểu ra máu|chảy máu|BAB hitam|perdarahan|ถ่ายดำ|ปัสสาวะเป็นเลือด|เลือดออก/i,
+        re: /黑便|血尿|流血不止|牙齦.*出血|瘀青|拔牙.*手術|看牙醫.*開刀|看牙醫.*侵入|異常陰道出血|black stool|red urine|bruising|bleeding|dental|unusual vaginal bleeding|phân đen|tiểu ra máu|chảy máu|nhổ răng|BAB hitam|perdarahan|cabut gigi|ถ่ายดำ|ปัสสาวะเป็นเลือด|เลือดออก|ทำฟัน/i,
         i18n: {
-          zh: '注意出血：若解黑便、血尿、流血不止或大片瘀青快就醫；拔牙開刀前先講。',
-          en: 'Watch for bleeding: See doctor for black stools, red urine, or big bruises; tell dentist/doctor before procedures.',
-          vi: 'Chú ý chảy máu: Đi khám nếu phân đen, tiểu máu, bầm lớn; báo bác sĩ trước khi nhổ răng/mổ.',
-          id: 'Waspada perdarahan: Ke dokter jika BAB hitam, urine merah, atau memar luas; beri tahu dokter sebelum operasi.',
-          th: 'ระวังเลือดออก: หากถ่ายดำ ปัสสาวะแดง หรือฟกช้ำมากให้พบแพทย์ แจ้งแพทย์ก่อนทำฟัน/ผ่าตัด'
+          zh: '注意出血：若解黑便、血尿、流血不止、異常出血或大片瘀青快就醫；拔牙開刀前先講。',
+          en: 'Watch for bleeding: See doctor for black stools, red urine, unusual bleeding, or big bruises; tell dentist/doctor before procedures.',
+          vi: 'Chú ý chảy máu: Đi khám nếu phân đen, tiểu máu, chảy máu bất thường; báo bác sĩ trước khi nhổ răng/mổ.',
+          id: 'Waspada perdarahan: Ke dokter jika BAB hitam, urine merah, atau perdarahan tidak normal; beri tahu dokter sebelum operasi.',
+          th: 'ระวังเลือดออก: หากถ่ายดำ ปัสสาวะแดง หรือเลือดออกผิดปกติให้พบแพทย์ และแจ้งแพทย์ก่อนทำฟัน/ผ่าตัด'
+        }
+      },
+      {
+        key: 'fq_tendon', tier: 'red',
+        re: /腳跟|肌腱疼痛|肌腱.*紅腫|heel\/tendon|tendon pain|gân gót chân|tendon tumit|เอ็นร้อยหวาย/i,
+        i18n: {
+          zh: '腳跟肌腱痛快停藥：若腳跟或關節肌腱紅腫疼痛，請立刻停藥並回診看醫師。',
+          en: 'Heel/tendon pain: Stop the antibiotic and see a doctor right away if heel or tendon pain/swelling occurs.',
+          vi: 'Đau gân gót chân: Ngừng thuốc và đi khám ngay nếu đau hoặc sưng gân gót chân.',
+          id: 'Nyeri tendon tumit: Hentikan obat dan segera ke dokter jika tumit/tendon nyeri atau bengkak.',
+          th: 'ปวดเอ็นร้อยหวายหยุดยาทันที: หากปวดหรือบวมบริเวณส้นเท้า/เอ็นร้อยหวาย ให้หยุดยาและพบแพทย์ทันที'
         }
       },
       {
         key: 'rash_allergy', tier: 'red',
-        re: /皮膚紅疹|水泡|嘴破|嚴重.*過敏|呼吸困難|喘不過氣|severe.*rash|blisters|mouth sores|breathing trouble|dị ứng da nặng|phồng rộp|khó thở|alergi kulit berat|sesak napas|แพ้ยา.*รุนแรง|ผื่น.*พุพอง|หายใจลำบาก/i,
+        re: /皮膚紅疹|起紅疹|水泡|嘴破|口腔潰瘍|嚴重.*過敏|呼吸困難|喘不過氣|severe.*rash|blisters|mouth sores|breathing trouble|dị ứng da nặng|phồng rộp|khó thở|alergi kulit berat|sesak napas|แพ้ยา.*รุนแรง|ผื่น.*พุพอง|หายใจลำบาก/i,
         i18n: {
           zh: '過敏快停藥：若起紅疹、水泡、嘴破或喘不過氣，馬上停藥就醫。',
-          en: 'Allergy alert: Stop and see a doctor right away for rash, blisters, or trouble breathing.',
-          vi: 'Dị ứng ngừng ngay: Ngừng thuốc và đi khám ngay nếu nổi mẩn, phồng da hoặc khó thở.',
-          id: 'Alergi hentikan segera: Hentikan obat & ke dokter jika ruam, lepuh, atau sesak napas.',
+          en: 'Allergy alert: Stop and see a doctor right away for rash, blisters, mouth sores, or trouble breathing.',
+          vi: 'Dị ứng ngừng ngay: Ngừng thuốc và đi khám ngay nếu nổi mẩn, phồng da, loét miệng hoặc khó thở.',
+          id: 'Alergi hentikan segera: Hentikan obat & ke dokter jika ruam, lepuh, sariawan, atau sesak napas.',
           th: 'แพ้ยาหยุดทันที: หากมีผื่น พุพอง แผลในปาก หรือหายใจลำบาก ให้หยุดยาพบแพทย์ทันที'
         }
       },
       {
-        key: 'no_abrupt_stop', tier: 'red',
-        re: /切勿突然停藥|不要自行停藥|不可自行停藥|慢慢減量|never stop abruptly|do not stop suddenly|không tự ý ngừng|jangan hentikan mendadak|ห้ามหยุดยา.*กะทันหัน/i,
+        key: 'digoxin_toxic', tier: 'red',
+        re: /視線變黃|心跳過慢|心跳低於|yellow vision|slow pulse|màu vàng|mạch chậm|penglihatan kuning|nadi lambat|ภาพสีเหลือง|ชีพจรช้า/i,
         i18n: {
-          zh: '別自己停藥：想停藥或改顆數都要先問醫師，不要自己停吃。',
-          en: 'Do not stop suddenly: Always ask your doctor before stopping or changing doses.',
-          vi: 'Không tự ý ngừng thuốc: Luôn hỏi bác sĩ trước khi ngừng hoặc đổi liều.',
-          id: 'Jangan berhenti sendiri: Selalu tanya dokter sebelum berhenti atau mengubah dosis.',
-          th: 'ห้ามหยุดยาเอง: ปรึกษาแพทย์ก่อนทุกครั้งหากต้องการหยุดยาหรือปรับขนาด'
+          zh: '心跳太慢或視線變黃快回診：若噁心沒胃口、看東西變黃或心跳低於 60 下請快就醫。',
+          en: 'Slow pulse / yellow vision: See your doctor promptly for nausea, yellow vision, or pulse below 60.',
+          vi: 'Mạch chậm / nhìn vàng: Đi khám ngay nếu buồn nôn, nhìn thấy màu vàng hoặc mạch dưới 60.',
+          id: 'Nadi lambat / penglihatan kuning: Segera ke dokter jika mual, pandangan kuning, atau nadi di bawah 60.',
+          th: 'ชีพจรช้าหรือมองเห็นสีเหลือง: หากคลื่นไส้ มองเห็นภาพสีเหลือง หรือชีพจรต่ำกว่า 60 ให้รีบพบแพทย์'
+        }
+      },
+      {
+        key: 'alendronate_upright', tier: 'red',
+        re: /不可躺下|下巴疼痛|stay upright|jaw pain|không nằm|đau hàm|tetap duduk\/berdiri|nyeri rahang|ห้ามนอนราบ|ปวดกราม/i,
+        i18n: {
+          zh: '骨鬆藥吃完 30 分鐘別躺下：起床空腹配一大杯白開水吞，30 分鐘內坐著或站著；若下巴腫痛請看醫師。',
+          en: 'Stay upright 30+ min: Take with a full glass of water upon waking, do NOT lie down or eat for 30 min; report jaw pain.',
+          vi: 'Ngồi/đứng thẳng 30 phút: Uống lúc mới dậy với 1 ly nước đầy, không nằm ít nhất 30 phút; báo bác sĩ nếu đau hàm.',
+          id: 'Tetap tegak 30 menit: Minum saat bangun dengan segelas air penuh, jangan berbaring 30 menit; lapor jika nyeri rahang.',
+          th: 'ห้ามนอนราบ 30 นาที: กินตอนตื่นพร้อมน้ำ 1 แก้วเต็ม นั่งหรือยืนตัวตรงอย่างน้อย 30 นาที แจ้งแพทย์หากปวดกราม'
+        }
+      },
+      {
+        key: 'colchicine_exact', tier: 'red',
+        re: /千萬不要自行加量|嚴重拉肚子.*過量|never take extra pills|severe diarrhea|không tự tăng liều|jangan menambah tablet|ห้ามเพิ่มยาเอง/i,
+        i18n: {
+          zh: '別自己加量：嚴格照醫師顆數吃；若嚴重拉肚子請立刻停藥回診。',
+          en: 'Never take extra pills: Follow exact dose; stop and see doctor if severe diarrhea occurs.',
+          vi: 'Không tự tăng liều: Uống đúng số viên; ngừng thuốc đi khám nếu tiêu chảy nặng.',
+          id: 'Jangan tambah dosis: Minum tepat sesuai resep; hentikan bila diare berat.',
+          th: 'ห้ามเพิ่มขนาดยาเอง: กินตามจำนวนที่แพทย์สั่ง หากท้องเสียรุนแรงให้หยุดยาและพบแพทย์'
+        }
+      },
+      {
+        key: 'no_abrupt_stop', tier: 'red',
+        re: /切勿突然停藥|不要自行停藥|不可自行停藥|勿自行停藥|不要漏吃|慢慢減量|never stop abruptly|do not stop suddenly|never miss doses|không tự ý ngừng|không quên thuốc|jangan hentikan mendadak|jangan lewatkan dosis|ห้ามหยุดยา|ห้ามลืมกินยา/i,
+        i18n: {
+          zh: '別自己停藥：想停藥或改顆數都要先問醫師，慢性病與重要藥品別漏吃或自己停。',
+          en: 'Do not stop suddenly: Never skip or stop important medicines without asking your doctor first.',
+          vi: 'Không tự ý ngừng thuốc: Luôn uống đều và hỏi bác sĩ trước khi ngừng hoặc đổi liều.',
+          id: 'Jangan berhenti sendiri: Jangan lewatkan atau hentikan obat tanpa konsultasi dokter.',
+          th: 'ห้ามหยุดยาเอง: กินยาให้สม่ำเสมอและปรึกษาแพทย์ก่อนทุกครั้งหากต้องการหยุดหรือปรับยา'
         }
       },
       {
         key: 'urgent_gi_nausea', tier: 'red',
-        re: /莫名噁心想吐|酮酸中毒|胃痛黑便|腳腫.*就醫|尿變茶色|嚴重拉肚子|sudden nausea|dark urine|severe diarrhea|buồn nôn lạ|tiêu chảy nặng|mual mendadak|urine gelap|คลื่นไส้ผิดปกติ|ปัสสาวะสีชาเข้ม|ท้องเสียรุนแรง/i,
+        re: /莫名噁心想吐|酮酸中毒|胃痛黑便|腳腫.*就醫|尿變茶色|嚴重拉肚子|過量可能傷肝|持續嚴重上腹痛|發高燒請回診|sudden nausea|dark urine|severe stomach pain|overdose may harm the liver|buồn nôn lạ|đau bụng trên dữ dội|mual mendadak|nyeri ulu hati berat|คลื่นไส้ผิดปกติ|ปัสสาวะสีชาเข้ม|ปวดท้องรุนแรง/i,
         i18n: {
-          zh: '不舒服快看醫師：若莫名想吐、劇烈胃痛、尿變茶色或猛拉肚子請快就醫。',
-          en: 'See a doctor fast: If sudden nausea, bad stomach pain, dark urine, or severe diarrhea happens.',
-          vi: 'Đi khám sớm: Nếu buồn nôn lạ, đau dạ dày nhiều, nước tiểu màu trà hoặc tiêu chảy nặng.',
-          id: 'Segera ke dokter: Jika mual mendadak, nyeri perut berat, urine gelap, atau diare parah.',
-          th: 'รีบพบแพทย์: หากคลื่นไส้ผิดปกติ ปวดท้องมาก ปัสสาวะสีชาเข้ม หรือท้องเสียรุนแรง'
+          zh: '不舒服快看醫師：若莫名想吐、劇烈胃痛、尿變茶色、發高燒或猛拉肚子請快就醫。',
+          en: 'See a doctor fast: If sudden nausea, bad stomach pain, dark urine, high fever, or severe diarrhea happens.',
+          vi: 'Đi khám sớm: Nếu buồn nôn lạ, đau dạ dày nhiều, nước tiểu màu trà, sốt cao hoặc tiêu chảy nặng.',
+          id: 'Segera ke dokter: Jika mual mendadak, nyeri perut berat, urine gelap, demam tinggi, atau diare parah.',
+          th: 'รีบพบแพทย์: หากคลื่นไส้ผิดปกติ ปวดท้องมาก ปัสสาวะสีชาเข้ม ไข้สูง หรือท้องเสียรุนแรง'
         }
       },
 
@@ -6261,7 +6372,7 @@ ${JSON.stringify(items)}
         re: /葡萄柚|柚子|grapefruit|pomelo|bưởi|jeruk bali|ส้มโอ|เกรปฟรุต/i,
         i18n: {
           zh: '別吃葡萄柚、柚子：會影響藥效，讓血壓太低或不舒服。',
-          en: 'No grapefruit or pomelo: Can make blood pressure drop too low.',
+          en: 'No grapefruit or pomelo: Can make blood pressure drop too low or increase side effects.',
           vi: 'Không ăn bưởi: Có thể gây tụt huyết áp hoặc tăng tác dụng phụ.',
           id: 'Jangan makan jeruk bali/grapefruit: Bisa membuat tensi turun terlalu rendah.',
           th: 'งดส้มโอและเกรปฟรุต: อาจทำให้ความดันตกหรือเกิดผลข้างเคียง'
@@ -6290,6 +6401,28 @@ ${JSON.stringify(items)}
         }
       },
       {
+        key: 'milk_calcium_space', tier: 'amber',
+        re: /與牛奶.*間隔|鈣片.*鐵劑.*間隔|高纖食物.*間隔|牛奶或吃鈣片|space.*milk|space.*calcium|high-fiber foods|cách sữa|cách canxi|jarak.*susu|jarak.*kalsium|ห่างจากนม|ห่างจากแคลเซียม/i,
+        i18n: {
+          zh: '隔開奶類、鈣片與胃藥：請與牛奶、鈣片、鐵劑、胃藥或高纖燕麥隔開 2–4 小時再吃。',
+          en: 'Space from dairy/calcium/antacids: Wait 2–4 hours between this medicine and milk, calcium, iron, or antacids.',
+          vi: 'Uống cách sữa, canxi & thuốc dạ dày: Giữ khoảng cách 2–4 giờ để thuốc hấp thu tốt.',
+          id: 'Beri jarak dari susu/kalsium/obat maag: Tunggu 2–4 jam agar penyerapan obat optimal.',
+          th: 'เว้นห่างจากนม แคลเซียม และยาลดกรด: กินห่างกันอย่างน้อย 2–4 ชั่วโมงเพื่อไม่ให้ลดฤทธิ์ยา'
+        }
+      },
+      {
+        key: 'empty_stomach_am', tier: 'amber',
+        re: /早餐前\s*30|空腹配白開水|不要吃早餐|before breakfast|empty stomach|trước ăn sáng|sebelum sarapan|ก่อนอาหารเช้า/i,
+        i18n: {
+          zh: '早餐前空腹吃：起床後在早餐前 30–60 分鐘配溫白開水吃，效果最好。',
+          en: 'Take before breakfast: Best taken on an empty stomach 30–60 min before breakfast with water.',
+          vi: 'Uống trước ăn sáng: Uống lúc đói 30–60 phút trước bữa sáng với nước ấm để đạt hiệu quả tốt nhất.',
+          id: 'Minum sebelum sarapan: Paling baik saat perut kosong 30–60 menit sebelum sarapan.',
+          th: 'กินตอนท้องว่างก่อนอาหารเช้า: กินก่อนอาหารเช้า 30–60 นาทีพร้อมน้ำเปล่าจะได้ผลดีที่สุด'
+        }
+      },
+      {
         key: 'antibiotic_course', tier: 'amber',
         re: /完整吃完|天數.*吃完|療程.*吃完|finish.*course|finish all prescribed|uống hết liệu trình|uống đủ số ngày|habiskan.*resep|กินยาให้ครบ/i,
         i18n: {
@@ -6301,19 +6434,85 @@ ${JSON.stringify(items)}
         }
       },
       {
-        key: 'take_with_meal', tier: 'amber',
-        re: /隨餐或飯後|飯後吃.*傷胃|胃脹或拉肚子|take with or right after meals|after meals to protect|uống.*sau bữa ăn|setelah makan|กินหลังอาหาร/i,
+        key: 'su_regular_meals', tier: 'amber',
+        re: /定時吃正餐|不要忘記吃飯|按時吃飯|never skip meals|eat meals on time|không bỏ bữa|ăn đúng bữa|jangan lewatkan makan|ห้ามอดอาหาร/i,
         i18n: {
-          zh: '飯後吃較不傷胃：隨餐或飯後配水吃，比較不會胃脹或拉肚子。',
-          en: 'Take with/after meals: Helps prevent mild stomach upset or loose stools.',
-          vi: 'Uống sau ăn: Giúp đỡ đầy bụng, khó chịu dạ dày hoặc đi lỏng.',
-          id: 'Minum setelah makan: Membantu mencegah kembung atau sakit perut ringan.',
-          th: 'กินหลังอาหาร: ช่วยลดอาการท้องอืดหรือถ่ายเหลวเล็กน้อย'
+          zh: '吃藥後一定要吃飯：用了降血糖藥別漏掉正餐，以免血糖掉太低。',
+          en: 'Never skip meals: Always eat regular meals on time after taking diabetes medicine.',
+          vi: 'Không bỏ bữa: Luôn ăn đủ bữa đúng giờ sau khi dùng thuốc tiểu đường.',
+          id: 'Jangan lewatkan makan: Selalu makan teratur tepat waktu setelah memakai obat diabetes.',
+          th: 'ห้ามอดอาหาร: รับประทานอาหารให้ตรงเวลาเสมอหลังใช้ยาเบาหวาน'
+        }
+      },
+      {
+        key: 'take_with_meal', tier: 'amber',
+        re: /隨餐或飯後|飯後吃.*傷胃|飯後吃.*保護胃|飯後吃.*刺激胃|胃脹或拉肚子|輕微腹瀉|腹絞痛或拉肚子|早上飯後吃|take with or right after meals|after meals to protect|uống.*sau bữa ăn|setelah makan|กินหลังอาหาร/i,
+        i18n: {
+          zh: '飯後吃較不傷胃：隨餐或飯後配水吃，比較不會胃脹、胃痛或拉肚子。',
+          en: 'Take with/after meals: Helps prevent stomach irritation, bloating, or loose stools.',
+          vi: 'Uống sau ăn đỡ hại dạ dày: Giúp giảm đầy bụng, đau dạ dày hoặc đi lỏng.',
+          id: 'Minum setelah makan: Membantu mencegah sakit maag, kembung, atau diare ringan.',
+          th: 'กินหลังอาหารช่วยถนอมกระเพาะ: ลดอาการท้องอืด ระคายเคืองกระเพาะ หรือถ่ายเหลวเล็กน้อย'
+        }
+      },
+      {
+        key: 'diuretic_daytime', tier: 'amber',
+        re: /下午\s*4\s*點前|半夜一直跑廁所|before 4 PM|nighttime bathroom|trước 4 giờ chiều|sebelum jam 4 sore|ก่อนบ่าย\s*4\s*โมง/i,
+        i18n: {
+          zh: '利尿劑白天吃：盡量早上或下午 4 點前吃，才不會半夜一直跑廁所跌倒。',
+          en: 'Take water pills early: Take in the morning or before 4 PM to avoid nighttime bathroom trips.',
+          vi: 'Uống thuốc lợi tiểu ban ngày: Uống sáng hoặc trước 4 giờ chiều để tránh đi tiểu đêm.',
+          id: 'Minum diuretik di siang hari: Minum pagi atau sebelum jam 4 sore agar tidak sering ke toilet malam.',
+          th: 'กินยาขับปัสสาวะตอนกลางวัน: กินตอนเช้าหรือก่อนบ่าย 4 โมง เพื่อเลี่ยงการลุกเข้าห้องน้ำกลางดึก'
+        }
+      },
+      {
+        key: 'inhaler_rinse', tier: 'amber',
+        re: /清水漱口|吸完.*漱口|嘴巴發炎長白斑|抽菸|二手菸|聲音沙啞|rinse mouth|mouth thrush|smoking|súc miệng|hút thuốc|berkumur|merokok|กลั้วปาก|สูบบุหรี่/i,
+        i18n: {
+          zh: '吸完藥馬上漱口：吸入後用清水漱口並吐掉，避免嘴巴長白斑；請遠離菸害。',
+          en: 'Rinse after inhaling: Rinse mouth with water and spit out after each use; avoid smoking.',
+          vi: 'Súc miệng sau khi hít: Súc miệng bằng nước sạch và nhổ bỏ ngay sau khi hít; tránh khói thuốc.',
+          id: 'Kumur setelah inhaler: Berkumur air dan buang setiap selesai menghirup; hindari asap rokok.',
+          th: 'กลั้วปากหลังพ่นยา: บ้วนปากด้วยน้ำเปล่าแล้วบ้วนทิ้งทันทีหลังพ่น และเลี่ยงควันบุหรี่'
+        }
+      },
+      {
+        key: 'warfarin_greens', tier: 'amber',
+        re: /深綠色蔬菜|人參.*當歸.*銀杏|dark green vegetables|ginseng|ginkgo|rau xanh đậm|sayur hijau gelap|ผักใบเขียวเข้ม/i,
+        i18n: {
+          zh: '深綠色蔬菜吃固定量：每天吃差不多的量就好；避免人參、當歸與銀杏保健品。',
+          en: 'Keep greens steady: Eat a steady amount of dark green vegetables daily; avoid ginseng/ginkgo.',
+          vi: 'Ăn rau xanh ổn định: Ăn lượng rau xanh đậm đều đặn mỗi ngày; tránh nhân sâm, bạch quả.',
+          id: 'Sayur hijau porsi tetap: Makan sayur hijau gelap dalam jumlah stabil; hindari ginseng/ginkgo.',
+          th: 'กินผักใบเขียวปริมาณคงที่: รับประทานผักใบเขียวเข้มสม่ำเสมอทุกวัน งดโสมและแปะก๊วย'
+        }
+      },
+      {
+        key: 'nsaid_no_double', tier: 'amber',
+        re: /不要重複吃.*止痛|勿同時吃多種.*感冒|傷胃.*影響腎臟|never double up|do not double up|không uống trùng|jangan minum.*ganda|ห้ามกินยาแก้ปวดซ้ำ|อย่ากินซ้ำซ้อน/i,
+        i18n: {
+          zh: '止痛感冒藥別重複吃：不要同時混吃不同家的止痛藥或感冒藥，以免過量傷肝傷胃傷腎。',
+          en: 'Do not double up pain/cold pills: Never mix multiple pain or cold medicines—it harms liver/stomach/kidneys.',
+          vi: 'Không uống trùng thuốc đau/cảm: Không dùng chung nhiều loại giảm đau/cảm để tránh hại gan thận.',
+          id: 'Jangan gabung obat nyeri/flu: Hindari minum obat nyeri/flu ganda agar tidak merusak hati/ginjal.',
+          th: 'อย่ากินยาแก้ปวด/แก้หวัดซ้ำซ้อน: ห้ามกินหลายชนิดพร้อมกันเพราะอาจเป็นอันตรายต่อตับ กระเพาะ และไต'
+        }
+      },
+      {
+        key: 'statin_muscle', tier: 'amber',
+        re: /肌肉痠痛|紅麴|muscle ache|red yeast rice|đau mỏi cơ|men gạo đỏ|nyeri.*otot|angkak|ปวดเมื่อยกล้ามเนื้อ|ข้าวยีสต์แดง/i,
+        i18n: {
+          zh: '留意肌肉痠痛：若出現不明原因全身肌肉痠痛無力請回診；別併吃紅麴保健品。',
+          en: 'Watch for muscle pain: Tell your doctor if unusual muscle ache/weakness occurs; avoid red yeast rice.',
+          vi: 'Chú ý đau cơ: Báo bác sĩ nếu đau mỏi cơ bất thường; tránh dùng thêm men gạo đỏ.',
+          id: 'Pantau nyeri otot: Lapor dokter bila otot nyeri/lemas tanpa sebab; hindari angkak.',
+          th: 'สังเกตปวดกล้ามเนื้อ: หากปวดเมื่อยกล้ามเนื้อผิดปกติให้แจ้งแพทย์ และเลี่ยงข้าวยีสต์แดง'
         }
       },
       {
         key: 'diet_salt_sugar', tier: 'amber',
-        re: /少鹽|清淡|低鈉鹽|含糖飲料|少吃油炸|low-salt|sugary drinks|less salt|ăn nhạt|đồ uống ngọt|kurangi garam|minuman manis|ลดเค็ม|เครื่องดื่มรสหวาน/i,
+        re: /少鹽|高鹽|清淡|低鈉鹽|含糖飲料|少吃油炸|生病吃不下|low-salt|sugary drinks|less salt|ăn nhạt|đồ uống ngọt|kurangi garam|minuman manis|ลดเค็ม|เครื่องดื่มรสหวาน/i,
         i18n: {
           zh: '飲食少鹽少糖：少喝甜飲與油炸，別用「低鈉鹽」；生病吃不下先問醫師。',
           en: 'Eat less salt & sugar: Limit sweet drinks/fried food; avoid low-sodium salt substitutes.',
@@ -6324,13 +6523,24 @@ ${JSON.stringify(items)}
       },
       {
         key: 'mild_edema_side', tier: 'amber',
-        re: /腳踝輕微水腫|臉部微熱|手腳微腫|ankle swelling|facial warmth|phù nhẹ cổ chân|bengkak ringan|ข้อเท้าบวมเล็กน้อย/i,
+        re: /腳踝輕微水腫|臉部微熱|手腳微腫|臉腫|局部微癢|心悸.*手抖.*怕熱|ankle swelling|facial warmth|phù nhẹ cổ chân|bengkak ringan|ข้อเท้าบวมเล็กน้อย/i,
         i18n: {
-          zh: '留意輕微水腫：腳踝或手腳可能微腫、臉熱熱的，變嚴重再告訴醫師。',
-          en: 'Mild swelling: Slight ankle/hand swelling or warmth may happen; tell doctor if worse.',
-          vi: 'Phù nhẹ: Có thể hơi phù cổ chân hoặc nóng mặt; báo bác sĩ nếu sưng nhiều hơn.',
-          id: 'Bengkak ringan: Kaki/tangan mungkin sedikit bengkak; lapor dokter bila memburuk.',
-          th: 'อาการบวมเล็กน้อย: อาจมีข้อเท้าบวมหรือหน้าร้อนเล็กน้อย หากบวมมากให้แจ้งแพทย์'
+          zh: '留意輕微水腫或不適：腳踝微腫、臉微熱或局部微癢多半輕微，若變嚴重請告知醫師。',
+          en: 'Mild side effects: Slight ankle swelling or warmth may happen; tell your doctor if it worsens.',
+          vi: 'Phản ứng nhẹ: Có thể hơi phù cổ chân hoặc nóng mặt; báo bác sĩ nếu nặng hơn.',
+          id: 'Reaksi ringan: Bengkak ringan di kaki atau wajah hangat bisa terjadi; lapor dokter bila memburuk.',
+          th: 'อาการเล็กน้อยที่อาจพบ: ข้อเท้าบวมหรือหน้าร้อนเล็กน้อย หากอาการมากขึ้นให้แจ้งแพทย์'
+        }
+      },
+      {
+        key: 'calcium_longterm_ppi', tier: 'amber',
+        re: /長期吃可能影響鈣質|lower calcium\/vitamin|giảm hấp thu canxi|penyerapan kalsium|ลดการดูดซึมแคลเซียม/i,
+        i18n: {
+          zh: '胃藥勿長期一直吃：症狀改善後可與醫師討論減量，長期吃較易影響鈣質吸收。',
+          en: 'Review long-term stomach pills: Ask your doctor if you still need it once reflux improves.',
+          vi: 'Không dùng thuốc dạ dày quá lâu: Hỏi bác sĩ giảm thuốc khi đã đỡ trào ngược.',
+          id: 'Evaluasi obat maag jangka panjang: Tanya dokter bila keluhan lambung sudah membaik.',
+          th: 'ทบทวนยาโรคกระเพาะ: หากอาการดีขึ้นแล้วควรปรึกษาแพทย์เพื่อปรับลดยา'
         }
       },
 
@@ -6348,7 +6558,7 @@ ${JSON.stringify(items)}
       },
       {
         key: 'bg_contrast_care', tier: 'green',
-        re: /按時量血糖|顯影劑|check blood sugar|contrast scan|đo đường huyết|chụp cản quang|cek gula darah|kontras|ตรวจน้ำตาล|ฉีดสี/i,
+        re: /量血糖|監測.*血糖|顯影劑|check blood sugar|contrast scan|đo đường huyết|chụp cản quang|cek gula darah|kontras|ตรวจน้ำตาล|ฉีดสี/i,
         i18n: {
           zh: '量血糖、做檢查先講：按時量血糖；要打顯影劑做檢查先告訴醫師有吃血糖藥。',
           en: 'Check blood sugar: Test regularly; tell doctor about diabetes pills before dye scans.',
@@ -6359,24 +6569,79 @@ ${JSON.stringify(items)}
       },
       {
         key: 'hydration_hygiene', tier: 'green',
-        re: /多喝白開水|多喝溫開水|私密處|尿量變多|不要憋尿|drink plenty of water|more urination|private area|uống nhiều nước|đi tiểu nhiều|vùng kín|minum banyak air|sering buang air|ดื่มน้ำเปล่า|ปัสสาวะบ่อย|จุดซ่อนเร้น/i,
+        re: /多喝白開水|多喝溫開水|多喝溫水|私密處|尿量變多|不要憋尿|多吃高纖|drink plenty of water|drink warm water|more urination|private area|uống nhiều nước|đi tiểu nhiều|vùng kín|minum banyak air|sering buang air|ดื่มน้ำเปล่า|ดื่มน้ำอุ่น|ปัสสาวะบ่อย|จุดซ่อนเร้น/i,
         i18n: {
-          zh: '白天多喝水不憋尿：排尿會變多，請保持私密處乾爽清潔，發癢要告訴醫師。',
-          en: 'Drink water & stay clean: You may pee more—drink water in daytime and keep private area dry.',
-          vi: 'Uống nhiều nước, không nhịn tiểu: Đi tiểu nhiều hơn, giữ vùng kín sạch khô.',
-          id: 'Banyak minum & jaga bersih: Sering buang air kecil; jaga area intim bersih kering.',
-          th: 'ดื่มน้ำมาก ๆ ไม่กลั้นปัสสาวะ: จะปัสสาวะบ่อยขึ้น รักษาความสะอาดจุดซ่อนเร้นให้แห้ง'
+          zh: '白天多喝水不憋尿：多喝溫白開水、多吃蔬果，並保持私密處乾爽清潔。',
+          en: 'Drink water & stay clean: Drink plenty of warm water in daytime, eat veggies/fruit, and keep private areas dry.',
+          vi: 'Uống nhiều nước, không nhịn tiểu: Uống đủ nước ấm ban ngày, ăn rau quả và giữ vùng kín sạch khô.',
+          id: 'Banyak minum & jaga bersih: Minum air hangat cukup di siang hari, makan sayur/buah, jaga area intim kering.',
+          th: 'ดื่มน้ำอุ่นให้เพียงพอ: ดื่มน้ำมาก ๆ ตอนกลางวัน กินผักผลไม้ ไม่กลั้นปัสสาวะ และรักษาความสะอาด'
+        }
+      },
+      {
+        key: 'reflux_posture', tier: 'green',
+        re: /吃完飯不要馬上平躺|睡前\s*2–3\s*小時|do not lie down right after meals|không nằm ngay sau ăn|jangan langsung berbaring|ห้ามนอนราบทันทีหลังอาหาร/i,
+        i18n: {
+          zh: '吃飽別馬上躺下：飯後先坐或散步一下，睡前 2–3 小時盡量不吃東西。',
+          en: 'Stay upright after meals: Do not lie down right after eating; avoid food 2–3 hours before bed.',
+          vi: 'Không nằm ngay sau ăn: Ngồi nghỉ sau ăn và tránh ăn 2–3 giờ trước khi ngủ.',
+          id: 'Jangan langsung tidur setelah makan: Hindari makan 2–3 jam sebelum tidur.',
+          th: 'อย่านอนทันทีหลังอาหาร: นั่งพักหลังกินอาหารและงดมื้อดึกก่อนนอน 2–3 ชม.'
+        }
+      },
+      {
+        key: 'sun_protection', tier: 'green',
+        re: /外出.*防曬|防曬|protect skin from strong sunlight|tránh nắng|lindungi kulit dari sinar matahari|หลีกเลี่ยงแดด/i,
+        i18n: {
+          zh: '外出記得防曬：部分藥品較怕曬太陽，出門戴帽子、撐傘或擦防曬。',
+          en: 'Sun protection: Protect skin from strong sunlight with a hat, umbrella, or sunscreen.',
+          vi: 'Chống nắng khi ra ngoài: Đội mũ, che ô hoặc bôi kem chống nắng khi ra nắng.',
+          id: 'Lindungi dari matahari: Pakai topi, payung, atau tabir surya saat keluar rumah.',
+          th: 'ป้องกันแดดเมื่อออกนอกบ้าน: สวมหมวก กางร่ม หรือทาครีมกันแดดเมื่อออกแดดจัด'
+        }
+      },
+      {
+        key: 'insulin_storage', tier: 'green',
+        re: /輪替不同注射部位|室溫保存勿冷凍|rotate injection sites|never freeze insulin|đổi vị trí tiêm|ganti titik suntik|เปลี่ยนจุดฉีด/i,
+        i18n: {
+          zh: '胰島素輪替與保存：每次換不同部位注射；開封後放室溫即可，千萬別放冷凍。',
+          en: 'Insulin care: Rotate injection sites each time; keep open pen at room temp and never freeze.',
+          vi: 'Dùng & bảo quản insulin: Đổi vị trí tiêm mỗi lần; để nhiệt độ phòng sau mở nắp, không để đông đá.',
+          id: 'Perawatan insulin: Ganti titik suntik tiap kali; simpan suhu ruang setelah dibuka, jangan dibekukan.',
+          th: 'การฉีดและเก็บอินซูลิน: เปลี่ยนจุดฉีดทุกครั้ง หลังเปิดใช้เก็บอุณหภูมิห้อง ห้ามแช่แข็ง'
+        }
+      },
+      {
+        key: 'vaginal_care', tier: 'green',
+        re: /塗藥器|陰道乳膏|婦科追蹤|wash applicator|gynecology checkups|rửa sạch dụng cụ|cuci aplikator|ล้างอุปกรณ์/i,
+        i18n: {
+          zh: '陰道乳膏用法與回診：睡前平躺使用較不易流出，塗藥器用溫水洗淨晾乾，並定期婦科追蹤。',
+          en: 'Vaginal cream care: Use lying down at bedtime, wash applicator with warm water, and keep routine checkups.',
+          vi: 'Cách dùng kem âm đạo: Dùng khi nằm trước khi ngủ, rửa sạch dụng cụ bằng nước ấm và tái khám định kỳ.',
+          id: 'Perawatan krim vagina: Gunakan sambil berbaring sebelum tidur, cuci aplikator dengan air hangat, kontrol rutin.',
+          th: 'วิธีใช้ครีมช่องคลอด: ใช้ขณะนอนก่อนนอน ล้างอุปกรณ์ด้วยน้ำอุ่นให้สะอาด และตรวจติดตามตามนัด'
+        }
+      },
+      {
+        key: 'eye_drop_care', tier: 'green',
+        re: /瓶口別碰到眼睛|間隔\s*5\s*分鐘|短暫微刺|視線微模糊|dropper tip|wait 5 minutes between|đầu lọ chạm|ujung botol|ปลายขวดโดนตา/i,
+        i18n: {
+          zh: '點眼藥水小提醒：瓶口別碰到眼睛；若點兩種以上眼藥水，中間請間隔 5 分鐘。',
+          en: 'Eye drops tip: Do not touch eye with bottle tip; wait 5 minutes between different eye drops.',
+          vi: 'Nhỏ mắt an toàn: Không để đầu lọ chạm mắt; chờ 5 phút giữa các loại thuốc nhỏ mắt.',
+          id: 'Tips tetes mata: Jangan sentuhkan ujung botol ke mata; beri jeda 5 menit antar tetes mata.',
+          th: 'วิธีหยอดตา: อย่าให้ปลายขวดโดนตา หากใช้ยาหยอดตาหลายชนิดให้เว้นห่าง 5 นาที'
         }
       },
       {
         key: 'exercise_lab', tier: 'green',
-        re: /規律散步|定期抽血|walk regularly|routine.*blood|đi bộ đều đặn|xét nghiệm.*định kỳ|jalan santai|tes darah rutin|เดินออกกำลังกาย|ตรวจเลือด.*ตามนัด/i,
+        re: /規律散步|定期抽血|固定排便|2–4\s*週才穩定|按時規律吸入|walk regularly|routine.*blood|đi bộ đều đặn|xét nghiệm.*định kỳ|jalan santai|tes darah rutin|เดินออกกำลังกาย|ตรวจเลือด.*ตามนัด/i,
         i18n: {
-          zh: '規律散步與抽血：平常多散步活動，並按時回醫院抽血檢查。',
-          en: 'Walk & lab checks: Take gentle walks and do your routine blood tests.',
-          vi: 'Đi bộ & xét nghiệm: Đi bộ nhẹ nhàng và làm xét nghiệm máu đúng hẹn.',
-          id: 'Jalan santai & cek darah: Rutin jalan santai dan cek darah sesuai jadwal.',
-          th: 'เดินออกกำลังกายและตรวจเลือด: เดินเบา ๆ สม่ำเสมอ และตรวจเลือดตามนัด'
+          zh: '規律活動與按時追蹤：平常多散步活動，持續按時用藥並定期回醫院抽血追蹤。',
+          en: 'Stay active & keep checkups: Take gentle walks, use medicines steadily, and do routine blood tests.',
+          vi: 'Vận động nhẹ & theo dõi: Đi bộ đều đặn, dùng thuốc đều và làm xét nghiệm đúng hẹn.',
+          id: 'Aktif & cek rutin: Rutin jalan santai, pakai obat teratur, dan cek lab sesuai jadwal.',
+          th: 'ออกกำลังกายเบา ๆ และตรวจตามนัด: เดินเบา ๆ สม่ำเสมอ ใช้ยาต่อเนื่อง และตรวจเลือดตามนัด'
         }
       }
     ];
@@ -6401,10 +6666,10 @@ ${JSON.stringify(items)}
 
     function rxClassifyTierFallback(text, catIdx) {
       if (catIdx === 1 || catIdx === 5) return 'red';
+      if (/立刻就醫|立即停藥|請停藥就醫|停藥就醫|停藥回診|立刻回診|馬上就醫|叫救護車|致命|低血糖|出血|黑便|跌倒|昏迷|呼吸困難|肌腱|切勿.*停藥|別自己停|urgent|immediately|stop.*doctor|fatal|bleed|fall/i.test(text)) return 'red';
       if (catIdx === 0) return 'amber';
       if (catIdx === 2 || catIdx === 3) return 'green';
-      if (/立刻就醫|立即停藥|馬上就醫|致命|低血糖|出血|黑便|跌倒|昏迷|呼吸困難|切勿.*停藥|別自己停|urgent|immediately|fatal|bleed|fall/i.test(text)) return 'red';
-      if (/量血壓|量血糖|量脈搏|多喝水|多喝溫|散步|回診|定期|抽血|運動|清潔乾燥|乾爽|記錄|follow-up|monitor|walk|water|record/i.test(text)) return 'green';
+      if (/量血壓|量血糖|量脈搏|多喝水|多喝溫|散步|回診|定期|抽血|運動|清潔乾燥|乾爽|記錄|防曬|follow-up|monitor|walk|water|record/i.test(text)) return 'green';
       return 'amber';
     }
 
@@ -6417,7 +6682,7 @@ ${JSON.stringify(items)}
       const seenThemes = new Set();
       const addItem = (tier, text, themeKey = '') => {
         const clean = cleanMarkdownTablesToProse(text).replace(/\s+/g, ' ').trim();
-        if (!clean) return;
+        if (!clean || rxIsGarbledClinicalTableText(clean)) return;
         if (lang !== 'zh' && /[\u4e00-\u9fff]/.test(clean)) return;
         if (themeKey) {
           if (seenThemes.has(themeKey)) return;
@@ -6468,7 +6733,7 @@ ${JSON.stringify(items)}
         });
       });
 
-      // 2. 進階精簡合併：若同時出現「別喝酒」＋「少喝茶咖啡」，自動合成 1 句更俐落的飲品提醒！
+      // 2. 進階精簡合併：若同時出現「別喝酒」＋「少喝茶咖啡」，自動合成 1 句更俐落的飲品提醒
       const alcIdx = result.findIndex(x => x.themeKey === 'avoid_alcohol');
       const cafIdx = result.findIndex(x => x.themeKey === 'avoid_caffeine');
       if (alcIdx !== -1 && cafIdx !== -1) {
@@ -6482,7 +6747,7 @@ ${JSON.stringify(items)}
         result.splice(cafIdx, 1);
       }
 
-      // 3. 進階精簡合併：若同時出現「量血壓」＋「量血糖／顯影劑」，合併成 1 句日常量測提醒！
+      // 3. 進階精簡合併：若同時出現「量血壓」＋「量血糖／顯影劑」，合併成 1 句日常量測提醒
       const bpIdx = result.findIndex(x => x.themeKey === 'bp_pulse_daily');
       const bgIdx = result.findIndex(x => x.themeKey === 'bg_contrast_care');
       if (bpIdx !== -1 && bgIdx !== -1) {
