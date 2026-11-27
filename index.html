@@ -1783,6 +1783,88 @@
   .rx-page.rx-tight-1 .rx-tier-list { font-size: 13.8px; line-height: 1.4; }
   .rx-page.rx-tight-1 .patient-reminder-box { font-size: 13.8px; line-height: 1.4; padding: 6px 9px; }
 
+
+  /* v46 Mobile Alignment & Prescription OCR Progress Bar */
+  .grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: end; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: end; }
+  .grid-2 > div, .grid-3 > div { min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+  .grid-2 label, .grid-3 label { line-height: 1.35; }
+  .editor-body input[type=text],
+  .editor-body input[type=number],
+  .editor-body input[type=password],
+  .editor-body select {
+    height: 42px;
+    line-height: 1.3;
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .rx-edit, .rx-nonoral-box, .med-editor-card { max-width: 100%; box-sizing: border-box; }
+  .rx-nonoral-box { overflow: hidden; }
+  .rx-nonoral-box label { overflow-wrap: anywhere; line-height: 1.4; }
+  .rx-nonoral-box input { width: 100%; max-width: 100%; box-sizing: border-box; }
+
+  .rx-progress-box {
+    margin-top: 8px;
+    padding: 9px 11px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1.5px solid var(--primary-border);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--primary-dark);
+  }
+  .rx-progress-box.is-error {
+    background: var(--danger-light);
+    border-color: var(--danger-border);
+    color: var(--danger);
+  }
+  .rx-progress-box.is-ok {
+    background: var(--ok-bg);
+    border-color: var(--ok-border);
+    color: var(--ok-text);
+  }
+  .rx-progress-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 7px;
+  }
+
+  @media (max-width: 960px) {
+    .tabs {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 7px !important;
+      padding: 6px 12px 10px !important;
+    }
+    .tabs .tab-btn,
+    .tabs .tab-btn.tab-compact {
+      width: 100% !important;
+      min-height: 40px;
+      padding: 8px 8px !important;
+      font-size: 13.5px !important;
+      justify-content: center;
+      background: var(--card);
+      border: 1.5px solid var(--line) !important;
+      box-shadow: 0 1px 2px rgba(40, 50, 45, .05);
+    }
+    .tabs .tab-btn.active {
+      background: var(--teal) !important;
+      border-color: var(--teal) !important;
+      color: #ffffff !important;
+    }
+    .grid-2 { gap: 8px; }
+    .editor-body input[type=text],
+    .editor-body input[type=number],
+    .editor-body input[type=password],
+    .editor-body select {
+      font-size: 14.5px;
+      padding: 8px 9px;
+      height: 41px;
+    }
+  }
+
   @media print {
     @page { size: A4 portrait; margin: 4mm; }
     .rx-page.a4-page {
@@ -1849,14 +1931,14 @@
             <span><span class="step-num">01</span>病人資料</span>
             <button type="button" class="btn btn-outline btn-sm" onclick="loadDemoPolypharmacy()">📋 載入高齡範例</button>
           </h3>
-          <div class="grid-2" style="margin-bottom:8px;">
+          <div class="grid-2" style="margin-bottom:10px;">
             <div>
-              <label>姓氏／稱呼（自動產生衛教單稱謂）</label>
-              <input type="text" id="p_surname" placeholder="例：陳、林、王阿嬤（選填）" oninput="syncAutoSheetTitle(); renderPreview();" />
+              <label title="輸入姓氏後會自動產生衛教單稱謂">姓氏／稱呼</label>
+              <input type="text" id="p_surname" placeholder="例：陳、林、王阿嬤" oninput="syncAutoSheetTitle(); renderPreview();" />
             </div>
             <div>
               <label>年齡（歲）與性別</label>
-              <div class="grid-2">
+              <div class="grid-2" style="gap:6px;">
                 <input type="number" id="p_age" value="75" min="1" max="120" placeholder="歲" oninput="syncAutoSheetTitle(); runBeersAndRender();" />
                 <select id="p_sex" onchange="syncAutoSheetTitle(); runBeersAndRender();">
                   <option value="any">不限</option>
@@ -1911,15 +1993,18 @@
           <!-- 內嵌可收合處方箋拍照辨識面板 -->
           <div id="rxInlinePanel" class="rx-inline-panel">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <strong style="font-size:12.5px; color:var(--primary-dark);">📷 處方箋拍照自動辨識</strong>
-              <button type="button" class="btn btn-outline btn-sm" style="padding:2px 7px;" onclick="toggleRxPanel(false)">收合</button>
+              <strong style="font-size:13px; color:var(--primary-dark);">📷 處方箋拍照自動辨識</strong>
+              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 9px;" onclick="toggleRxPanel(false)">收合</button>
             </div>
             <div style="font-size:11.5px; background:var(--warn-bg); color:var(--warn-text); border:1px solid var(--warn-border); padding:6px 8px; border-radius:6px; margin-bottom:8px;">
-              ⚠️ 上傳前請遮蔽病人姓名與身分證字號；此功能需於「⚙️ 設定」填入個人 Gemini API Key。
+              ⚠️ 上傳前請遮蔽病人姓名與身分證字號；照片會自動壓縮加速辨識，若雲端壅塞會自動切換備援模型（單次最多等 15 秒，可隨時取消改手打）。
             </div>
-            <input type="file" id="rxImageInput" accept="image/*" style="font-size:12px; margin-bottom:8px;" />
-            <button type="button" class="btn btn-primary btn-block" onclick="analyzePrescription()">🤖 辨識處方箋並比對資料庫</button>
-            <div id="rxStatus" style="font-size:12px; color:var(--primary); margin-top:8px;"></div>
+            <input type="file" id="rxImageInput" accept="image/*" style="font-size:12.5px; margin-bottom:8px;" />
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" id="btnAnalyzeRx" class="btn btn-primary" style="flex:1;" onclick="analyzePrescription()">🤖 辨識處方箋並比對資料庫</button>
+              <button type="button" id="btnCancelRx" class="btn btn-danger" style="display:none;" onclick="cancelPrescriptionAnalysis()">⏹️ 取消，改手打</button>
+            </div>
+            <div id="rxStatus" style="margin-top:8px;"></div>
             <div id="rxResults" style="margin-top:8px;"></div>
           </div>
         </div>
@@ -1981,11 +2066,11 @@
           </h3>
           <div class="grid-2" style="margin-bottom:8px;">
             <div>
-              <label>單張主標題（可自由修改）</label>
+              <label>單張主標題</label>
               <input type="text" id="f_sheetTitle" value="我的安心用藥提醒單" oninput="onManualTitleInput()" />
             </div>
             <div>
-              <label>右上角藥局／機構名稱</label>
+              <label>藥局／機構名稱</label>
               <input type="text" id="f_orgName" value="藥劑部高齡用藥照護" oninput="renderPreview()" />
             </div>
           </div>
@@ -2056,11 +2141,22 @@
           </p>
           <label>Gemini API Key</label>
           <input type="password" id="apiKeyInput" placeholder="貼上 AIza... 金鑰" onchange="saveApiKey()" />
-          <label>模型名稱</label>
-          <input type="text" id="modelNameInput" value="gemini-2.5-flash" onchange="saveApiKey()" />
-          <div style="margin-top:8px;">
-            <button type="button" class="btn btn-outline btn-sm" onclick="saveApiKey(); alert('已儲存 API 設定！');">💾 儲存設定</button>
+          <label>模型選擇（建議維持「自動備援」，遇流量高或舊模型停用會自動切換）</label>
+          <select id="modelPresetSelect" onchange="onModelPresetChange()">
+            <option value="auto">✨ 自動選擇最快可用模型（推薦・自動備援）</option>
+            <option value="gemini-2.5-flash">gemini-2.5-flash（標準均衡）</option>
+            <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite（輕量快速・較不塞車）</option>
+            <option value="custom">手動輸入自訂模型名稱...</option>
+          </select>
+          <div id="customModelWrap" style="display:none; margin-top:6px;">
+            <label>自訂模型名稱（無效或已停用時仍會自動偵測備援）</label>
+            <input type="text" id="modelNameInput" value="auto" placeholder="例如 gemini-2.5-flash" onchange="saveApiKey()" />
           </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="saveApiKey(); alert('已儲存 API 設定！');">💾 儲存設定</button>
+            <button type="button" id="btnTestGemini" class="btn btn-primary btn-sm" onclick="testAndDiscoverGeminiModels()">🔍 測試連線並偵測可用模型</button>
+          </div>
+          <div id="apiTestStatus" style="font-size:12px; margin-top:8px; line-height:1.5;"></div>
         </div>
 
         <div class="section-box">
@@ -3938,7 +4034,7 @@
       const savedFont = localStorage.getItem('elder_sheet_font_size');
       const savedWidthPct = parseFloat(localStorage.getItem('elder_editor_width_pct'));
       if (savedKey) document.getElementById('apiKeyInput').value = savedKey;
-      if (savedModel) document.getElementById('modelNameInput').value = savedModel;
+      initModelSelectorUI(savedModel || 'auto');
       if (savedFont) setSheetFontSize(savedFont, false);
       if (!isNaN(savedWidthPct) && savedWidthPct >= 36 && savedWidthPct <= 70 && window.innerWidth > 960) {
         document.getElementById('editorPanel').style.width = savedWidthPct + 'vw';
@@ -4052,9 +4148,47 @@
       if (bodyEl) bodyEl.scrollTop = 0;
     }
 
+    function initModelSelectorUI(val) {
+      const clean = String(val || 'auto').trim() || 'auto';
+      const sel = document.getElementById('modelPresetSelect');
+      const inp = document.getElementById('modelNameInput');
+      const wrap = document.getElementById('customModelWrap');
+      if (!sel || !inp) return;
+      const presetVals = Array.from(sel.options).map(o => o.value).filter(v => v !== 'custom');
+      if (presetVals.includes(clean)) {
+        sel.value = clean;
+        inp.value = clean;
+        if (wrap) wrap.style.display = 'none';
+      } else {
+        sel.value = 'custom';
+        inp.value = clean;
+        if (wrap) wrap.style.display = 'block';
+      }
+    }
+
+    function onModelPresetChange() {
+      const sel = document.getElementById('modelPresetSelect');
+      const inp = document.getElementById('modelNameInput');
+      const wrap = document.getElementById('customModelWrap');
+      if (!sel || !inp) return;
+      if (sel.value === 'custom') {
+        if (wrap) wrap.style.display = 'block';
+        if (inp.value === 'auto') inp.value = 'gemini-2.5-flash';
+        inp.focus();
+      } else {
+        if (wrap) wrap.style.display = 'none';
+        inp.value = sel.value;
+      }
+      saveApiKey();
+    }
+
     function saveApiKey() {
       localStorage.setItem('gemini_api_key', document.getElementById('apiKeyInput').value.trim());
-      localStorage.setItem('gemini_model_name', document.getElementById('modelNameInput').value.trim() || 'gemini-2.5-flash');
+      const sel = document.getElementById('modelPresetSelect');
+      const inp = document.getElementById('modelNameInput');
+      const val = (sel && sel.value !== 'custom') ? sel.value : (inp?.value.trim() || 'auto');
+      if (inp) inp.value = val;
+      localStorage.setItem('gemini_model_name', val);
     }
 
     function fetchWithTimeout(url, ms = 15000) {
@@ -5027,30 +5161,285 @@
     }
 
     // =========================================================================
-    // 5. Gemini API（處方箋拍照辨識 ＋ 一鍵 AI 轉長輩白話）
+    // 5. Gemini API（v46 臨床級防呆引擎：自動偵測現役可用模型、503/404 智慧切換備援、15 秒逾時防卡死、支援隨時取消）
     // =========================================================================
-    async function callGeminiAPI(parts) {
+    const GEMINI_BASELINE_MODELS = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    let geminiDiscoveredModels = [];
+    let geminiLastWorkingModel = '';
+    const geminiDeadModels = new Set();
+
+    function extractJsonFromModelText(rawText) {
+      let t = String(rawText || '').trim();
+      if (!t) return {};
+      // 去除模型偶爾包覆的 ```json ... ``` 標記
+      t = t.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+      try {
+        return JSON.parse(t);
+      } catch (_) {
+        // 嘗試擷取最外層 JSON 陣列或物件
+        const arrM = t.match(/\[[\s\S]*\]/);
+        if (arrM) { try { return JSON.parse(arrM[0]); } catch (__) {} }
+        const objM = t.match(/\{[\s\S]*\}/);
+        if (objM) { try { return JSON.parse(objM[0]); } catch (__) {} }
+        throw new Error('AI 回傳格式異常，請再試一次。');
+      }
+    }
+
+    function rankGeminiFlashModels(modelNames) {
+      const scoreModel = (name) => {
+        const s = name.toLowerCase();
+        // 排除不適合處方箋文字/JSON辨識的特化型號
+        if (/embedding|aqa|imagen|veo|tts|audio|live|robotics|computer-use|learnlm|gemma|bison|gecko|nano|vision-only|deep-research/.test(s)) return -1;
+        if (!/gemini/.test(s)) return -1;
+        let score = 0;
+        // 偏好 Flash（速度最快、處方箋 OCR 最穩）
+        if (/flash-lite/.test(s)) score += 90;
+        else if (/flash/.test(s)) score += 100;
+        else if (/pro/.test(s)) score += 45;
+        else score += 20;
+        // 版本越新越優先（例如 2.5 / 3.0 優於 2.0 / 1.5）
+        const verM = s.match(/gemini-(\d+(?:\.\d+)?)/);
+        if (verM) score += parseFloat(verM[1]) * 18;
+        // 正式版優先於 preview / exp / 帶日期快照
+        if (/exp|experimental/.test(s)) score -= 18;
+        if (/preview/.test(s)) score -= 8;
+        if (/-\d{3,}$/.test(s)) score -= 5;
+        return score;
+      };
+      return Array.from(new Set(modelNames))
+        .map(n => ({ n, sc: scoreModel(n) }))
+        .filter(x => x.sc > 0 && !geminiDeadModels.has(x.n))
+        .sort((a, b) => b.sc - a.sc)
+        .map(x => x.n);
+    }
+
+    async function discoverAvailableFlashModels(apiKey, forceRefresh = false) {
+      if (geminiDiscoveredModels.length && !forceRefresh) return geminiDiscoveredModels;
+      try {
+        const res = await fetchWithTimeout(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`, 7000);
+        if (!res.ok) return [];
+        const data = await res.json();
+        const rawNames = (data.models || [])
+          .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
+          .map(m => String(m.name || '').replace(/^models\//, '').trim())
+          .filter(Boolean);
+        geminiDiscoveredModels = rankGeminiFlashModels(rawNames);
+        return geminiDiscoveredModels;
+      } catch (_) {
+        return [];
+      }
+    }
+
+    async function testAndDiscoverGeminiModels() {
       const apiKey = document.getElementById('apiKeyInput').value.trim();
-      const model = document.getElementById('modelNameInput').value.trim() || 'gemini-2.5-flash';
+      const st = document.getElementById('apiTestStatus');
+      const btn = document.getElementById('btnTestGemini');
+      if (!apiKey) {
+        st.style.color = 'var(--danger)';
+        st.textContent = '⚠️ 請先貼上 Gemini API Key。';
+        return;
+      }
+      saveApiKey();
+      btn.disabled = true;
+      st.style.color = 'var(--primary)';
+      st.textContent = '⏳ 正在向 Google 查詢您金鑰目前可用的現役模型並實測回應速度...';
+      try {
+        geminiDeadModels.clear();
+        const live = await discoverAvailableFlashModels(apiKey, true);
+        if (!live.length) {
+          st.style.color = 'var(--danger)';
+          st.textContent = '❌ 無法取得可用模型清單，請確認 API Key 是否正確或網路連線是否正常。';
+          return;
+        }
+        // 更新下拉選單，把偵測到的前 4 個現役模型放進去方便選擇
+        const sel = document.getElementById('modelPresetSelect');
+        if (sel) {
+          const curVal = sel.value;
+          const opts = [
+            `<option value="auto">✨ 自動選擇最快可用模型（推薦・自動備援）</option>`,
+            ...live.slice(0, 5).map(m => `<option value="${escapeAttr(m)}">${escapeHtml(m)}（現役可用）</option>`),
+            `<option value="custom">手動輸入自訂模型名稱...</option>`
+          ];
+          sel.innerHTML = opts.join('');
+          const allVals = Array.from(sel.options).map(o => o.value);
+          sel.value = allVals.includes(curVal) ? curVal : 'auto';
+          if (sel.value !== 'custom') document.getElementById('modelNameInput').value = sel.value;
+        }
+        // 實測一筆極輕量 ping
+        const t0 = performance.now();
+        await callGeminiAPI([{ text: 'Reply JSON: {"ok": true}' }], { timeoutMs: 12000, totalBudgetMs: 22000 });
+        const sec = ((performance.now() - t0) / 1000).toFixed(1);
+        st.style.color = 'var(--ok-text)';
+        st.innerHTML = `✅ 連線實測成功（使用 <strong>${escapeHtml(geminiLastWorkingModel || live[0])}</strong>，耗時 ${sec} 秒）！<br>偵測到可用模型：<code>${escapeHtml(live.slice(0, 5).join('、'))}</code>`;
+      } catch (e) {
+        st.style.color = 'var(--danger)';
+        st.textContent = '❌ 測試失敗：' + e.message;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function callGeminiAPI(parts, opts = {}) {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      const configuredModel = (document.getElementById('modelNameInput')?.value || 'auto').trim() || 'auto';
       if (!apiKey) {
         alert('請先到「⚙️ 設定」填入你的 Gemini API Key！');
         return null;
       }
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts }],
-          generationConfig: { responseMimeType: 'application/json' }
-        })
-      });
-      if (!res.ok) {
-        const errTxt = await res.text();
-        throw new Error(`API 錯誤 (${res.status}): ${errTxt.slice(0, 180)}`);
+
+      const timeoutMs = opts.timeoutMs || 15000;
+      const totalBudgetMs = opts.totalBudgetMs || 32000;
+      const onProgress = typeof opts.onProgress === 'function' ? opts.onProgress : () => {};
+      const externalSignal = opts.signal || null;
+      const startedAt = Date.now();
+
+      // 建立初始候選模型清單（自動過濾本次已確認停用 404 的模型）
+      const queue = [];
+      const pushModel = (m) => {
+        if (!m || m === 'auto' || m === 'custom') return;
+        if (geminiDeadModels.has(m) || queue.includes(m)) return;
+        queue.push(m);
+      };
+
+      if (configuredModel !== 'auto') pushModel(configuredModel);
+      if (geminiLastWorkingModel) pushModel(geminiLastWorkingModel);
+      GEMINI_BASELINE_MODELS.forEach(pushModel);
+      geminiDiscoveredModels.slice(0, 4).forEach(pushModel);
+
+      let discoveredInThisCall = false;
+      let lastErrMsg = '';
+      let hadOverload = false;
+      let hadTimeout = false;
+
+      const tryFetchModel = async (modelName, perAttemptTimeout) => {
+        const controller = new AbortController();
+        const onExtAbort = () => controller.abort('USER_CANCELLED');
+        if (externalSignal) {
+          if (externalSignal.aborted) throw new Error('USER_CANCELLED');
+          externalSignal.addEventListener('abort', onExtAbort, { once: true });
+        }
+        const timer = setTimeout(() => controller.abort('TIMEOUT'), perAttemptTimeout);
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({
+              contents: [{ parts }],
+              generationConfig: { responseMimeType: 'application/json', temperature: 0.1 }
+            })
+          });
+          if (!res.ok) {
+            const errTxt = await res.text();
+            const err = new Error(errTxt.slice(0, 220));
+            err.httpStatus = res.status;
+            throw err;
+          }
+          const data = await res.json();
+          const textOut = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          if (!textOut) throw new Error('模型回傳空白內容');
+          return extractJsonFromModelText(textOut);
+        } catch (err) {
+          if (externalSignal && externalSignal.aborted) {
+            const cancelErr = new Error('USER_CANCELLED');
+            cancelErr.isCancelled = true;
+            throw cancelErr;
+          }
+          if (err.name === 'AbortError' || controller.signal.aborted) {
+            const toErr = new Error('TIMEOUT');
+            toErr.isTimeout = true;
+            throw toErr;
+          }
+          throw err;
+        } finally {
+          clearTimeout(timer);
+          if (externalSignal) externalSignal.removeEventListener('abort', onExtAbort);
+        }
+      };
+
+      let idx = 0;
+      while (idx < queue.length || !discoveredInThisCall) {
+        if (externalSignal && externalSignal.aborted) {
+          const ce = new Error('USER_CANCELLED');
+          ce.isCancelled = true;
+          throw ce;
+        }
+
+        // 若原清單試完還沒成功，即時向 Google 查詢這個 Key 當下真的活著的 Flash 模型清單接手！
+        if (idx >= queue.length) {
+          discoveredInThisCall = true;
+          const remaining = totalBudgetMs - (Date.now() - startedAt);
+          if (remaining < 4500) break;
+          onProgress('🔎 正在自動查詢 Google 目前可用的備援模型...');
+          const live = await discoverAvailableFlashModels(apiKey, true);
+          live.slice(0, 4).forEach(pushModel);
+          if (idx >= queue.length) break;
+        }
+
+        const remainingBudget = totalBudgetMs - (Date.now() - startedAt);
+        if (remainingBudget < 3500) {
+          hadTimeout = true;
+          break;
+        }
+
+        const modelName = queue[idx++];
+        const perTimeout = Math.min(timeoutMs, Math.max(5000, remainingBudget));
+        onProgress(`🤖 正在連線辨識（使用 ${modelName}）...`);
+
+        try {
+          const parsed = await tryFetchModel(modelName, perTimeout);
+          geminiLastWorkingModel = modelName;
+          return parsed;
+        } catch (err) {
+          if (err.isCancelled || err.message === 'USER_CANCELLED') throw err;
+
+          const status = err.httpStatus || 0;
+          const msgLower = String(err.message || '').toLowerCase();
+
+          // 金鑰無效／權限錯誤：不需重試，直接明確告知
+          if (status === 401 || status === 403 || /api key not valid|permission_denied/i.test(msgLower)) {
+            throw new Error('API Key 無效或權限不足，請至「⚙️ 設定」檢查您的 Gemini API Key。');
+          }
+
+          // 模型已停用 / 不存在 (404 / 400 model not found / retired)
+          if (status === 404 || /not found|no longer available|deprecated|retired|unsupported/i.test(msgLower)) {
+            geminiDeadModels.add(modelName);
+            lastErrMsg = `模型 ${modelName} 已停用或不支援`;
+            onProgress(`⚠️ ${modelName} 已停止服務，自動切換現役模型中...`);
+            if (!discoveredInThisCall) {
+              discoveredInThisCall = true;
+              const live = await discoverAvailableFlashModels(apiKey, true);
+              live.slice(0, 4).forEach(pushModel);
+            }
+            continue;
+          }
+
+          // 503 流量壅塞 / 429 限流 / 500 暫時錯誤
+          if (status === 503 || status === 429 || status === 500 || /high demand|unavailable|overloaded|resource_exhausted/i.test(msgLower)) {
+            hadOverload = true;
+            lastErrMsg = `${modelName} 目前流量過高 (HTTP ${status || 503})`;
+            onProgress(`⚠️ ${modelName} 目前尖峰壅塞，正自動切換下一個備援模型...`);
+            await new Promise(r => setTimeout(r, 900));
+            continue;
+          }
+
+          // 單次逾時：立刻中斷換下一個輕量模型
+          if (err.isTimeout || err.message === 'TIMEOUT') {
+            hadTimeout = true;
+            lastErrMsg = `${modelName} 回應超過 ${Math.round(perTimeout / 1000)} 秒`;
+            onProgress(`⏱️ ${modelName} 回應偏慢，自動改試更快的備援模型...`);
+            continue;
+          }
+
+          lastErrMsg = err.message || '連線失敗';
+        }
       }
-      const data = await res.json();
-      return JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text || '{}');
+
+      if (hadOverload || hadTimeout) {
+        throw new Error(`雲端 AI 目前尖峰壅塞或回應超時（${lastErrMsg}），建議直接於上方搜尋框手動輸入藥名／健保碼會更快！`);
+      }
+      throw new Error(lastErrMsg || '目前無法連線至 Gemini 服務，請稍後再試或改用手動搜尋。');
     }
 
     // 單一藥品：強制僅依「官方仿單原文」生成白話衛教（需藥師核對接地）
@@ -5211,37 +5600,174 @@ ${JSON.stringify(items)}
       }
     }
 
+    let rxActiveAbortController = null;
+    let rxTimerInterval = null;
+
+    // 處方箋照片前端自動壓縮（將手機 4–12 MB 原圖壓至 ~200 KB，大幅減少 4G 上傳卡死與 AI 逾時）
+    function compressRxImage(file, maxSide = 1400, quality = 0.82) {
+      return new Promise((resolve) => {
+        const fallback = () => {
+          const r = new FileReader();
+          r.onload = () => resolve({
+            base64: String(r.result || '').split(',')[1] || '',
+            mimeType: file.type || 'image/jpeg',
+            origKB: Math.round(file.size / 1024),
+            newKB: Math.round(file.size / 1024)
+          });
+          r.readAsDataURL(file);
+        };
+
+        if (!file || !/^image\//i.test(file.type || '')) { fallback(); return; }
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          try {
+            let w = img.naturalWidth || img.width;
+            let h = img.naturalHeight || img.height;
+            if (Math.max(w, h) > maxSide) {
+              const ratio = maxSide / Math.max(w, h);
+              w = Math.max(1, Math.round(w * ratio));
+              h = Math.max(1, Math.round(h * ratio));
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, w, h);
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+            const base64 = dataUrl.split(',')[1] || '';
+            const newKB = Math.max(1, Math.round((base64.length * 3) / 4 / 1024));
+            URL.revokeObjectURL(url);
+            resolve({
+              base64,
+              mimeType: 'image/jpeg',
+              origKB: Math.max(1, Math.round(file.size / 1024)),
+              newKB
+            });
+          } catch (_) {
+            URL.revokeObjectURL(url);
+            fallback();
+          }
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); fallback(); };
+        img.src = url;
+      });
+    }
+
+    function stopRxTimer() {
+      if (rxTimerInterval) {
+        clearInterval(rxTimerInterval);
+        rxTimerInterval = null;
+      }
+      const btnRun = document.getElementById('btnAnalyzeRx');
+      const btnCancel = document.getElementById('btnCancelRx');
+      if (btnRun) btnRun.disabled = false;
+      if (btnCancel) btnCancel.style.display = 'none';
+    }
+
+    function cancelPrescriptionAnalysis() {
+      if (rxActiveAbortController) {
+        rxActiveAbortController.abort('USER_CANCELLED');
+        rxActiveAbortController = null;
+      }
+      stopRxTimer();
+      const status = document.getElementById('rxStatus');
+      if (status) {
+        status.innerHTML = `<div class="rx-progress-box">⏹️ 已取消辨識，已為您切換回手動搜尋輸入。</div>`;
+      }
+      focusManualDrugSearch();
+    }
+
+    function focusManualDrugSearch() {
+      toggleRxPanel(false);
+      const inp = document.getElementById('searchInput');
+      if (inp) {
+        inp.focus();
+        inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
     async function analyzePrescription() {
       const fileInput = document.getElementById('rxImageInput');
       if (!fileInput.files || !fileInput.files[0]) { alert('請先選擇處方箋照片！'); return; }
       const status = document.getElementById('rxStatus');
       const box = document.getElementById('rxResults');
-      status.textContent = '⏳ 正在辨識處方箋全部藥品...';
+      const btnRun = document.getElementById('btnAnalyzeRx');
+      const btnCancel = document.getElementById('btnCancelRx');
+
+      // 若先前仍有未結束的請求，先中斷
+      if (rxActiveAbortController) rxActiveAbortController.abort('USER_CANCELLED');
+      rxActiveAbortController = new AbortController();
       box.innerHTML = '';
+      if (btnRun) btnRun.disabled = true;
+      if (btnCancel) btnCancel.style.display = 'inline-flex';
+
+      const startTs = Date.now();
+      let stageMsg = '⏳ 正在壓縮最佳化處方箋照片...';
+      const renderProgress = () => {
+        const sec = Math.floor((Date.now() - startTs) / 1000);
+        status.innerHTML = `
+          <div class="rx-progress-box">
+            <div><strong>${escapeHtml(stageMsg)}</strong></div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">已等待 ${sec} 秒（系統設有自動超時上限，最久約 30 秒，不等可直接點「取消，改手打」）</div>
+          </div>
+        `;
+      };
+      renderProgress();
+      rxTimerInterval = setInterval(renderProgress, 1000);
 
       try {
         const file = fileInput.files[0];
-        const base64 = await new Promise((resolve, reject) => {
-          const r = new FileReader();
-          r.onload = () => resolve(r.result.split(',')[1]);
-          r.onerror = reject;
-          r.readAsDataURL(file);
-        });
+        const imgInfo = await compressRxImage(file, 1400, 0.82);
+        if (rxActiveAbortController.signal.aborted) return;
+
+        const sizeNote = imgInfo.origKB > imgInfo.newKB + 30
+          ? `（已壓縮 ${imgInfo.origKB} KB → ${imgInfo.newKB} KB）`
+          : '';
+        stageMsg = `📤 照片準備完成${sizeNote}，正在呼叫 AI 辨識...`;
+        renderProgress();
+
         const prompt = `你是一位台灣藥師，請辨識這張處方箋上所有藥品（含健保碼若有印出），並將醫囑頻次（QD/BID/TID/HS/AC/PC）翻成台灣繁體中文高齡白話用法。
-回傳 JSON 陣列：[{"drug_name":"藥名","nhi_code":"10碼健保碼或空字串","dosage_text":"每天早晚飯後各吃1顆"}]`;
+回傳純 JSON 陣列：[{"drug_name":"藥名","nhi_code":"10碼健保碼或空字串","dosage_text":"每天早晚飯後各吃1顆"}]`;
+
         const items = await callGeminiAPI([
           { text: prompt },
-          { inlineData: { mimeType: file.type, data: base64 } }
-        ]);
+          { inlineData: { mimeType: imgInfo.mimeType, data: imgInfo.base64 } }
+        ], {
+          timeoutMs: 15000,
+          totalBudgetMs: 32000,
+          signal: rxActiveAbortController.signal,
+          onProgress: (msg) => { stageMsg = msg; renderProgress(); }
+        });
+
+        stopRxTimer();
+        rxActiveAbortController = null;
+        if (!items) { status.innerHTML = ''; return; }
+
+        const totalSec = ((Date.now() - startTs) / 1000).toFixed(1);
         if (!Array.isArray(items) || !items.length) {
-          status.textContent = '⚠️ 未辨識到藥品。';
+          status.innerHTML = `
+            <div class="rx-progress-box is-error">
+              <div>⚠️ 未辨識到藥品（可能是照片較模糊或光線不足）。</div>
+              <div class="rx-progress-actions">
+                <button type="button" class="btn btn-outline btn-sm" onclick="analyzePrescription()">🔄 重新辨識</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="focusManualDrugSearch()">⌨️ 改用手動搜尋</button>
+              </div>
+            </div>
+          `;
           return;
         }
         window._lastRxParsed = items.map(it => {
           const matched = findBestMatch(it.drug_name, it.nhi_code);
           return { ...it, matched };
         });
-        status.textContent = `✅ 辨識到 ${items.length} 種藥品：`;
+        status.innerHTML = `
+          <div class="rx-progress-box is-ok">
+            ✅ 辨識完成（共 ${items.length} 種藥，使用 <strong>${escapeHtml(geminiLastWorkingModel || 'Gemini')}</strong>，耗時 ${totalSec} 秒）
+          </div>
+        `;
         box.innerHTML = `
           <button type="button" class="btn btn-primary btn-block" style="margin-bottom:8px;" onclick="addAllRxToMedList()">＋ 全部 ${items.length} 種藥一次加入清單並執行 Beers 檢核</button>
           ${window._lastRxParsed.map((it, idx) => `
@@ -5255,7 +5781,18 @@ ${JSON.stringify(items)}
           `).join('')}
         `;
       } catch (err) {
-        status.textContent = '❌ 辨識失敗：' + err.message;
+        stopRxTimer();
+        rxActiveAbortController = null;
+        if (err && (err.isCancelled || err.message === 'USER_CANCELLED')) return;
+        status.innerHTML = `
+          <div class="rx-progress-box is-error">
+            <div>❌ ${escapeHtml(err.message || '辨識失敗')}</div>
+            <div class="rx-progress-actions">
+              <button type="button" class="btn btn-outline btn-sm" onclick="analyzePrescription()">🔄 再試一次</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="focusManualDrugSearch()">⌨️ 立刻改用手動搜尋</button>
+            </div>
+          </div>
+        `;
       }
     }
 
@@ -5351,7 +5888,7 @@ ${JSON.stringify(items)}
       const drug = document.getElementById('rep_drug').value.trim() || '（未指定）';
       const desc = document.getElementById('rep_desc').value.trim();
       const contact = document.getElementById('rep_contact').value.trim() || '（未填寫）';
-      const env = `CareRx-v45 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
+      const env = `CareRx-v46 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
       return { type, drug, desc, contact, env, plainText: `【類型】${type}\n【藥品】${drug}\n【描述】${desc}\n【聯絡】${contact}\n【環境】${env}` };
     }
 
