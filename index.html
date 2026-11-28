@@ -2154,7 +2154,7 @@
 
             <div class="rx-mode-tabs" role="tablist">
               <button type="button" class="rx-mode-tab active" data-rxmode="qr" onclick="switchRxInputMode('qr', this)">📱 健保 QR 掃碼</button>
-              <button type="button" class="rx-mode-tab" data-rxmode="crop" onclick="switchRxInputMode('crop', this)">✂️ 框選離線辨識</button>
+              <button type="button" class="rx-mode-tab" data-rxmode="crop" onclick="switchRxInputMode('crop', this)">🔍 框選PaddleOCR</button>
               <button type="button" class="rx-mode-tab" data-rxmode="paste" onclick="switchRxInputMode('paste', this)">📋 批次貼上</button>
               <button type="button" class="rx-mode-tab" data-rxmode="ai" onclick="switchRxInputMode('ai', this)">🤖 AI 拍照(選用)</button>
             </div>
@@ -2188,15 +2188,16 @@
               </div>
             </div>
 
-            <!-- 模式 2：無 QR Code 處方 → 拍照「手動框選藥品區」＋ 純前端離線英文 OCR（Tesseract.js eng） -->
+            <!-- 模式 2：無 QR Code 處方 → 拍照「手動框選藥品區」＋ 瀏覽器內建 PaddleOCR（PP-OCRv4 ONNX，跨電腦手機免裝軟體） -->
             <div id="rxPane_crop" class="rx-mode-pane">
               <div style="font-size:11.5px; background:var(--ok-bg); color:var(--ok-text); border:1px solid var(--ok-border); padding:6px 9px; border-radius:8px; margin-bottom:8px; line-height:1.45;">
-                ✅ <strong>免 API Key、無每日 20 次上限、100% 在手機／電腦本機離線辨識</strong>。專為無 QR Code 的門診批價處方單設計：只框選「藥品明細表格」，自動避開上方過敏紀錄與下方非藥品項目！
+                ✅ <strong>0 元、無次數上限、換任何電腦或手機開網頁就能用</strong>（瀏覽器內建 <strong>PaddleOCR PP-OCRv4 深度學習</strong>，抗陰影＋座標還原表格，圖片 100% 不上傳雲端）。
               </div>
+
               <input type="file" id="rxCropFileInput" accept="image/*" style="font-size:12.5px; margin-bottom:6px;" onchange="loadCropperImage(this)" />
               <div id="rxCropWorkspace" style="display:none;">
                 <div style="font-size:11.5px; color:var(--ink-2); margin-bottom:4px;">
-                  👆 拖曳藍綠色方框（或拖曳四個角落）只框住「藥品名稱～途徑」表格區：
+                  👆 拖曳藍綠色方框（或拖曳四個角落）只框住「藥品明細列」，避開病人姓名與表頭：
                 </div>
                 <div class="rx-crop-stage">
                   <canvas id="rxCropCanvas" class="rx-crop-canvas"></canvas>
@@ -2206,25 +2207,30 @@
                   <button type="button" class="btn btn-outline btn-sm" onclick="resetCropRect('full')">🖼️ 選取全圖</button>
                   <button type="button" class="btn btn-outline btn-sm" onclick="rotateCropImage90()">🔄 旋轉 90°</button>
                 </div>
-                <div class="rx-ocr-lang-row" title="若處方箋或藥袋有中文藥名／中文用法請選中英雙語；全英文醫院批價單可選純英文極速">
-                  <label class="rx-ocr-lang-opt">
-                    <input type="radio" name="rxOcrLang" value="chi_tra+eng" checked />
-                    <span>🇹🇼 中英雙語（可讀中文）</span>
-                  </label>
-                  <label class="rx-ocr-lang-opt">
-                    <input type="radio" name="rxOcrLang" value="eng" />
-                    <span>⚡ 純英文極速（1秒）</span>
-                  </label>
-                </div>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                  <button type="button" id="btnRunOfflineOcr" class="btn btn-primary" style="flex:1;" onclick="runOfflineCroppedOcr()">⚡ 離線辨識框選藥品（免 API）</button>
+                  <button type="button" id="btnRunOfflineOcr" class="btn btn-primary" style="flex:1;" onclick="runBrowserPaddleOcrCropped()">🔍 瀏覽器離線 PaddleOCR 辨識（免裝軟體）</button>
                   <button type="button" id="btnCancelOfflineOcr" class="btn btn-danger" style="display:none;" onclick="cancelOfflineOcr()">⏹️ 取消</button>
                 </div>
               </div>
+
               <details id="rxRawOcrDetails" style="display:none; margin-top:8px; background:#fff; border:1px solid var(--line); border-radius:8px; padding:6px 8px;">
-                <summary style="cursor:pointer; font-size:12px; font-weight:700; color:var(--primary-dark);">📝 檢視／微調離線辨識原始文字</summary>
+                <summary style="cursor:pointer; font-size:12px; font-weight:700; color:var(--primary-dark);">📝 檢視／微調 PaddleOCR 座標還原文字</summary>
                 <textarea id="rxRawOcrText" style="min-height:86px; font-size:12px; font-family:monospace; margin-top:6px;"></textarea>
                 <button type="button" class="btn btn-outline btn-sm" style="margin-top:5px;" onclick="reparseFromEditedOcrText()">🔄 依修改後文字重新比對</button>
+              </details>
+
+              <details style="margin-top:8px; background:#ffffff; border:1px solid var(--line); border-radius:9px; padding:6px 9px;">
+                <summary style="cursor:pointer; font-size:11.5px; font-weight:700; color:var(--ink-2); display:flex; align-items:center; justify-content:space-between; gap:6px;">
+                  <span>🖥️ 進階選用：改連藥局電腦 RapidOCR 伺服器（約 1 秒極速）</span>
+                  <span id="localOcrConnBadge" class="src-badge yellow">未啟用</span>
+                </summary>
+                <div style="margin-top:7px;">
+                  <div style="display:flex; gap:6px; align-items:stretch; margin-bottom:6px;">
+                    <input type="text" id="localOcrUrlInput" placeholder="http://127.0.0.1:8765 或 https://xxx.trycloudflare.com" style="font-size:12px; height:35px;" onchange="saveLocalOcrUrl()" />
+                    <button type="button" id="btnTestLocalOcr" class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="testLocalOcrServer()">🔌 測試</button>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm btn-block" onclick="runRapidOcrCropped()">⚡ 改傳送框選區至電腦 RapidOCR 辨識</button>
+                </div>
               </details>
             </div>
 
@@ -2380,6 +2386,34 @@
 
       <!-- Tab Settings: 系統與 API 設定 -->
       <div id="tab-settings" class="tab-content">
+        <div class="section-box">
+          <h3>🔍 瀏覽器內建 PaddleOCR（PP-OCRv4 ONNX）離線模型狀態</h3>
+          <p style="font-size:12px; color:var(--text-muted); margin:0 0 8px 0;">
+            只需將 <code>models/</code>（內含 <code>det.onnx</code>、<code>rec.onnx</code>、<code>keys.txt</code>，共約 15 MB）推送到 GitHub 專案一次，之後<strong>任何電腦與手機</strong>開啟網址即自動載入並離線快取，完全免裝軟體。
+          </p>
+          <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:8px;">
+            <span id="paddleModelBadge" class="src-badge yellow">尚未載入</span>
+            <button type="button" class="btn btn-primary btn-sm" onclick="checkPaddleOcrModelsHealth()">🔍 檢查並預載網站模型</button>
+          </div>
+          <div id="paddleModelStatus" style="font-size:12px; margin-bottom:8px; line-height:1.45;"></div>
+          <label>本機離線測試（選用）：若以 <code>file://</code> 開啟，可一次多選 <code>det.onnx</code> + <code>rec.onnx</code> + <code>keys.txt</code></label>
+          <input type="file" accept=".onnx,.txt" multiple onchange="loadLocalPaddleModelFiles(event)" style="font-size:12px;" />
+        </div>
+
+        <div class="section-box">
+          <h3>⚡ 進階選用：藥局電腦本機 RapidOCR 伺服器設定</h3>
+          <p style="font-size:12px; color:var(--text-muted); margin:0 0 8px 0;">
+            在藥局 Windows 電腦啟動 <code>CareRx_LocalOCR</code> 後，同一台電腦預設使用 <code>http://127.0.0.1:8765</code>；若用手機拍照連線，請執行 <code>3_啟動手機連線OCR(免費HTTPS).bat</code> 並掃描電腦畫面的配對 QR Code。
+          </p>
+          <label>RapidOCR 伺服器網址</label>
+          <input type="text" id="settingsLocalOcrUrl" placeholder="http://127.0.0.1:8765 或 https://xxx.trycloudflare.com" onchange="syncLocalOcrUrlFromSettings()" />
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="syncLocalOcrUrlFromSettings(); alert('已儲存本機 RapidOCR 網址！');">💾 儲存網址</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="syncLocalOcrUrlFromSettings(); testLocalOcrServer(true);">🔌 測試 RapidOCR 連線</button>
+          </div>
+          <div id="settingsLocalOcrStatus" style="font-size:12px; margin-top:6px;"></div>
+        </div>
+
         <div class="section-box">
           <h3>Gemini API 設定（處方箋拍照辨識／AI 白話改寫用）</h3>
           <p style="font-size:12px; color:var(--text-muted); margin:0 0 8px 0;">
@@ -4282,6 +4316,7 @@
       if (savedKey) document.getElementById('apiKeyInput').value = savedKey;
       initModelSelectorUI(savedModel || 'auto');
       if (savedFont) setSheetFontSize(savedFont, false);
+      initLocalOcrFromUrlOrStorage();
       if (!isNaN(savedWidthPct) && savedWidthPct >= 36 && savedWidthPct <= 70 && window.innerWidth > 960) {
         document.getElementById('editorPanel').style.width = savedWidthPct + 'vw';
       }
@@ -6046,8 +6081,6 @@ ${JSON.stringify(items)}
     let rxCropDrag = null;
     let rxCropBound = false;
     let rxOfflineOcrCancelled = false;
-    let rxTesseractWorkerPromise = null;
-    let rxTesseractWorkerLang = '';
 
     function switchRxInputMode(mode, btnEl) {
       document.querySelectorAll('#rxInlinePanel .rx-mode-tab').forEach(b => b.classList.remove('active'));
@@ -6082,33 +6115,59 @@ ${JSON.stringify(items)}
       return window._extScriptPromises[url];
     }
 
-    // --- 醫囑頻次與劑量轉台灣高齡白話用法 ---
-    function formatSigToPlainZh(doseStr, unitStr, freqStr, routeStr) {
+    // --- v50 醫囑頻次、智慧劑型單位（修掉胰島素「注射 30 顆」）與分次劑量格式化 ---
+    function inferSmartUnitVerb(drug, rawUnitStr, rawRouteStr) {
+      const uRaw = String(rawUnitStr || '').toUpperCase().replace(/[^A-Z]/g, '');
+      const rRaw = String(rawRouteStr || '').toUpperCase().replace(/[^A-Z]/g, '');
+      const meta = drug
+        ? `${drug.name_zh || ''} ${drug.name_en || ''} ${drug.dosage_form || ''} ${(drug.ingredients || []).join(' ')}`
+        : '';
+
+      const explicitUnitMap = {
+        TAB: '顆', TABS: '顆', CAP: '顆', CAPS: '顆', PILL: '顆',
+        ML: '毫升', CC: '毫升', PACK: '包', PKT: '包', BAG: '包', SACHET: '包',
+        DROP: '滴', GTT: '滴', GTTS: '滴', PUFF: '噴', SPRAY: '噴',
+        PATCH: '貼', SUPP: '顆', BOT: '瓶', AMP: '支', VIAL: '支', SYR: '支', PEN: '支',
+        IU: '單位', U: '單位', UNIT: '單位', UNITS: '單位'
+      };
+
+      const isInsulin = /insulin|glargine|detemir|degludec|aspart|lispro|glulisine|levemir|lantus|novorapid|tresiba|toujeo|humulin|胰島素|易筆/i.test(meta);
+      let unitZh = explicitUnitMap[uRaw] || '';
+
+      if (!unitZh) {
+        if (isInsulin) unitZh = '單位';
+        else if (/點眼|眼藥水|點耳|耳滴|ophthalmic.*(?:sol|drop)|eye.*drop|ear.*drop/i.test(meta) || ['OPH','EYE','OU','OD','OS','OTIC'].includes(rRaw)) unitZh = '滴';
+        else if (/吸入|噴霧|鼻噴|口腔噴|舌下噴|inhaler|spray/i.test(meta) || ['INH','NASAL'].includes(rRaw)) unitZh = '噴';
+        else if (/貼片|貼布|patch/i.test(meta)) unitZh = '貼';
+        else if (/軟膏|乳膏|凝膠|藥膏|cream|ointment|gel/i.test(meta) || ['EXT','TOP','SKIN'].includes(rRaw)) unitZh = '次';
+        else if (/糖漿|口服液|內服液|懸液|止咳水|syrup|susp|solu|mixture/i.test(meta)) unitZh = '毫升';
+        else if (/散劑|粉劑|顆粒|powder|granule|sachet/i.test(meta)) unitZh = '包';
+        else if (/注射|針劑|injection|syringe/i.test(meta) || ['SC','IM','IV'].includes(rRaw)) unitZh = '支';
+        else unitZh = '顆';
+      } else if (isInsulin && (unitZh === '顆' || unitZh === '支')) {
+        // 健保 QR 若未給單位或誤給顆，胰島素一律顯示「單位」
+        unitZh = '單位';
+      }
+
+      let verb = '吃';
+      if (isInsulin || ['SC','IM','IV'].includes(rRaw) || (/注射|針劑|injection/i.test(meta) && !/口服|錠|膠囊/.test(meta))) verb = '注射';
+      else if (['EXT','TOP','SKIN'].includes(rRaw) || unitZh === '次') verb = '塗抹';
+      else if (['OPH','EYE','OTIC','OU','OD','OS'].includes(rRaw) || unitZh === '滴') verb = '點';
+      else if (['INH','NASAL'].includes(rRaw) || unitZh === '噴') verb = '噴';
+      else if (unitZh === '貼') verb = '貼';
+      else if (['VAG','RECT','SUPP'].includes(rRaw) || /栓劑|塞劑|陰道/.test(meta)) verb = '使用';
+      else if (unitZh === '毫升') verb = '喝';
+
+      return { unitZh, verb };
+    }
+
+    function formatSigToPlainZh(doseStr, unitStr, freqStr, routeStr, matchedDrug = null) {
       const doseNum = parseFloat(String(doseStr || '').replace(/[^0-9.]/g, ''));
       const cleanDose = (!isNaN(doseNum) && doseNum > 0)
         ? (doseNum === 0.5 ? '半' : String(Number(doseNum.toFixed(2))))
         : '1';
-      const uRaw = String(unitStr || '').toUpperCase().replace(/[^A-Z]/g, '');
-      const rRaw = String(routeStr || '').toUpperCase().replace(/[^A-Z]/g, '');
       const fRaw = String(freqStr || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-
-      const unitMap = {
-        TAB: '顆', TABS: '顆', CAP: '顆', CAPS: '顆', PILL: '顆',
-        ML: '毫升', CC: '毫升', PACK: '包', PKT: '包', BAG: '包', SACHET: '包',
-        DROP: '滴', GTT: '滴', GTTS: '滴', PUFF: '噴', SPRAY: '噴',
-        PATCH: '貼', SUPP: '顆', BOT: '瓶', AMP: '支', VIAL: '支', SYR: '支', PEN: '支', IU: '單位', U: '單位'
-      };
-      let unitZh = unitMap[uRaw] || '顆';
-      if (rRaw === 'OPH' || rRaw === 'EYE' || rRaw === 'OU' || rRaw === 'OD' || rRaw === 'OS') unitZh = uRaw === 'GM' ? '次' : '滴';
-      else if (rRaw === 'INH' || rRaw === 'NASAL') unitZh = '噴';
-      else if (rRaw === 'EXT' || rRaw === 'TOP' || rRaw === 'SKIN') unitZh = '次';
-
-      const verb = (rRaw === 'EXT' || rRaw === 'TOP') ? '塗抹'
-        : (rRaw === 'OPH' || rRaw === 'OTIC') ? '點'
-        : (rRaw === 'INH' || rRaw === 'NASAL') ? '噴'
-        : (rRaw === 'SC' || rRaw === 'IM' || rRaw === 'IV') ? '注射'
-        : (rRaw === 'VAG' || rRaw === 'RECT' || rRaw === 'SUPP') ? '使用'
-        : (unitZh === '毫升' ? '喝' : '吃');
+      const { unitZh, verb } = inferSmartUnitVerb(matchedDrug, unitStr, routeStr);
 
       const mealSuffix = /AC$/.test(fRaw) ? '飯前' : (/PC$/.test(fRaw) ? '飯後' : '');
       const baseFreq = fRaw.replace(/(?:AC|PC)$/, '');
@@ -6130,7 +6189,21 @@ ${JSON.stringify(items)}
       return `依醫師指示每次${verb} ${cleanDose} ${unitZh}`;
     }
 
-    // --- v48 台灣健保 QR Code 雙引擎解碼器（修正 Big5 空白 Bug、Samsung/Android BarcodeDetector 靜默失敗、高密度中央原尺寸裁切） ---
+    function renderSigsToPlainZh(sigs, matchedDrug = null) {
+      if (!Array.isArray(sigs) || !sigs.length) return '';
+      const parts = [];
+      const seen = new Set();
+      for (const sg of sigs) {
+        const txt = formatSigToPlainZh(sg.dose, sg.unit, sg.freq, sg.route, matchedDrug);
+        if (txt && !seen.has(txt)) {
+          seen.add(txt);
+          parts.push(txt);
+        }
+      }
+      return parts.join('；');
+    }
+
+    // --- v50 台灣健保 QR Code 雙引擎解碼器（Big5 支援 ＋ 同健保碼分次劑量如「早 30 單位；睡前 28 單位」完整保留！） ---
     function decodeQrBytesBig5Safe(qrObj) {
       if (!qrObj) return '';
       if (qrObj.binaryData && qrObj.binaryData.length) {
@@ -6138,7 +6211,6 @@ ${JSON.stringify(items)}
         try {
           return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
         } catch (_) {
-          // 台灣健保處方箋 QR Code 傳統上使用 Big5 編碼中文；jsQR 遇 Big5 會回傳空字串 qr.data === ""
           try {
             return new TextDecoder('big5').decode(bytes);
           } catch (__) {
@@ -6160,7 +6232,6 @@ ${JSON.stringify(items)}
       const s = String(rawStr || '').trim();
       if (!s) return { ok: false, reason: 'EMPTY' };
 
-      // 支援分號 ;（標準健保格式）或直槓 | / 逗號 , 分隔
       let delim = ';';
       if ((s.match(/;/g) || []).length < 3) {
         if ((s.match(/\|/g) || []).length >= 4) delim = '|';
@@ -6173,7 +6244,7 @@ ${JSON.stringify(items)}
         if (!/^[A-Z0-9]{10}$/i.test(tok)) return false;
         if (isTaiwanId(tok)) return false;
         if (/^\d{10}$/.test(tok)) return false;
-        return /^[A-Z]{1,2}[A-Z0-9]{8,9}$/i.test(tok);
+        return /^[A-Z]{1,2}[A-Z0-9]{8,9}$/i.test(tok) && (tok.match(/\d/g) || []).length >= 5;
       };
 
       const nhiIndices = [];
@@ -6181,11 +6252,10 @@ ${JSON.stringify(items)}
         if (isNhiDrugCode(parts[i])) nhiIndices.push(i);
       }
 
-      // 若分號切不出，嘗試直接以正規表達式撈出字串內所有 10 碼健保藥品碼（相容非標準診所 QR）
       if (!nhiIndices.length) {
         const fallbackCodes = Array.from(s.matchAll(/\b([A-Z]{1,2}[A-Z0-9]{8,9})\b/gi))
           .map(m => m[1].toUpperCase())
-          .filter(c => isNhiDrugCode(c) && /\d{4,}/.test(c));
+          .filter(c => isNhiDrugCode(c));
         const uniqFallback = Array.from(new Set(fallbackCodes));
         if (uniqFallback.length) {
           return {
@@ -6193,7 +6263,9 @@ ${JSON.stringify(items)}
             items: uniqFallback.map(code => ({
               drug_name: code,
               nhi_code: code,
+              sigs: [],
               dosage_text: '依醫師指示按時服用',
+              has_explicit_sig: false,
               raw_line: code
             })),
             meta: { surname: '', age: '', sex: '' }
@@ -6202,7 +6274,6 @@ ${JSON.stringify(items)}
         return { ok: false, reason: parts.length < 4 ? 'NOT_NHI_RX_QR' : 'NO_NHI_DRUGS', preview: redactSensitiveForPreview(s), length: s.length };
       }
 
-      // 隱私安全擷取表頭：只抽「姓氏 1 字」與「出生民國年→年齡」，絕不保存姓名全名或身分證字號！
       const meta = { surname: '', age: '', sex: '' };
       const headerSlice = parts.slice(0, Math.min(14, nhiIndices[0]));
       const curRocYear = new Date().getFullYear() - 1911;
@@ -6228,7 +6299,8 @@ ${JSON.stringify(items)}
         }
       }
 
-      const items = [];
+      const byCode = new Map();
+      const orderedItems = [];
       const FREQ_RE = /^(?:QD|QDAC|QDPC|QDAM|QDPM|BID|BIDAC|BIDPC|TID|TIDAC|TIDPC|QID|QIDAC|QIDPC|HS|QHS|QN|PRN|QOD|QW|QWK|STAT|Q\d+H)$/i;
       const ROUTE_RE = /^(?:PO|EXT|INH|OPH|OTIC|TOP|SC|IM|IV|SL|VAG|RECT|SUPP|NASAL|AD|AS|AU|OD|OS|OU|IE)$/i;
 
@@ -6247,15 +6319,35 @@ ${JSON.stringify(items)}
           if (!freq && FREQ_RE.test(f)) { freq = f.toUpperCase(); continue; }
           if (!route && ROUTE_RE.test(f)) { route = f.toUpperCase(); continue; }
         }
-        items.push({
-          drug_name: code,
-          nhi_code: code,
-          dosage_text: formatSigToPlainZh(dose || '1', '', freq || 'QD', route || 'PO'),
-          raw_line: [code, dose, freq, route].filter(Boolean).join(' ')
-        });
+        const sigObj = { dose: dose || '1', unit: '', freq: freq || 'QD', route: route || 'PO' };
+        const sigKey = `${sigObj.dose}|${sigObj.freq}|${sigObj.route}`;
+
+        if (byCode.has(code)) {
+          // 同一張處方同健保碼出現不同時段／劑量（如 Levemir 早 30 QD ＋ 睡前 28 HS）→ 合併成雙時段，絕不吃掉！
+          const existing = byCode.get(code);
+          if (!existing._sigKeys.has(sigKey)) {
+            existing._sigKeys.add(sigKey);
+            existing.sigs.push(sigObj);
+            existing.dosage_text = renderSigsToPlainZh(existing.sigs, null);
+            existing.raw_line += ' ; ' + [code, dose, freq, route].filter(Boolean).join(' ');
+          }
+        } else {
+          const entry = {
+            drug_name: code,
+            nhi_code: code,
+            sigs: [sigObj],
+            _sigKeys: new Set([sigKey]),
+            dosage_text: renderSigsToPlainZh([sigObj], null),
+            has_explicit_sig: true,
+            raw_line: [code, dose, freq, route].filter(Boolean).join(' ')
+          };
+          byCode.set(code, entry);
+          orderedItems.push(entry);
+        }
       }
 
-      return { ok: true, items, meta };
+      orderedItems.forEach(it => { delete it._sigKeys; });
+      return { ok: true, items: orderedItems, meta };
     }
 
     function applyQrResultToBuffer(rawStr) {
@@ -6281,12 +6373,24 @@ ${JSON.stringify(items)}
       }
 
       let addedCnt = 0;
-      const seenCodes = new Set(rxQrBufferItems.map(x => x.nhi_code));
-      for (const it of parsed.items) {
-        if (!seenCodes.has(it.nhi_code)) {
-          rxQrBufferItems.push(it);
-          seenCodes.add(it.nhi_code);
-          addedCnt++;
+      if (!isDupScan) {
+        for (const it of parsed.items) {
+          const existing = rxQrBufferItems.find(x => x.nhi_code === it.nhi_code);
+          if (!existing) {
+            rxQrBufferItems.push({ ...it, sigs: Array.isArray(it.sigs) ? [...it.sigs] : [] });
+            addedCnt++;
+          } else if (Array.isArray(it.sigs) && it.sigs.length) {
+            // 若第 2 顆 QR 出現同健保碼的另一個時段／劑量，合併進 sigs 而不是丟掉！
+            const existingKeys = new Set((existing.sigs || []).map(s => `${s.dose}|${s.freq}|${s.route}`));
+            for (const sg of it.sigs) {
+              const k = `${sg.dose}|${sg.freq}|${sg.route}`;
+              if (!existingKeys.has(k)) {
+                existing.sigs.push(sg);
+                existingKeys.add(k);
+              }
+            }
+            existing.dosage_text = renderSigsToPlainZh(existing.sigs, null);
+          }
         }
       }
 
@@ -6334,7 +6438,6 @@ ${JSON.stringify(items)}
     let rxQrFrameCounter = 0;
 
     async function initQrDecoders() {
-      // 無論瀏覽器是否宣稱支援 BarcodeDetector，一律載入 jsQR 作為雙保險（修掉三星/Android 原生引擎靜默失敗 Bug）
       await loadExternalScriptOnce('https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js', () => typeof window.jsQR === 'function');
       if (!rxQrNativeDetector && !rxQrNativeFailed && ('BarcodeDetector' in window)) {
         try {
@@ -6355,7 +6458,6 @@ ${JSON.stringify(items)}
 
     async function decodeQrFromCanvas(canvas, ctx) {
       const results = [];
-      // 1. 先試原生 BarcodeDetector（傳 canvas 而非 video，避開 Android Chromium 視訊幀 Bug）
       if (rxQrNativeDetector && !rxQrNativeFailed) {
         try {
           const codes = await rxQrNativeDetector.detect(canvas);
@@ -6365,13 +6467,11 @@ ${JSON.stringify(items)}
             }
           }
         } catch (_) {
-          // 若原生引擎在該裝置報錯，立刻停用它改全走 jsQR
           rxQrNativeFailed = true;
         }
       }
       if (results.length) return results;
 
-      // 2. jsQR 備援（使用 Big5 安全解碼，修掉台灣健保 QR 中文 Big5 回傳空字串 Bug！）
       if (typeof window.jsQR === 'function') {
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const qr = window.jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts: 'attemptBoth' });
@@ -6402,15 +6502,10 @@ ${JSON.stringify(items)}
         await initQrDecoders();
 
         rxQrStream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: 'environment' },
-            width: { ideal: 1920 },
-            height: { ideal: 1080 }
-          },
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } },
           audio: false
         });
 
-        // 嘗試開啟連續自動對焦（提升三星／Android 手機近拍 QR 清晰度）
         try {
           const vTrack = rxQrStream.getVideoTracks()[0];
           const caps = vTrack && vTrack.getCapabilities ? vTrack.getCapabilities() : {};
@@ -6453,7 +6548,6 @@ ${JSON.stringify(items)}
             try {
               const vw = video.videoWidth;
               const vh = video.videoHeight;
-              // 奇數幀掃「中央白框 1:1 原解析度裁切」（高密度健保 QR 最關鍵！），偶數幀掃「全畫面」
               const scanCenter = (rxQrFrameCounter % 2 === 1);
               if (scanCenter) {
                 const side = Math.round(Math.min(vw, vh) * 0.72);
@@ -6512,11 +6606,7 @@ ${JSON.stringify(items)}
       const c = document.createElement('canvas');
       const ctx = c.getContext('2d', { willReadFrequently: true });
 
-      const regions = [
-        [0.15, 0.12, 0.70, 0.76], // 中央白框原尺寸
-        [0, 0, 1, 1],             // 全畫面
-        [0.25, 0.20, 0.50, 0.60]  // 中心放大
-      ];
+      const regions = [[0.15, 0.12, 0.70, 0.76], [0, 0, 1, 1], [0.25, 0.20, 0.50, 0.60]];
       for (const [rx, ry, rw, rh] of regions) {
         const sx = Math.round(vw * rx), sy = Math.round(vh * ry);
         const sw = Math.max(1, Math.round(vw * rw)), sh = Math.max(1, Math.round(vh * rh));
@@ -6530,7 +6620,7 @@ ${JSON.stringify(items)}
             if (navigator.vibrate) navigator.vibrate(90);
             return;
           }
-          if (v && v.trim()) return; // 已於 rxStatus 顯示非健保 QR 內容摘要
+          if (v && v.trim()) return;
         }
       }
       status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 這個角度仍無法讀出 QR（可能太近無法對焦或紙面反光）。請稍微拉遠 15–20 公分讓 QR 邊緣銳利，或改點「🖼️ 選取 QR 照片」用手機原生相機拍高清近照！</div>`;
@@ -6570,7 +6660,6 @@ ${JSON.stringify(items)}
         });
         URL.revokeObjectURL(imgUrl);
 
-        // 先掃全圖，再掃常見 QR 位置（中央、右側、中下、左下、右下）提高處方辨識率
         const regions = [
           [0, 0, 1, 1],
           [0.15, 0.15, 0.70, 0.70],
@@ -6605,7 +6694,7 @@ ${JSON.stringify(items)}
           if (matchedAny) break;
         }
         if (!matchedAny && !sawOtherQr) {
-          status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 未在照片中讀出 QR Code（可能太遠、模糊或反光）。建議只近拍 QR Code，或切到「✂️ 框選離線辨識」辨識文字！</div>`;
+          status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 未在照片中讀出 QR Code（可能太遠、模糊或反光）。建議只近拍 QR Code，或切到「⚡ 電腦RapidOCR」辨識文字！</div>`;
         }
       } catch (err) {
         status.innerHTML = `<div class="rx-progress-box is-error">❌ 解析 QR 照片失敗：${escapeHtml(err.message || '')}</div>`;
@@ -6614,7 +6703,91 @@ ${JSON.stringify(items)}
       }
     }
 
-    // --- 模式 2：互動式框選畫布（觸控＋滑鼠）＋ 純前端離線英文 OCR（Tesseract.js eng） ---
+    // --- 模式 2：互動式框選畫布（觸控＋滑鼠）＋ 藥局電腦本機 RapidOCR 伺服器連線 ---
+    let rxRapidOcrAbort = null;
+
+    function normalizeOcrServerUrl(raw) {
+      return String(raw || '').trim().replace(/\/+$/, '');
+    }
+
+    function getLocalOcrUrl() {
+      const inp = document.getElementById('localOcrUrlInput');
+      const val = normalizeOcrServerUrl(inp?.value || localStorage.getItem('carerx_local_ocr_url') || 'http://127.0.0.1:8765');
+      return val || 'http://127.0.0.1:8765';
+    }
+
+    function saveLocalOcrUrl(customUrl) {
+      const inp = document.getElementById('localOcrUrlInput');
+      const setInp = document.getElementById('settingsLocalOcrUrl');
+      const url = normalizeOcrServerUrl(customUrl !== undefined ? customUrl : (inp?.value || ''));
+      if (url) localStorage.setItem('carerx_local_ocr_url', url);
+      if (inp && inp.value !== url) inp.value = url;
+      if (setInp && setInp.value !== url) setInp.value = url;
+    }
+
+    function syncLocalOcrUrlFromSettings() {
+      const setInp = document.getElementById('settingsLocalOcrUrl');
+      saveLocalOcrUrl(setInp?.value || '');
+    }
+
+    function initLocalOcrFromUrlOrStorage() {
+      const params = new URLSearchParams(window.location.search);
+      const fromParam = normalizeOcrServerUrl(params.get('ocr') || '');
+      const saved = normalizeOcrServerUrl(localStorage.getItem('carerx_local_ocr_url') || 'http://127.0.0.1:8765');
+      const finalUrl = fromParam || saved;
+      saveLocalOcrUrl(finalUrl);
+
+      if (fromParam) {
+        // 透過電腦端 QR Code 一鍵配對進來：清掉網址參數、自動展開 RapidOCR 頁籤並測試連線！
+        try {
+          params.delete('ocr');
+          const cleanQs = params.toString();
+          const cleanUrl = window.location.pathname + (cleanQs ? '?' + cleanQs : '') + window.location.hash;
+          window.history.replaceState({}, '', cleanUrl);
+        } catch (_) {}
+        toggleRxPanel(true);
+        const cropTab = document.querySelector('#rxInlinePanel .rx-mode-tab[data-rxmode="crop"]');
+        switchRxInputMode('crop', cropTab);
+        setTimeout(() => testLocalOcrServer(false), 300);
+      }
+    }
+
+    async function testLocalOcrServer(fromSettings = false) {
+      const url = getLocalOcrUrl();
+      const badge = document.getElementById('localOcrConnBadge');
+      const stSet = document.getElementById('settingsLocalOcrStatus');
+      const rxSt = document.getElementById('rxStatus');
+      if (badge) { badge.className = 'src-badge yellow'; badge.textContent = '⏳ 連線測試中...'; }
+      if (stSet && fromSettings) { stSet.style.color = 'var(--primary)'; stSet.textContent = '⏳ 正在連線測試 ' + url + ' ...'; }
+
+      // HTTPS 網頁連 http://192.168.x.x 會被瀏覽器 Mixed Content 封鎖，提早給明確引導
+      if (window.location.protocol === 'https:' && /^http:\/\/(?!127\.0\.0\.1|localhost)/i.test(url)) {
+        const msg = '⚠️ 手機開啟 HTTPS 網頁無法連區網 http://，請在電腦執行「3_啟動手機連線OCR(免費HTTPS).bat」取得 https://xxx.trycloudflare.com 網址！';
+        if (badge) { badge.className = 'src-badge red'; badge.textContent = '❌ 需用 HTTPS 通道'; }
+        if (stSet) { stSet.style.color = 'var(--danger)'; stSet.textContent = msg; }
+        if (!fromSettings && rxSt) rxSt.innerHTML = `<div class="rx-progress-box is-error">${escapeHtml(msg)}</div>`;
+        return false;
+      }
+
+      try {
+        const res = await fetchWithTimeout(`${url}/health`, 6000);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!data || !data.ok) throw new Error('伺服器回應格式異常');
+        const okMsg = `✅ 已連線 ${data.engine || 'RapidOCR'}（0 元・無限次）`;
+        if (badge) { badge.className = 'src-badge green'; badge.textContent = '🟢 已連線 RapidOCR'; }
+        if (stSet) { stSet.style.color = 'var(--ok-text)'; stSet.textContent = okMsg; }
+        if (!fromSettings && rxSt) rxSt.innerHTML = `<div class="rx-progress-box is-ok">${escapeHtml(okMsg)}！現在可直接選取處方照片框選辨識。</div>`;
+        return true;
+      } catch (err) {
+        const errMsg = `❌ 連不到 RapidOCR 伺服器（${url}）。請確認藥局電腦已開啟「3_啟動手機連線OCR(免費HTTPS).bat」（或電腦本機「2_啟動電腦本機OCR.bat」）。`;
+        if (badge) { badge.className = 'src-badge red'; badge.textContent = '🔴 未連線'; }
+        if (stSet) { stSet.style.color = 'var(--danger)'; stSet.textContent = errMsg; }
+        if (!fromSettings && rxSt) rxSt.innerHTML = `<div class="rx-progress-box is-error">${escapeHtml(errMsg)}</div>`;
+        return false;
+      }
+    }
+
     function loadCropperImage(inputEl) {
       const file = inputEl?.files?.[0];
       if (!file) return;
@@ -6674,21 +6847,18 @@ ${JSON.stringify(items)}
       const rw = rxCropRect.w * canvas.width;
       const rh = rxCropRect.h * canvas.height;
 
-      // 遮罩框外區域
       ctx.fillStyle = 'rgba(15, 23, 42, 0.48)';
       ctx.fillRect(0, 0, canvas.width, ry);
       ctx.fillRect(0, ry + rh, canvas.width, canvas.height - (ry + rh));
       ctx.fillRect(0, ry, rx, rh);
       ctx.fillRect(rx + rw, ry, canvas.width - (rx + rw), rh);
 
-      // 框線
       ctx.strokeStyle = '#34D399';
       ctx.lineWidth = Math.max(2.5, canvas.width / 240);
       ctx.setLineDash([8, 5]);
       ctx.strokeRect(rx, ry, rw, rh);
       ctx.setLineDash([]);
 
-      // 四個角落拖曳把手
       const hs = Math.max(11, canvas.width / 44);
       ctx.fillStyle = '#10B981';
       ctx.strokeStyle = '#ffffff';
@@ -6764,101 +6934,555 @@ ${JSON.stringify(items)}
       canvas.addEventListener('pointercancel', endDrag);
     }
 
-    function buildEnhancedCropCanvas() {
+    // =========================================================================
+    // 5C. v51 瀏覽器內建 PaddleOCR（PP-OCRv4 ONNX Runtime Web）純前端深度學習引擎
+    //     - 0 元、無次數上限、跨電腦與手機免裝軟體、圖片 100% 留在本機瀏覽器
+    //     - 內建「粗網格紙張包絡線均光去陰影」＋ DBNet 連通域還原 ＋ PP-OCRv4(h=48) CTC ＋ (x,y) 座標表格列重建
+    // =========================================================================
+    const ORT_WEB_CDN_PRIMARY = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.3/dist/';
+    const ORT_WEB_CDN_BACKUP  = 'https://unpkg.com/onnxruntime-web@1.17.3/dist/';
+
+    const browserPaddleState = {
+      detSession: null,
+      recSession: null,
+      dictChars: null, // dictChars[0] = '' (blank), 1..N = chars, last = ' '
+      ready: false,
+      loadingPromise: null,
+      localBuffers: { det: null, rec: null, keysText: null }
+    };
+
+    function updatePaddleModelBadge(cls, text, detailMsg = '') {
+      const badge = document.getElementById('paddleModelBadge');
+      const st = document.getElementById('paddleModelStatus');
+      if (badge) { badge.className = 'src-badge ' + cls; badge.textContent = text; }
+      if (st && detailMsg !== '') st.innerHTML = detailMsg;
+    }
+
+    async function loadLocalPaddleModelFiles(event) {
+      const files = Array.from(event?.target?.files || []);
+      if (!files.length) return;
+      let loaded = [];
+      for (const f of files) {
+        const nm = (f.name || '').toLowerCase();
+        if (nm.endsWith('.onnx') && nm.includes('det')) {
+          browserPaddleState.localBuffers.det = new Uint8Array(await f.arrayBuffer());
+          loaded.push('det.onnx');
+        } else if (nm.endsWith('.onnx') && nm.includes('rec')) {
+          browserPaddleState.localBuffers.rec = new Uint8Array(await f.arrayBuffer());
+          loaded.push('rec.onnx');
+        } else if (nm.endsWith('.txt')) {
+          browserPaddleState.localBuffers.keysText = await f.text();
+          loaded.push('keys.txt');
+        }
+      }
+      browserPaddleState.ready = false;
+      browserPaddleState.detSession = null;
+      browserPaddleState.recSession = null;
+      browserPaddleState.loadingPromise = null;
+      const got = [];
+      if (browserPaddleState.localBuffers.det) got.push('det.onnx');
+      if (browserPaddleState.localBuffers.rec) got.push('rec.onnx');
+      if (browserPaddleState.localBuffers.keysText) got.push('keys.txt');
+      updatePaddleModelBadge(
+        got.length === 3 ? 'green' : 'yellow',
+        got.length === 3 ? '🟢 已手動載入 3 個模型檔' : `已載入 ${got.length}/3 檔`,
+        `已載入本機檔案：<code>${escapeHtml(got.join('、') || '無')}</code>`
+      );
+    }
+
+    async function fetchFirstOkBuffer(urls, asText = false) {
+      let lastErr = null;
+      for (const u of urls) {
+        try {
+          const res = await fetch(u, { cache: 'force-cache' });
+          if (res && res.ok) {
+            return asText ? await res.text() : new Uint8Array(await res.arrayBuffer());
+          }
+          lastErr = new Error(`HTTP ${res.status} (${u})`);
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+      throw lastErr || new Error('模型檔案無法讀取');
+    }
+
+    async function loadOrtRuntimeOnce(onProgress) {
+      if (window.ort && window.ort.InferenceSession) return;
+      let usedBase = ORT_WEB_CDN_PRIMARY;
+      try {
+        onProgress('⬇️ 載入 ONNX WebAssembly 推理引擎（首次載入後離線快取）...');
+        await loadExternalScriptOnce(ORT_WEB_CDN_PRIMARY + 'ort.min.js', () => Boolean(window.ort && window.ort.InferenceSession));
+      } catch (_) {
+        usedBase = ORT_WEB_CDN_BACKUP;
+        await loadExternalScriptOnce(ORT_WEB_CDN_BACKUP + 'ort.min.js', () => Boolean(window.ort && window.ort.InferenceSession));
+      }
+      // GitHub Pages 不提供 COOP/COEP 標頭，固定走單執行緒 SIMD WASM（相容所有手機與電腦瀏覽器！）
+      window.ort.env.wasm.numThreads = 1;
+      window.ort.env.wasm.simd = true;
+      window.ort.env.wasm.proxy = false;
+      window.ort.env.wasm.wasmPaths = usedBase;
+    }
+
+    function parsePaddleKeysText(txt) {
+      const lines = String(txt || '').replace(/\r/g, '').split('\n');
+      // 去掉末尾因檔案換行產生的最後一個空元素，但保留字元本身
+      while (lines.length && lines[lines.length - 1] === '') lines.pop();
+      // Index 0 為 CTC blank token
+      return ['', ...lines];
+    }
+
+    async function ensureBrowserPaddleOcrReady(onProgress = () => {}) {
+      if (browserPaddleState.ready && browserPaddleState.detSession && browserPaddleState.recSession && browserPaddleState.dictChars) {
+        return browserPaddleState;
+      }
+      if (browserPaddleState.loadingPromise) {
+        return browserPaddleState.loadingPromise;
+      }
+
+      browserPaddleState.loadingPromise = (async () => {
+        try {
+          await loadOrtRuntimeOnce(onProgress);
+
+          onProgress('⬇️ 載入文字偵測模型 det.onnx（約 4.7 MB，首次載入後即快取於本機）...');
+          const detBuf = browserPaddleState.localBuffers.det || await fetchFirstOkBuffer([
+            './models/det.onnx',
+            './models/ch_PP-OCRv4_det_infer.onnx'
+          ], false);
+
+          onProgress('⬇️ 載入中英文辨識模型 rec.onnx（約 10.9 MB，首次載入後即快取於本機）...');
+          const recBuf = browserPaddleState.localBuffers.rec || await fetchFirstOkBuffer([
+            './models/rec.onnx',
+            './models/ch_PP-OCRv4_rec_infer.onnx'
+          ], false);
+
+          onProgress('⬇️ 載入繁簡中英文字典 keys.txt...');
+          const keysTxt = browserPaddleState.localBuffers.keysText || await fetchFirstOkBuffer([
+            './models/keys.txt',
+            './models/ppocr_keys_v1.txt'
+          ], true);
+
+          onProgress('🧠 初始化瀏覽器 PaddleOCR（PP-OCRv4）神經網路...');
+          const sessOpts = { executionProviders: ['wasm'], graphOptimizationLevel: 'all' };
+          browserPaddleState.detSession = await window.ort.InferenceSession.create(detBuf, sessOpts);
+          browserPaddleState.recSession = await window.ort.InferenceSession.create(recBuf, sessOpts);
+          browserPaddleState.dictChars = parsePaddleKeysText(keysTxt);
+          browserPaddleState.ready = true;
+          updatePaddleModelBadge('green', '🟢 模型已就緒（離線可用）', '✅ 已成功載入 <code>det.onnx</code>、<code>rec.onnx</code> 與字典（共 ' + (browserPaddleState.dictChars.length - 1).toLocaleString() + ' 字元）。');
+          return browserPaddleState;
+        } catch (err) {
+          browserPaddleState.loadingPromise = null;
+          browserPaddleState.ready = false;
+          const isMissing = /404|Failed to fetch|無法讀取/i.test(String(err?.message || ''));
+          if (isMissing) {
+            const guide = '找不到網站的 ./models/det.onnx、rec.onnx 或 keys.txt。請先執行 Colab 的「CareRx_Extract_PaddleOCR_Models.ipynb」下載 models/ 資料夾，放入 GitHub 專案根目錄並 Push 一次即可永久免安裝使用！';
+            updatePaddleModelBadge('red', '🔴 尚未上傳 models/', escapeHtml(guide));
+            throw new Error(guide);
+          }
+          updatePaddleModelBadge('red', '🔴 載入失敗', escapeHtml(err?.message || '模型初始化失敗'));
+          throw err;
+        }
+      })();
+
+      return browserPaddleState.loadingPromise;
+    }
+
+    async function checkPaddleOcrModelsHealth() {
+      updatePaddleModelBadge('yellow', '⏳ 檢查預載中...', '⏳ 正在載入與驗證 ONNX 引擎及 ./models/ 檔案...');
+      try {
+        await ensureBrowserPaddleOcrReady((msg) => {
+          const st = document.getElementById('paddleModelStatus');
+          if (st) st.textContent = msg;
+        });
+      } catch (_) {}
+    }
+
+    // 柔和均光去陰影（粗網格 20×14 紙張 90 百分位亮度包絡線：只抬亮手機陰影，絕不把黑字洗淡！）
+    function normalizeCropIlluminationCanvas(srcCanvas) {
+      const w = srcCanvas.width;
+      const h = srcCanvas.height;
+      const ctx = srcCanvas.getContext('2d', { willReadFrequently: true });
+      const imgData = ctx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+
+      const gx = 20, gy = 14;
+      const gridCanvas = document.createElement('canvas');
+      gridCanvas.width = gx;
+      gridCanvas.height = gy;
+      const gCtx = gridCanvas.getContext('2d');
+      const gImg = gCtx.createImageData(gx, gy);
+      const gd = gImg.data;
+      const cellLums = [];
+
+      for (let r = 0; r < gy; r++) {
+        const y0 = Math.floor((r * h) / gy);
+        const y1 = Math.max(y0 + 1, Math.min(h, Math.floor(((r + 1) * h) / gy)));
+        for (let c = 0; c < gx; c++) {
+          const x0 = Math.floor((c * w) / gx);
+          const x1 = Math.max(x0 + 1, Math.min(w, Math.floor(((c + 1) * w) / gx)));
+          const stepY = Math.max(1, Math.floor((y1 - y0) / 14));
+          const stepX = Math.max(1, Math.floor((x1 - x0) / 14));
+          const rs = [], gs = [], bs = [];
+          for (let y = y0; y < y1; y += stepY) {
+            const rowOff = y * w * 4;
+            for (let x = x0; x < x1; x += stepX) {
+              const p = rowOff + x * 4;
+              rs.push(d[p]); gs.push(d[p + 1]); bs.push(d[p + 2]);
+            }
+          }
+          rs.sort((a, b) => a - b);
+          gs.sort((a, b) => a - b);
+          bs.sort((a, b) => a - b);
+          const k = Math.min(rs.length - 1, Math.floor(rs.length * 0.90));
+          const pr = rs[k] || 240, pg = gs[k] || 240, pb = bs[k] || 240;
+          const gp = (r * gx + c) * 4;
+          gd[gp] = pr; gd[gp + 1] = pg; gd[gp + 2] = pb; gd[gp + 3] = 255;
+          cellLums.push(0.299 * pr + 0.587 * pg + 0.114 * pb);
+        }
+      }
+
+      cellLums.sort((a, b) => a - b);
+      const p8 = cellLums[Math.floor(cellLums.length * 0.08)] || 0;
+      const p92 = cellLums[Math.min(cellLums.length - 1, Math.floor(cellLums.length * 0.92))] || 255;
+      const meanL = cellLums.reduce((s, v) => s + v, 0) / Math.max(1, cellLums.length);
+      // 若畫面受光本來就很均勻明亮，原圖直接送 PaddleOCR 最自然
+      if ((p92 - p8) < 26 && meanL > 145) return srcCanvas;
+
+      gCtx.putImageData(gImg, 0, 0);
+      const bgCanvas = document.createElement('canvas');
+      bgCanvas.width = w;
+      bgCanvas.height = h;
+      const bgCtx = bgCanvas.getContext('2d', { willReadFrequently: true });
+      bgCtx.imageSmoothingEnabled = true;
+      bgCtx.imageSmoothingQuality = 'high';
+      bgCtx.drawImage(gridCanvas, 0, 0, w, h);
+      const bgData = bgCtx.getImageData(0, 0, w, h).data;
+
+      for (let i = 0; i < d.length; i += 4) {
+        const nr = Math.min(255, (245 * d[i]) / Math.max(40, bgData[i]));
+        const ng = Math.min(255, (245 * d[i + 1]) / Math.max(40, bgData[i + 1]));
+        const nb = Math.min(255, (245 * d[i + 2]) / Math.max(40, bgData[i + 2]));
+        d[i]     = Math.min(255, Math.round(0.82 * nr + 0.18 * d[i]));
+        d[i + 1] = Math.min(255, Math.round(0.82 * ng + 0.18 * d[i + 1]));
+        d[i + 2] = Math.min(255, Math.round(0.82 * nb + 0.18 * d[i + 2]));
+      }
+      ctx.putImageData(imgData, 0, 0);
+      return srcCanvas;
+    }
+
+    function buildCroppedCanvasForPaddle() {
       const sx = Math.round(rxCropRect.x * rxCropImg.width);
       const sy = Math.round(rxCropRect.y * rxCropImg.height);
       const sw = Math.max(20, Math.round(rxCropRect.w * rxCropImg.width));
       const sh = Math.max(20, Math.round(rxCropRect.h * rxCropImg.height));
-      // 放大至足夠解析度以提升針式／雷射印表機小字辨識率
-      const targetW = Math.min(2200, Math.max(sw, Math.round(sw * 1.8)));
-      const scale = targetW / sw;
+      const maxSide = 1280;
+      const ratio = Math.max(sw, sh) > maxSide ? (maxSide / Math.max(sw, sh)) : 1;
       const out = document.createElement('canvas');
-      out.width = Math.round(sw * scale);
-      out.height = Math.round(sh * scale);
-      const ctx = out.getContext('2d');
+      out.width = Math.max(32, Math.round(sw * ratio));
+      out.height = Math.max(32, Math.round(sh * ratio));
+      const ctx = out.getContext('2d', { willReadFrequently: true });
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, out.width, out.height);
       ctx.drawImage(rxCropImg, sx, sy, sw, sh, 0, 0, out.width, out.height);
-
-      // 灰階＋自適應對比增強（淡化紅筆註記、強化黑灰印刷英文字）
-      try {
-        const imgData = ctx.getImageData(0, 0, out.width, out.height);
-        const d = imgData.data;
-        let minL = 255, maxL = 0;
-        const lum = new Uint8Array(d.length / 4);
-        for (let i = 0, p = 0; i < d.length; i += 4, p++) {
-          // 稍微拉高紅色通道權重，讓處方上的紅筆圈線變淡、黑字保持深黑！
-          const l = Math.min(255, Math.round(0.45 * d[i] + 0.40 * d[i + 1] + 0.15 * d[i + 2]));
-          lum[p] = l;
-          if (l < minL) minL = l;
-          if (l > maxL) maxL = l;
-        }
-        const span = Math.max(30, maxL - minL);
-        for (let i = 0, p = 0; i < d.length; i += 4, p++) {
-          let v = ((lum[p] - minL) * 255) / span;
-          // 柔和 S 型對比拉開背景與印刷字
-          v = v > 195 ? 255 : (v < 70 ? Math.max(0, v * 0.65) : v);
-          d[i] = d[i + 1] = d[i + 2] = Math.round(v);
-        }
-        ctx.putImageData(imgData, 0, 0);
-      } catch (_) {}
-      return out;
+      return normalizeCropIlluminationCanvas(out);
     }
 
-    function cancelOfflineOcr() {
-      rxOfflineOcrCancelled = true;
-      document.getElementById('btnRunOfflineOcr').disabled = false;
-      document.getElementById('btnCancelOfflineOcr').style.display = 'none';
-      document.getElementById('rxStatus').innerHTML = `<div class="rx-progress-box">⏹️ 已取消離線辨識。</div>`;
+    // 階段 A：PP-OCRv4 DBNet 文字偵測（純 JS 連通域＋unclip 擴張）
+    async function runPaddleDetOnCanvas(srcCanvas) {
+      const origW = srcCanvas.width;
+      const origH = srcCanvas.height;
+      const maxSide = 960;
+      let ratio = 1;
+      if (Math.max(origW, origH) > maxSide) ratio = maxSide / Math.max(origW, origH);
+      else if (Math.max(origW, origH) < 600) ratio = Math.min(1.5, 768 / Math.max(origW, origH));
+
+      const detW = Math.max(32, Math.round((origW * ratio) / 32) * 32);
+      const detH = Math.max(32, Math.round((origH * ratio) / 32) * 32);
+
+      const detCanvas = document.createElement('canvas');
+      detCanvas.width = detW;
+      detCanvas.height = detH;
+      const dCtx = detCanvas.getContext('2d', { willReadFrequently: true });
+      dCtx.drawImage(srcCanvas, 0, 0, detW, detH);
+      const rgba = dCtx.getImageData(0, 0, detW, detH).data;
+
+      const plane = detW * detH;
+      const inputFloat = new Float32Array(3 * plane);
+      // PaddleOCR DBNet 標準輸入：BGR 通道 ＋ ImageNet mean/std
+      const m0 = 0.485, m1 = 0.456, m2 = 0.406;
+      const s0 = 0.229, s1 = 0.224, s2 = 0.225;
+      for (let i = 0; i < plane; i++) {
+        const p = i * 4;
+        const r = rgba[p] / 255.0;
+        const g = rgba[p + 1] / 255.0;
+        const b = rgba[p + 2] / 255.0;
+        inputFloat[i] = (b - m0) / s0;
+        inputFloat[plane + i] = (g - m1) / s1;
+        inputFloat[2 * plane + i] = (r - m2) / s2;
+      }
+
+      const detSess = browserPaddleState.detSession;
+      const inName = detSess.inputNames[0];
+      const outName = detSess.outputNames[0];
+      const tensor = new window.ort.Tensor('float32', inputFloat, [1, 3, detH, detW]);
+      const feeds = {};
+      feeds[inName] = tensor;
+      const results = await detSess.run(feeds);
+      const prob = results[outName].data;
+
+      // 4-連通域 BFS 尋找文字核心並執行 DBNet unclip 擴張
+      const thresh = 0.30;
+      const boxThresh = 0.50;
+      const visited = new Uint8Array(plane);
+      const queue = new Int32Array(plane);
+      const scaleX = origW / detW;
+      const scaleY = origH / detH;
+      const boxes = [];
+
+      for (let y = 0; y < detH; y++) {
+        const rowBase = y * detW;
+        for (let x = 0; x < detW; x++) {
+          const startIdx = rowBase + x;
+          if (visited[startIdx] || prob[startIdx] <= thresh) continue;
+
+          let qHead = 0, qTail = 0;
+          queue[qTail++] = startIdx;
+          visited[startIdx] = 1;
+          let minX = x, maxX = x, minY = y, maxY = y;
+          let probSum = 0;
+
+          while (qHead < qTail) {
+            const cur = queue[qHead++];
+            const cy = (cur / detW) | 0;
+            const cx = cur - cy * detW;
+            probSum += prob[cur];
+            if (cx < minX) minX = cx;
+            if (cx > maxX) maxX = cx;
+            if (cy < minY) minY = cy;
+            if (cy > maxY) maxY = cy;
+
+            if (cx > 0) {
+              const ni = cur - 1;
+              if (!visited[ni] && prob[ni] > thresh) { visited[ni] = 1; queue[qTail++] = ni; }
+            }
+            if (cx + 1 < detW) {
+              const ni = cur + 1;
+              if (!visited[ni] && prob[ni] > thresh) { visited[ni] = 1; queue[qTail++] = ni; }
+            }
+            if (cy > 0) {
+              const ni = cur - detW;
+              if (!visited[ni] && prob[ni] > thresh) { visited[ni] = 1; queue[qTail++] = ni; }
+            }
+            if (cy + 1 < detH) {
+              const ni = cur + detW;
+              if (!visited[ni] && prob[ni] > thresh) { visited[ni] = 1; queue[qTail++] = ni; }
+            }
+          }
+
+          const bw = maxX - minX + 1;
+          const bh = maxY - minY + 1;
+          const meanProb = probSum / qTail;
+          if (bw < 3 || bh < 3 || qTail < 10 || meanProb < boxThresh) continue;
+
+          const dUnclip = (bw * bh * 1.55) / (2.0 * (bw + bh));
+          const padY = Math.max(2, Math.min(dUnclip * 0.85, bh * 0.55));
+          const padX = Math.max(3, Math.min(dUnclip * 1.25, bh * 1.0));
+
+          const x1 = Math.max(0, Math.floor((minX - padX) * scaleX));
+          const y1 = Math.max(0, Math.floor((minY - padY) * scaleY));
+          const x2 = Math.min(origW, Math.ceil((maxX + 1 + padX) * scaleX));
+          const y2 = Math.min(origH, Math.ceil((maxY + 1 + padY) * scaleY));
+          if ((x2 - x1) >= 6 && (y2 - y1) >= 6) {
+            boxes.push({ x: x1, y: y1, w: x2 - x1, h: y2 - y1, detScore: meanProb });
+          }
+        }
+      }
+
+      // 依由上到下、由左到右預先排序，並限制上限避免極端誤框卡死手機
+      boxes.sort((a, b) => (Math.abs(a.y - b.y) < 12 ? (a.x - b.x) : (a.y - b.y)));
+      return boxes.slice(0, 110);
     }
 
-    async function runOfflineCroppedOcr() {
+    // 階段 B：PP-OCRv4 文字辨識（h=48 動態寬度 ＋ CTC Greedy Decode）
+    async function runPaddleRecOnBoxes(srcCanvas, boxes, onProgress) {
+      const recSess = browserPaddleState.recSession;
+      const inName = recSess.inputNames[0];
+      const outName = recSess.outputNames[0];
+      const dict = browserPaddleState.dictChars;
+      const recH = 48;
+      const stripCanvas = document.createElement('canvas');
+      const sCtx = stripCanvas.getContext('2d', { willReadFrequently: true });
+
+      const recognized = [];
+      for (let idx = 0; idx < boxes.length; idx++) {
+        if (rxOfflineOcrCancelled) return [];
+        const b = boxes[idx];
+        const sidePad = 4;
+        const innerW = Math.max(16, Math.min(952, Math.ceil((b.w / Math.max(1, b.h)) * recH)));
+        const recW = innerW + sidePad * 2;
+
+        stripCanvas.width = recW;
+        stripCanvas.height = recH;
+        sCtx.fillStyle = '#ffffff';
+        sCtx.fillRect(0, 0, recW, recH);
+        sCtx.drawImage(srcCanvas, b.x, b.y, b.w, b.h, sidePad, 0, innerW, recH);
+
+        const rgba = sCtx.getImageData(0, 0, recW, recH).data;
+        const plane = recW * recH;
+        const inputFloat = new Float32Array(3 * plane);
+        // PP-OCRv4 Rec 標準正規化：BGR 通道、線性映射至 [-1, 1]
+        for (let i = 0; i < plane; i++) {
+          const p = i * 4;
+          inputFloat[i]             = (rgba[p + 2] / 255.0 - 0.5) * 2.0; // B
+          inputFloat[plane + i]     = (rgba[p + 1] / 255.0 - 0.5) * 2.0; // G
+          inputFloat[2 * plane + i] = (rgba[p]     / 255.0 - 0.5) * 2.0; // R
+        }
+
+        const tensor = new window.ort.Tensor('float32', inputFloat, [1, 3, recH, recW]);
+        const feeds = {};
+        feeds[inName] = tensor;
+        const outMap = await recSess.run(feeds);
+        const outTensor = outMap[outName];
+        const dims = outTensor.dims; // [1, seqLen, numClasses]
+        const seqLen = dims[1];
+        const numClasses = dims[2];
+        const logits = outTensor.data;
+
+        // 自動對齊末尾空白字元（PP-OCRv4: blank + 6623 chars + ' ' = 6625）
+        if (dict.length === numClasses - 1) {
+          dict.push(' ');
+        }
+
+        let prevIdx = 0;
+        let textBuf = '';
+        let scoreSum = 0;
+        let charCnt = 0;
+        for (let t = 0; t < seqLen; t++) {
+          const offset = t * numClasses;
+          let maxIdx = 0;
+          let maxVal = logits[offset];
+          for (let c = 1; c < numClasses; c++) {
+            const v = logits[offset + c];
+            if (v > maxVal) { maxVal = v; maxIdx = c; }
+          }
+          if (maxIdx !== 0 && maxIdx !== prevIdx) {
+            const ch = (maxIdx < dict.length) ? dict[maxIdx] : '';
+            if (ch) {
+              textBuf += ch;
+              scoreSum += maxVal;
+              charCnt++;
+            }
+          }
+          prevIdx = maxIdx;
+        }
+
+        const cleanTxt = textBuf.trim();
+        const avgScore = charCnt ? (scoreSum / charCnt) : 0;
+        if (cleanTxt && !(avgScore < 0.45 && cleanTxt.length <= 2)) {
+          recognized.push({
+            text: cleanTxt,
+            score: Number(avgScore.toFixed(3)),
+            x: b.x,
+            y: b.y,
+            w: b.w,
+            h: b.h,
+            yc: b.y + b.h / 2.0,
+            y_min: b.y,
+            y_max: b.y + b.h
+          });
+        }
+
+        if (idx % 2 === 1 || idx === boxes.length - 1) {
+          onProgress(`🔎 辨識文字區塊中（${idx + 1} / ${boxes.length}）...`);
+          await new Promise(r => setTimeout(r, 0));
+        }
+      }
+      return recognized;
+    }
+
+    // 階段 C：純前端 (x, y) 座標還原處方明細表格列（與後端 RapidOCR 演算法一致）
+    function reconstructTableRowsJs(ocrBoxes) {
+      if (!Array.isArray(ocrBoxes) || !ocrBoxes.length) return [];
+      const heights = ocrBoxes.map(b => Math.max(4, b.h)).sort((a, b) => a - b);
+      const medianH = heights[Math.floor(heights.length / 2)] || 16;
+      const rowTol = Math.max(10, medianH * 0.58);
+
+      const sorted = [...ocrBoxes].sort((a, b) => (a.yc - b.yc) || (a.x - b.x));
+      const rows = [];
+      for (const it of sorted) {
+        let bestRow = null;
+        let bestDist = Infinity;
+        for (const row of rows) {
+          const rowYc = row.reduce((s, r) => s + r.yc, 0) / row.length;
+          const dist = Math.abs(it.yc - rowYc);
+          const rowYmin = Math.min(...row.map(r => r.y_min));
+          const rowYmax = Math.max(...row.map(r => r.y_max));
+          const overlap = Math.max(0, Math.min(it.y_max, rowYmax) - Math.max(it.y_min, rowYmin));
+          const overlapRatio = overlap / Math.max(1, Math.min(it.h, rowYmax - rowYmin));
+          if ((dist <= rowTol || overlapRatio >= 0.48) && dist < bestDist) {
+            bestDist = dist;
+            bestRow = row;
+          }
+        }
+        if (bestRow) bestRow.push(it);
+        else rows.push([it]);
+      }
+
+      rows.sort((ra, rb) => {
+        const ya = ra.reduce((s, r) => s + r.yc, 0) / ra.length;
+        const yb = rb.reduce((s, r) => s + r.yc, 0) / rb.length;
+        return ya - yb;
+      });
+
+      const lines = [];
+      for (const row of rows) {
+        row.sort((a, b) => a.x - b.x);
+        const lineStr = row.map(x => x.text).join(' ').replace(/\s{2,}/g, ' ').trim();
+        if (lineStr) lines.push(lineStr);
+      }
+      return lines;
+    }
+
+    async function runBrowserPaddleOcrCropped() {
       if (!rxCropImg) { alert('請先選擇處方箋照片！'); return; }
       const status = document.getElementById('rxStatus');
       const btnRun = document.getElementById('btnRunOfflineOcr');
       const btnCancel = document.getElementById('btnCancelOfflineOcr');
-      const langRadio = document.querySelector('input[name="rxOcrLang"]:checked');
-      const ocrLang = (langRadio && langRadio.value) ? langRadio.value : 'chi_tra+eng';
-      const isBilingual = ocrLang.includes('chi_tra');
 
       rxOfflineOcrCancelled = false;
       btnRun.disabled = true;
       btnCancel.style.display = 'inline-flex';
       const t0 = performance.now();
+      const setProg = (msg) => {
+        if (!rxOfflineOcrCancelled) {
+          status.innerHTML = `<div class="rx-progress-box">${escapeHtml(msg)}</div>`;
+        }
+      };
 
       try {
-        status.innerHTML = `<div class="rx-progress-box">⏳ 正在準備純前端離線 OCR 引擎（${isBilingual ? '中英雙語模式・首次使用會下載繁中字庫快取於本機，之後離線秒開' : '純英文極速模式'}）...</div>`;
-        await loadExternalScriptOnce('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js', () => Boolean(window.Tesseract));
+        await ensureBrowserPaddleOcrReady(setProg);
         if (rxOfflineOcrCancelled) return;
 
-        status.innerHTML = `<div class="rx-progress-box">✨ 正在增強框選區域對比度並淡化手寫紅線...</div>`;
-        const cropCanvas = buildEnhancedCropCanvas();
+        setProg('✨ 正在進行局部均光去陰影處理...');
+        await new Promise(r => setTimeout(r, 0));
+        const cropCanvas = buildCroppedCanvasForPaddle();
+        if (rxOfflineOcrCancelled) return;
 
-        if (!rxTesseractWorkerPromise || rxTesseractWorkerLang !== ocrLang) {
-          if (rxTesseractWorkerPromise) {
-            try { (await rxTesseractWorkerPromise).terminate(); } catch (_) {}
-          }
-          rxTesseractWorkerLang = ocrLang;
-          rxTesseractWorkerPromise = window.Tesseract.createWorker(ocrLang, 1, {
-            logger: (m) => {
-              if (rxOfflineOcrCancelled) return;
-              if (m.status === 'loading language traineddata') {
-                const pct = Math.round((m.progress || 0) * 100);
-                status.innerHTML = `<div class="rx-progress-box">⬇️ 首次載入${isBilingual ? '繁體中文＋英文' : '英文'}離線字庫中... <strong>${pct}%</strong>（載入一次即存入離線快取）</div>`;
-              } else if (m.status === 'recognizing text') {
-                const pct = Math.round((m.progress || 0) * 100);
-                status.innerHTML = `<div class="rx-progress-box">🔎 本機離線辨識藥品文字中... <strong>${pct}%</strong>（0 元・不消耗 API）</div>`;
-              }
-            }
-          });
+        setProg('🔎 正在以 PaddleOCR (PP-OCRv4) 偵測藥品文字區塊...');
+        await new Promise(r => setTimeout(r, 0));
+        const detBoxes = await runPaddleDetOnCanvas(cropCanvas);
+        if (rxOfflineOcrCancelled) return;
+
+        if (!detBoxes.length) {
+          status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 框選區域內未偵測到清晰文字區塊。請確認藍綠框有涵蓋藥品文字且沒有過度反光模糊。</div>`;
+          return;
         }
-        const worker = await rxTesseractWorkerPromise;
+
+        setProg(`🔎 已偵測到 ${detBoxes.length} 個文字區塊，正在離線辨識...`);
+        const recBoxes = await runPaddleRecOnBoxes(cropCanvas, detBoxes, setProg);
         if (rxOfflineOcrCancelled) return;
 
-        const ret = await worker.recognize(cropCanvas);
-        if (rxOfflineOcrCancelled) return;
-
-        const rawText = (ret?.data?.text || '').trim();
+        const lines = reconstructTableRowsJs(recBoxes);
+        const rawText = lines.join('\n').trim();
         const detailsEl = document.getElementById('rxRawOcrDetails');
         const txtEl = document.getElementById('rxRawOcrText');
         if (detailsEl && txtEl) {
@@ -6869,21 +7493,119 @@ ${JSON.stringify(items)}
         const sec = ((performance.now() - t0) / 1000).toFixed(1);
         const parsed = parseHospitalRxText(rawText);
         if (!parsed.items.length) {
-          status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 未從框選範圍抓到明確藥品（耗時 ${sec} 秒）。請調整藍綠框只涵蓋藥品表格，或點下方展開微調辨識文字。</div>`;
+          status.innerHTML = `<div class="rx-progress-box is-error">⚠️ PaddleOCR 已完成（耗時 ${sec} 秒，辨識 ${lines.length} 列），但尚未抓到明確藥品。請展開下方「檢視／微調 PaddleOCR 座標還原文字」確認。</div>`;
           if (detailsEl) detailsEl.open = true;
           return;
         }
         showParsedRxReview(parsed.items, {
-          sourceLabel: `純前端離線 OCR 完成（${isBilingual ? '中英雙語' : '純英文'}・耗時 ${sec} 秒・0 元無上限）`,
+          sourceLabel: `瀏覽器離線 PaddleOCR 完成（耗時 ${sec} 秒・0 元免裝軟體）`,
           patientMeta: parsed.meta
         });
       } catch (err) {
-        rxTesseractWorkerPromise = null;
-        rxTesseractWorkerLang = '';
         if (!rxOfflineOcrCancelled) {
-          status.innerHTML = `<div class="rx-progress-box is-error">❌ 離線辨識失敗：${escapeHtml(err.message || '')}</div>`;
+          status.innerHTML = `<div class="rx-progress-box is-error">❌ ${escapeHtml(err?.message || '瀏覽器 PaddleOCR 辨識失敗')}</div>`;
         }
       } finally {
+        btnRun.disabled = false;
+        btnCancel.style.display = 'none';
+      }
+    }
+
+    function buildCleanCropJpegDataUrl() {
+      const sx = Math.round(rxCropRect.x * rxCropImg.width);
+      const sy = Math.round(rxCropRect.y * rxCropImg.height);
+      const sw = Math.max(20, Math.round(rxCropRect.w * rxCropImg.width));
+      const sh = Math.max(20, Math.round(rxCropRect.h * rxCropImg.height));
+      const maxSide = 1800;
+      const scale = Math.min(1.5, maxSide / Math.max(sw, sh));
+      const out = document.createElement('canvas');
+      out.width = Math.max(1, Math.round(sw * scale));
+      out.height = Math.max(1, Math.round(sh * scale));
+      const ctx = out.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, out.width, out.height);
+      ctx.drawImage(rxCropImg, sx, sy, sw, sh, 0, 0, out.width, out.height);
+      return out.toDataURL('image/jpeg', 0.90);
+    }
+
+    function cancelOfflineOcr() {
+      rxOfflineOcrCancelled = true;
+      if (rxRapidOcrAbort) {
+        try { rxRapidOcrAbort.abort(); } catch (_) {}
+        rxRapidOcrAbort = null;
+      }
+      document.getElementById('btnRunOfflineOcr').disabled = false;
+      document.getElementById('btnCancelOfflineOcr').style.display = 'none';
+      document.getElementById('rxStatus').innerHTML = `<div class="rx-progress-box">⏹️ 已取消辨識。</div>`;
+    }
+
+    async function runRapidOcrCropped() {
+      if (!rxCropImg) { alert('請先選擇處方箋照片！'); return; }
+      const url = getLocalOcrUrl();
+      saveLocalOcrUrl(url);
+      const status = document.getElementById('rxStatus');
+      const btnRun = document.getElementById('btnRunOfflineOcr');
+      const btnCancel = document.getElementById('btnCancelOfflineOcr');
+
+      if (window.location.protocol === 'https:' && /^http:\/\/(?!127\.0\.0\.1|localhost)/i.test(url)) {
+        status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 手機開啟 HTTPS 網頁無法連區網 http://，請在電腦執行 <code>3_啟動手機連線OCR(免費HTTPS).bat</code> 並用手機掃電腦螢幕的配對 QR Code！</div>`;
+        return;
+      }
+
+      rxOfflineOcrCancelled = false;
+      if (rxRapidOcrAbort) { try { rxRapidOcrAbort.abort(); } catch (_) {} }
+      rxRapidOcrAbort = new AbortController();
+      const timeoutId = setTimeout(() => rxRapidOcrAbort?.abort('TIMEOUT'), 20000);
+
+      btnRun.disabled = true;
+      btnCancel.style.display = 'inline-flex';
+      const t0 = performance.now();
+
+      try {
+        status.innerHTML = `<div class="rx-progress-box">⚡ 正在裁切框選藥品區並傳送至本機 RapidOCR（PP-OCRv4 深度學習）辨識中...</div>`;
+        const dataUrl = buildCleanCropJpegDataUrl();
+        const res = await fetch(`${url}/ocr`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: rxRapidOcrAbort.signal,
+          body: JSON.stringify({ image: dataUrl, enhance: true })
+        });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error(`伺服器回應錯誤 (HTTP ${res.status})`);
+        const data = await res.json();
+        if (!data || !data.ok) throw new Error(data?.error || '辨識回傳失敗');
+        if (rxOfflineOcrCancelled) return;
+
+        const badge = document.getElementById('localOcrConnBadge');
+        if (badge) { badge.className = 'src-badge green'; badge.textContent = '🟢 已連線 RapidOCR'; }
+
+        const rawText = (Array.isArray(data.lines) && data.lines.length ? data.lines.join('\n') : (data.raw_text || '')).trim();
+        const detailsEl = document.getElementById('rxRawOcrDetails');
+        const txtEl = document.getElementById('rxRawOcrText');
+        if (detailsEl && txtEl) {
+          txtEl.value = rawText;
+          detailsEl.style.display = 'block';
+        }
+
+        const sec = ((performance.now() - t0) / 1000).toFixed(1);
+        const parsed = parseHospitalRxText(rawText);
+        if (!parsed.items.length) {
+          status.innerHTML = `<div class="rx-progress-box is-error">⚠️ RapidOCR 已完成（耗時 ${sec} 秒），但框選範圍未抓到明確藥品。請展開下方「檢視／微調辨識文字」確認內容或微調藍綠框。</div>`;
+          if (detailsEl) detailsEl.open = true;
+          return;
+        }
+        showParsedRxReview(parsed.items, {
+          sourceLabel: `本機 RapidOCR 辨識完成（耗時 ${sec} 秒・0 元無上限）`,
+          patientMeta: parsed.meta
+        });
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (rxOfflineOcrCancelled) return;
+        const badge = document.getElementById('localOcrConnBadge');
+        if (badge) { badge.className = 'src-badge red'; badge.textContent = '🔴 連線失敗'; }
+        status.innerHTML = `<div class="rx-progress-box is-error">❌ 無法連線至本機 RapidOCR（${escapeHtml(err.message || '')}）。請確認電腦已執行 <code>3_啟動手機連線OCR(免費HTTPS).bat</code> 且配對網址正確。</div>`;
+      } finally {
+        rxRapidOcrAbort = null;
         btnRun.disabled = false;
         btnCancel.style.display = 'none';
       }
@@ -6901,7 +7623,6 @@ ${JSON.stringify(items)}
       const status = document.getElementById('rxStatus');
       if (!raw) { alert('請先貼上處方內容或健保碼！'); return; }
 
-      // 1. 先檢查是否為健保 QR Code 分號格式
       if ((raw.match(/;/g) || []).length >= 10) {
         const qr = parseTaiwanNhiQr(raw);
         if (qr.ok) {
@@ -6910,7 +7631,6 @@ ${JSON.stringify(items)}
         }
       }
 
-      // 2. 走通用醫院處方文字＋健保碼解析器
       const parsed = parseHospitalRxText(raw);
       if (!parsed.items.length) {
         status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 未辨識到藥品名稱或 10 碼健保碼，請確認貼上內容包含英文藥名、中文品名或 10 碼健保碼。</div>`;
@@ -6919,20 +7639,19 @@ ${JSON.stringify(items)}
       showParsedRxReview(parsed.items, { sourceLabel: '批次文字離線解析完成（0 秒）', patientMeta: parsed.meta });
     }
 
-    // --- v49 台灣醫院門診處方箋解析器（修掉 10 字母學名如 OLMESARTAN 誤切為第 2 種藥、支援中文用法與雙行商品名＋學名自動合併） ---
+    // --- v50 台灣各院所通用處方文字解析器（奇美 / 義大 / 長庚 / 基層診所雙向醫囑順序 ＋ 表頭封殺 ＋ 多行合併） ---
     function isStrictTaiwanNhiCode(tok) {
       const t = String(tok || '').trim().toUpperCase();
       if (t.length !== 10) return false;
-      if (/^[A-Z][1289]\d{8}$/.test(t)) return false; // 排除身分證字號
+      if (/^[A-Z][1289]\d{8}$/.test(t)) return false;
       if (!/^[A-Z]{1,2}[A-Z0-9]{8,9}$/.test(t)) return false;
-      const digitCnt = (t.match(/\d/g) || []).length;
-      return digitCnt >= 5; // 真正健保碼必含至少 5 位數字，絕不會誤抓 10 字母英文學名如 OLMESARTAN / AMLODIPINE
+      return (t.match(/\d/g) || []).length >= 5;
     }
 
     function parseChineseSigPhrase(text) {
       const s = String(text || '');
       if (!/(?:每日|每天|早晚|三餐|睡前|飯前|飯後|需要時|每次|早飯|晚飯)/.test(s)) return '';
-      const doseM = s.match(/(?:每次|各|服|吃)?\s*(半|[0-9]+(?:\.[0-9]+)?)\s*(顆|錠|粒|包|毫升|mL|滴|噴|貼|支|次)/i);
+      const doseM = s.match(/(?:每次|各|服|吃)?\s*(半|[0-9]+(?:\.[0-9]+)?)\s*(單位|顆|錠|粒|包|毫升|mL|滴|噴|貼|支|次)/i);
       const qty = doseM ? doseM[1] : '1';
       const unit = doseM ? doseM[2].replace(/錠|粒/g, '顆').replace(/mL/i, '毫升') : '顆';
       const meal = /飯前|空腹/.test(s) ? '飯前' : (/飯後|隨餐/.test(s) ? '飯後' : '');
@@ -6958,11 +7677,12 @@ ${JSON.stringify(items)}
 
       const mergedRows = [];
       let inAllergySkip = false;
-      const STOP_RE = /以下為非藥品|非藥品類處方|診察費|藥事服務費|尿流量圖|超音波|檢驗項目|\*{2,}\s*以下/;
-      const HEADER_NOISE_RE = /^(?:序|代碼|名稱|劑量|單位|頻率|途徑|天數|總量|門診|批價處方|領藥號|病歷號碼|身分證號|看診日期|列印時間|診斷|依健保署|請至門診|科別|診號|姓名|生日|男\s*\d+|女\s*\d+|身份|身高|體重|GPT|SRCR|CR\s*:)/i;
+      const STOP_RE = /以下為非藥品|非藥品類處方|診察費|藥事服務費|尿流量圖|超音波|檢驗項目|\*{2,}\s*以下|^共\s*\d+\s*筆$/;
+      const HEADER_ANYWHERE_RE = /(?:藥品代碼與名稱|次量.*單位|總量.*單位|劑量.*單位.*頻率|學\s*名.*商品名|自費.*學\s*名|批價處方單|連續處方箋|領藥號|領藥期間)/i;
+      const HEADER_NOISE_RE = /^(?:ADC\b|序|代碼|名稱|劑量|次量|單位|頻率|途徑|天數|總量|門診|批價處方|領藥號|病歷號碼|身分證號|看診日期|列印時間|診斷|依健保署|請至門診|科別|診號|姓名|生日|男\s*\d+|女\s*\d+|身份|身高|體重|GPT|SRCR|CR\s*:|共\s*\d+\s*筆)/i;
       const ALLERGY_START_RE = /過敏藥品|藥物過敏|禁忌用藥|\bNKDA\b/i;
-      // 嚴格行首錨點：序號+院內碼、院內碼（如 21T012）、或真正含 >=5 數字的 10 碼健保碼
-      const ROW_ANCHOR_RE = /^(?:0?[1-9]|1\d|20)\s+[A-Z0-9]{4,10}\b|^[0-9]{2}[A-Z][0-9A-Z]{2,5}\b|^[A-Z]{1,2}\d{5,8}[A-Z0-9]{0,3}\b/i;
+      const ROW_ANCHOR_RE = /^(?:0?[1-9]|1\d|20)\s+[A-Za-z\u4e00-\u9fff][A-Za-z0-9\u4e00-\u9fff-]{2,}|^[0-9]{2}[A-Z][0-9A-Z]{2,5}\b|^[A-Z]{1,2}\d{5,8}[A-Z0-9]{0,3}\b/i;
+      const BRACKET_GENERIC_CONT_RE = /^\[[A-Z0-9]{3,10}\]\s*\(|^\([A-Za-z][A-Za-z0-9\s,./-]{3,}\)$/;
       const GENERIC_LABEL_RE = /^(?:學名|成分|主成分|Generic|Ingredient|i\s*\d+\s*#?\d*\s*[:：]|[^\u4e00-\u9fffA-Za-z]{0,4}[:：])/i;
 
       for (const line of lines) {
@@ -6972,23 +7692,25 @@ ${JSON.stringify(items)}
           if (ROW_ANCHOR_RE.test(line) || /劑量|頻率|途徑/.test(line)) inAllergySkip = false;
           else continue;
         }
-        if (HEADER_NOISE_RE.test(line)) continue;
+        if (HEADER_ANYWHERE_RE.test(line) || HEADER_NOISE_RE.test(line)) continue;
         if (line.length < 3 || /^[\d.\s\-_=*#@|/\\]+$/.test(line)) continue;
 
         const hasStrictNhi = (line.match(/\b[A-Z]{1,2}[A-Z0-9]{8,9}\b/gi) || []).some(isStrictTaiwanNhiCode);
         const hasSig = /\b(?:QD|BID|TID|QID|QHS|HS|QN|PRN|QOD|QW|Q\d+H)(?:AC|PC)?\b/i.test(line);
         const hasRowAnchor = ROW_ANCHOR_RE.test(line);
-        const looksLikeGenericCont = !hasRowAnchor && !hasSig && !hasStrictNhi && (
-          GENERIC_LABEL_RE.test(line) ||
-          /^[\W\d_#]{0,12}[A-Z]{5,}(?:\s+[A-Z]{4,})*/.test(line)
-        );
+        // 例如 [OALLE](Fexofenadine HCl)、[LBROW](Glycyrrhiza...)、或純中文子品名列（艾胃逆服咀嚼錠、甘草止咳水）→ 一律併回上一筆！
+        const isSubLine = BRACKET_GENERIC_CONT_RE.test(line) ||
+          (!hasRowAnchor && !hasSig && !hasStrictNhi && (
+            GENERIC_LABEL_RE.test(line) ||
+            /^[\u4e00-\u9fff]{2,14}$/.test(line) ||
+            /^[\W\d_#]{0,12}[A-Z]{5,}(?:\s+[A-Z]{4,})*/.test(line)
+          ));
 
-        const isNewRow = (hasRowAnchor || hasSig || hasStrictNhi) && !looksLikeGenericCont;
+        const isNewRow = (hasRowAnchor || hasSig || hasStrictNhi) && !isSubLine;
 
         if (isNewRow || !mergedRows.length) {
           mergedRows.push(line);
         } else {
-          // 同藥品第二行（例如：第一行商品名 OLSAA F.C. TABLET、第二行學名 OLMESARTAN MEDOXOMIL，或折行備註）自動併回同一筆！
           mergedRows[mergedRows.length - 1] += ' ' + line;
         }
       }
@@ -6996,6 +7718,12 @@ ${JSON.stringify(items)}
       const items = [];
       const FREQ_PAT = /\b((?:QD|BID|TID|QID|QHS|HS|QN|PRN|QOD|QW|STAT|Q\d+H)(?:AC|PC)?)\b/i;
       const ROUTE_PAT = /\b(PO|EXT|INH|OPH|OTIC|TOP|SC|IM|IV|SL|VAG|RECT|SUPP|NASAL)\b/i;
+      const UNIT_GROUP = '(TABS?|CAPS?|PILL|ML|CC|PACK|PKT|BOT|DROP|GTTS?|PUFF|PATCH|SUPP|GM|AMP|VIAL|PEN|UNITS?|IU)';
+      const FREQ_GROUP = '((?:QD|BID|TID|QID|QHS|HS|QN|PRN|QOD|QW|STAT|Q\\d+H)(?:AC|PC)?)';
+      const ROUTE_GROUP = '(PO|EXT|INH|OPH|OTIC|TOP|SC|IM|IV|SL|VAG|RECT|SUPP|NASAL)';
+      // 雙向醫囑格式：支援「1.00 TAB QD PO」「30. UNIT QD」「0.5 TAB QN」也支援「1 Tab PO BID」「8 ml PO HS」！
+      const SIG_UNIT_FREQ_ROUTE = new RegExp(`(\\d+(?:\\.\\d+)?)\\.?\\s*${UNIT_GROUP}\\s+${FREQ_GROUP}(?:\\s+${ROUTE_GROUP})?`, 'i');
+      const SIG_UNIT_ROUTE_FREQ = new RegExp(`(\\d+(?:\\.\\d+)?)\\.?\\s*${UNIT_GROUP}\\s+${ROUTE_GROUP}\\s+${FREQ_GROUP}`, 'i');
       const NHI_PAT = /\b([A-Z]{1,2}[0-9A-Z]{8,9})\b/g;
 
       for (const row of mergedRows) {
@@ -7005,7 +7733,7 @@ ${JSON.stringify(items)}
         const hasOtherDrugWords = /[a-z]{4,}/i.test(row.replace(NHI_PAT, ' '));
         if (allNhi.length >= 2 && !hasOtherDrugWords) {
           allNhi.forEach(code => {
-            items.push({ drug_name: code, nhi_code: code.toUpperCase(), dosage_text: '依醫師指示按時服用', has_explicit_sig: false, raw_line: code });
+            items.push({ drug_name: code, nhi_code: code.toUpperCase(), sigs: [], dosage_text: '依醫師指示按時服用', has_explicit_sig: false, raw_line: code });
           });
           continue;
         }
@@ -7019,15 +7747,23 @@ ${JSON.stringify(items)}
 
         let dose = '', unit = '', freq = '', route = '';
         let hasExplicitSig = false;
-        const sigBlockM = work.match(/(\d+(?:\.\d+)?)\s+(TABS?|CAPS?|ML|CC|PACK|PKT|BOT|DROP|GTTS?|PUFF|PATCH|SUPP|GM|AMP|VIAL|PEN)\s+((?:QD|BID|TID|QID|QHS|HS|QN|PRN|QOD|QW|STAT|Q\d+H)(?:AC|PC)?)(?:\s+(PO|EXT|INH|OPH|OTIC|TOP|SC|IM|IV|SL|VAG|RECT|SUPP|NASAL))?/i);
         let namePart = work;
-        if (sigBlockM) {
-          dose = sigBlockM[1];
-          unit = sigBlockM[2];
-          freq = sigBlockM[3];
-          route = sigBlockM[4] || 'PO';
+
+        const mURF = work.match(SIG_UNIT_ROUTE_FREQ);
+        const mUFR = work.match(SIG_UNIT_FREQ_ROUTE);
+        if (mURF) {
+          dose = mURF[1]; unit = mURF[2]; route = mURF[3]; freq = mURF[4];
           hasExplicitSig = true;
-          namePart = work.slice(0, sigBlockM.index);
+          // 保留 Sig 之後的 [OALLE](Fexofenadine HCl) 括號學名，只切掉純數量天數（如 7 14 Tab NN）
+          const afterTail = work.slice(mURF.index + mURF[0].length);
+          const bracketCarry = (afterTail.match(/\[[A-Z0-9]{3,10}\]\s*\([^)]+\)|[\u4e00-\u9fff]{3,12}/g) || []).join(' ');
+          namePart = work.slice(0, mURF.index) + (bracketCarry ? ' ' + bracketCarry : '');
+        } else if (mUFR) {
+          dose = mUFR[1]; unit = mUFR[2]; freq = mUFR[3]; route = mUFR[4] || '';
+          hasExplicitSig = true;
+          const afterTail = work.slice(mUFR.index + mUFR[0].length);
+          const bracketCarry = (afterTail.match(/\[[A-Z0-9]{3,10}\]\s*\([^)]+\)|[\u4e00-\u9fff]{3,12}/g) || []).join(' ');
+          namePart = work.slice(0, mUFR.index) + (bracketCarry ? ' ' + bracketCarry : '');
         } else {
           const fm = work.match(FREQ_PAT);
           if (fm) {
@@ -7035,21 +7771,20 @@ ${JSON.stringify(items)}
             hasExplicitSig = true;
             const beforeF = work.slice(0, fm.index);
             const afterF = work.slice(fm.index + fm[0].length);
-            const duM = beforeF.match(/(\d+(?:\.\d+)?)\s*(TABS?|CAPS?|ML|CC|PACK|PKT|BOT|DROP|GTTS?|PUFF|PATCH|SUPP)\s*$/i);
+            const duM = beforeF.match(new RegExp(`(\\d+(?:\\.\\d+)?)\\.?\\s*${UNIT_GROUP}\\s*$`, 'i'));
             if (duM) {
-              dose = duM[1];
-              unit = duM[2];
+              dose = duM[1]; unit = duM[2];
               namePart = beforeF.slice(0, duM.index);
             } else {
               namePart = beforeF;
             }
-            const rm = afterF.match(ROUTE_PAT);
+            const rm = afterF.match(ROUTE_PAT) || beforeF.match(ROUTE_PAT);
             if (rm) route = rm[1];
           }
         }
 
-        // 若英文頻次未命中，嘗試解析中文用法（中英雙語 OCR 或中文處方箋）
-        let dosageText = hasExplicitSig ? formatSigToPlainZh(dose || '1', unit, freq || 'QD', route || 'PO') : '';
+        const sigs = hasExplicitSig ? [{ dose: dose || '1', unit, freq: freq || 'QD', route }] : [];
+        let dosageText = hasExplicitSig ? renderSigsToPlainZh(sigs, null) : '';
         if (!dosageText) {
           const zhSig = parseChineseSigPhrase(row);
           if (zhSig) {
@@ -7060,10 +7795,11 @@ ${JSON.stringify(items)}
           }
         }
 
-        // 清理備註、學名標籤與 OCR 雜訊片段（如 i 173 #4 :、_ 、孤立短亂碼）
         namePart = namePart
-          .replace(/\[[^\]]*\].*$/, '')
+          .replace(/\[備註\].*$/, '')
           .replace(/備註.*$/, '')
+          .replace(/\[[A-Z0-9]{3,10}\]/g, ' ') // 去掉院內碼如 [OALLE] 但保留後面緊接的 (Fexofenadine HCl)
+          .replace(/【[^】]{1,6}】/g, ' ')    // 去掉【綠藍】【複方】等院內註記
           .replace(/^[低液磨外內高冰管]\s*(?=[A-Za-z])/, '')
           .replace(/^[^A-Za-z\u4e00-\u9fff]{1,4}(?=[A-Za-z]{3,})/, '')
           .replace(/\)[化磨液外內高冰管]{1,2}\s*$/, ')')
@@ -7073,12 +7809,14 @@ ${JSON.stringify(items)}
           .replace(/\s+/g, ' ')
           .trim();
 
-        if (!nhiCode && !/[A-Za-z]{3,}|[\u4e00-\u9fff]{2,}/.test(namePart)) continue;
-        if (/診察費|藥事服務|檢查|測量|掛號費|部分負擔/.test(namePart)) continue;
+        // 嚴格雜訊過濾：必須有健保碼、>=4 字母英文詞或 >=2 字非表頭中文詞
+        if (!nhiCode && !/[A-Za-z]{4,}|[\u4e00-\u9fff]{2,}/.test(namePart)) continue;
+        if (/診察費|藥事服務|檢查|測量|掛號費|部分負擔|藥品代碼/.test(namePart)) continue;
 
         items.push({
           drug_name: namePart || nhiCode,
           nhi_code: nhiCode,
+          sigs,
           dosage_text: dosageText,
           has_explicit_sig: hasExplicitSig,
           raw_line: row
@@ -7088,7 +7826,7 @@ ${JSON.stringify(items)}
       return { ok: items.length > 0, items, meta };
     }
 
-    // --- 升級版多候選模糊比對引擎（v49：全字精準優先於前綴子字串、單方優先於複方，避免 OLSAA 誤配 OlsaaCa 雙優惠脈錠） ---
+    // --- 升級版多候選模糊比對引擎（v50：封殺表頭誤配、門檻防假藥、錠/膠囊區分、單複方防呆） ---
     function levenshteinBounded(a, b, maxDist = 2) {
       if (Math.abs(a.length - b.length) > maxDist) return maxDist + 1;
       const prev = new Array(b.length + 1);
@@ -7117,7 +7855,7 @@ ${JSON.stringify(items)}
     function findTopMatches(name, nhiCode, limit = 5) {
       if (!drugIndex.length) return [];
 
-      // 1. 10 碼健保碼三階段比對（10 碼精準 → 前 8 碼同藥不同包裝 → 反查中間 5 碼許可證字號）
+      // 1. 10 碼健保碼三階段比對
       if (nhiCode && nhiCode.trim().length >= 8) {
         const codeU = nhiCode.trim().toUpperCase();
         const getCodes = (d) => (d.nhi_codes || (drugFull[d.license_id]?.nhi_codes) || []).map(c => String(c || '').toUpperCase());
@@ -7149,41 +7887,49 @@ ${JSON.stringify(items)}
       const raw = String(name || '').trim();
       if (!raw) return [];
 
-      // 擷取括號內商品名（例如 (Betmiga)、(Nolvadex)、(Doxymycin)、(Coheal)）
-      const brandTokens = [];
-      for (const m of raw.matchAll(/\(([^)]{2,30})\)/g)) {
-        const bt = m[1].toLowerCase().replace(/[^a-z0-9-]/g, ' ').trim();
-        if (bt.length >= 3) brandTokens.push(bt);
+      // 擷取括號內英文商品名或學名（如 (Betmiga)、(Fexofenadine HCl)、(Alginic acid)）
+      const parenTokens = [];
+      for (const m of raw.matchAll(/\(([^)]{2,48})\)/g)) {
+        const inner = m[1].toLowerCase();
+        const words = inner.match(/[a-z][a-z0-9-]{2,}/g) || [];
+        for (const w of words) {
+          if (!['hcl','acid','tab','cap','mg','ml','bot','ext','inj','pen','unit'].includes(w)) {
+            parenTokens.push(w);
+          }
+        }
       }
 
-      // 偵測是否為複方劑量格式（例如 5/40mg、5/160、+）
-      const queryLooksCombo = /\b\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?\s*(?:mg|mcg|ug)?\b/i.test(raw) || /\+|複方|雙效|双/.test(raw);
+      const queryLooksCombo = /\b\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?\s*(?:mg|mcg|ug)?\b/i.test(raw) || /\+|複方|雙效|双|triprolidine.*pseudoephedrine|glycyrrhiza.*opium/i.test(raw);
+      const doseNums = Array.from(raw.matchAll(/\b(\d+(?:\.\d+)?)\s*(?:mg|mcg|ug|g|gm|ml|iu|%)\b/gi)).map(m => m[1]);
 
-      // 擷取劑量數字（例如 10mg, 25mg, 100mg, 500mg, 1mg）
-      const doseNums = Array.from(raw.matchAll(/\b(\d+(?:\.\d+)?)\s*(?:mg|mcg|ug|g|gm|ml|%)\b/gi)).map(m => m[1]);
-
-      const wantSyrup = /\b(?:susp|syrup|solu|sol|liq|bot)\b|液|糖漿/i.test(raw);
+      const wantSyrup = /\b(?:susp|syrup|solu|sol|liq|bot|mixture)\b|液|糖漿|止咳水/i.test(raw);
       const wantGranule = /\b(?:granule|powder|pack)\b|顆粒|散/i.test(raw);
       const wantCap = /\b(?:cap|caps|capsule|capsules)\b|膠囊/i.test(raw);
       const wantTab = /\b(?:tab|tabs|tablet|tablets|f\.c\.)\b|錠/i.test(raw);
+      const wantPen = /\b(?:pen|flexpen|insulin)\b|易筆|胰島素/i.test(raw);
 
       const STOP_WORDS = new Set([
         'tab','tabs','tablet','tablets','cap','caps','capsule','capsules','film','coated','fc',
-        'susp','syrup','solu','sol','bot','pack','granules','granule','powder','oral',
-        'cream','ointment','gel','drops','spray','inj','mg','ml','mcg','gm','base',
-        'if','fever','po','qd','bid','tid','qid','prn','hs','and','for','the','with','from','per','day','use','cia','zan','rixk'
+        'susp','syrup','solu','sol','bot','pack','granules','granule','powder','oral','pen',
+        'cream','ointment','gel','drops','spray','inj','mg','ml','mcg','gm','iu','unit','units','base',
+        'if','fever','po','qd','bid','tid','qid','prn','hs','qn','and','for','the','with','from','per','day','use',
+        'adc','nn','cia','zan','rixk','acid','hcl','sodium','ethyl','nitrite','antimony','flexpen'
       ]);
       const noParen = raw.replace(/\([^)]*\)/g, ' ');
-      const enTokens = (noParen.toLowerCase().match(/[a-z][a-z0-9-]{2,}/g) || [])
+      // 要求英文詞長度 >= 4 才進主比對（徹底避免 3 字母亂碼如 BEC、ADO 憑空配出假藥！）
+      const enTokens = (noParen.toLowerCase().match(/[a-z][a-z0-9-]{3,}/g) || [])
         .map(t => t.replace(/^-+|-+$/g, ''))
-        .filter(t => t.length >= 3 && !STOP_WORDS.has(t));
-      const zhTokens = (noParen.match(/[\u4e00-\u9fff]{2,}/g) || []).filter(t => !/備註|處方|門診|每日|飯後|飯前|睡前|用法|學名|成分/.test(t));
+        .filter(t => t.length >= 4 && !STOP_WORDS.has(t));
 
-      const primaryWords = Array.from(new Set([...brandTokens, ...enTokens, ...zhTokens]));
-      if (!primaryWords.length) return [];
+      // 嚴格剔除所有處方箋表頭字詞（徹底根除「藥品」「單位」誤配出「芝鄉藥品...6000國際單位」！）
+      const ZH_HEADER_STOP_RE = /^(?:藥品|代碼|名稱|次量|劑量|單位|用法|頻率|途徑|天數|總量|自費|備註|處方|門診|每日|飯後|飯前|睡前|學名|成分|商品名|批價|領藥|連續|注意|事項|共\d+筆)$/;
+      const zhTokens = (noParen.match(/[\u4e00-\u9fff]{2,}/g) || [])
+        .filter(t => !ZH_HEADER_STOP_RE.test(t) && !/藥品代碼|次量單位|總量單位|以下為非/.test(t));
 
-      const brandRegexes = brandTokens.map(bt => ({ bt, wb: new RegExp(`\\b${escapeRegexStr(bt)}\\b`, 'i') }));
-      const enRegexes = enTokens.map(wt => ({ wt, wb: new RegExp(`\\b${escapeRegexStr(wt)}\\b`, 'i') }));
+      const allEnWords = Array.from(new Set([...enTokens, ...parenTokens.filter(w => w.length >= 4 && !STOP_WORDS.has(w))]));
+      if (!allEnWords.length && !zhTokens.length) return [];
+
+      const enRegexes = allEnWords.map(wt => ({ wt, wb: new RegExp(`\\b${escapeRegexStr(wt)}\\b`, 'i') }));
 
       const scored = [];
       for (let i = 0; i < drugIndex.length; i++) {
@@ -7196,45 +7942,23 @@ ${JSON.stringify(items)}
         const hasNhi = (d.nhi_codes && d.nhi_codes.length > 0);
         let sc = 0;
         let reason = '';
-        let matchedIngCount = 0;
 
-        // A. 括號內英文商品名比對（全字完全相符遠高於子字串）
-        for (const { bt, wb } of brandRegexes) {
-          if (wb.test(en)) {
-            sc += 210;
-            reason = '商品名精準比對';
-          } else if (en.includes(bt)) {
-            sc += 70;
-            reason = reason || '商品名相似比對';
-          } else if (bt.length >= 5) {
-            const enWords = en.match(/[a-z][a-z0-9-]{3,}/g) || [];
-            if (enWords.some(w => levenshteinBounded(bt, w, 1) <= 1)) {
-              sc += 115;
-              reason = reason || '商品名模糊比對';
-            }
-          }
-        }
-
-        // B. 英文學名／商品名詞元比對（全字相符如 OLSAA 遠高於子字串 OlsaaCa！）
+        // A. 英文詞元比對（同時覆蓋商品名＋括號學名，全字相符遠高於子字串）
         for (const { wt, wb } of enRegexes) {
           let hitThis = false;
-          if (wb.test(ing)) {
-            sc += 145;
-            matchedIngCount++;
-            reason = reason || '學名精準比對';
-            hitThis = true;
-          } else if (wb.test(en)) {
-            sc += 165;
+          if (wb.test(en)) {
+            sc += 180;
             reason = reason || '英文商品名精準比對';
             hitThis = true;
-          } else if (ing.includes(wt) && wt.length >= 5) {
-            sc += 55;
-            reason = reason || '學名相似比對';
+          }
+          if (wb.test(ing)) {
+            sc += 150;
+            reason = reason || '學名精準比對';
             hitThis = true;
-          } else if (en.includes(wt) && wt.length >= 5) {
-            sc += 40; // 子字串（例如 olsaa 命中 olsaaca）大幅降權，絕不壓過全字 OLSAA！
-            reason = reason || '英文名相似比對';
-            hitThis = true;
+          }
+          if (!hitThis && wt.length >= 5) {
+            if (ing.includes(wt)) { sc += 55; reason = reason || '學名相似比對'; hitThis = true; }
+            else if (en.includes(wt)) { sc += 40; reason = reason || '英文名相似比對'; hitThis = true; }
           }
           if (!hitThis && wt.length >= 6) {
             const candWords = (ing + ' ' + en).match(/[a-z]{5,}/g) || [];
@@ -7250,17 +7974,17 @@ ${JSON.stringify(items)}
           }
         }
 
-        // C. 中文品名詞元比對（支援中英雙語 OCR 辨識出的中文藥名！）
+        // B. 中文品名詞元比對（若本行有明確英文詞，中文作為強加分；純中文藥名同樣可比對）
         for (const zt of zhTokens) {
           if (zh.includes(zt)) {
-            sc += (zt.length >= 3 ? 160 : 95);
+            sc += (zt.length >= 3 ? 165 : 95);
             reason = reason || '中文品名比對';
           }
         }
 
-        if (sc <= 0) continue;
+        if (sc < 85) continue; // 低分雜訊門檻：杜絕亂碼硬配假藥！
 
-        // D. 單方 vs 複方合理性加權（以「實際命中幾種不同主成分」計算，避免 OLMESARTAN MEDOXOMIL 兩字被當成兩種成分）
+        // C. 單方 vs 複方合理性加權
         const distinctIngMatched = ingList.filter(itemIng => {
           const lowIng = String(itemIng || '').toLowerCase();
           return enRegexes.some(({ wb }) => wb.test(lowIng));
@@ -7270,18 +7994,24 @@ ${JSON.stringify(items)}
           if (nIngs === 1) sc += 40;
           else if (nIngs >= 2) sc -= 55;
         } else if ((queryLooksCombo || distinctIngMatched >= 2) && nIngs >= 2) {
-          sc += 35;
+          sc += 45;
         }
 
-        // E. 劑量與劑型加分
+        // D. 劑量與劑型精準加權（修正 Allegra 60mg (錠) 誤配 艾來膠囊！）
         const fullMeta = `${zh} ${en} ${df}`;
         for (const dn of doseNums) {
-          if (new RegExp(`(?:^|[^0-9.])${dn.replace('.', '\\.')}(?:$|[^0-9.])`).test(fullMeta)) sc += 34;
+          if (new RegExp(`(?:^|[^0-9.])${dn.replace('.', '\\.')}(?:$|[^0-9.])`).test(fullMeta)) sc += 36;
         }
-        if (wantSyrup && /糖漿|口服液|內服液|懸液|syrup|susp|solu/.test(fullMeta)) sc += 28;
-        if (wantGranule && /顆粒|散劑|粉劑|granule|powder/.test(fullMeta)) sc += 28;
-        if (wantCap && /膠囊|capsule/.test(fullMeta)) sc += 18;
-        if (wantTab && /錠|tablet/.test(fullMeta)) sc += 18;
+        if (wantPen && /筆|pen|注射/.test(fullMeta)) sc += 40;
+        if (wantSyrup && /糖漿|口服液|內服液|懸液|液劑|止咳水|syrup|susp|solu|mixture/.test(fullMeta)) sc += 45;
+        if (wantGranule && /顆粒|散劑|粉劑|granule|powder/.test(fullMeta)) sc += 35;
+        if (wantTab && !wantCap) {
+          if (/錠|tablet/.test(fullMeta)) sc += 36;
+          else if (/膠囊|capsule/.test(fullMeta)) sc -= 28;
+        } else if (wantCap && !wantTab) {
+          if (/膠囊|capsule/.test(fullMeta)) sc += 36;
+          else if (/錠|tablet/.test(fullMeta)) sc -= 28;
+        }
         if (hasNhi) sc += 15;
         if (d.has_leaflet) sc += 6;
 
@@ -7311,49 +8041,67 @@ ${JSON.stringify(items)}
       if (btn) { btn.textContent = '✅ 已套用病人資料'; btn.disabled = true; }
     }
 
-    // 自動合併「同一種藥被拆成兩行（商品名行 ＋ 學名行）」或「比對出同一張許可證」的重複項目
+    // 自動合併：① 同一種藥被拆成兩行（商品名行 ＋ 學名行） ② 同一張處方同藥早晚不同劑量（如 Levemir 早 30 QD ＋ 睡前 28 HS）
     function mergeDuplicateParsedRx(enrichedList) {
       const out = [];
       for (const cur of enrichedList) {
-        const prev = out.length ? out[out.length - 1] : null;
-        let shouldMerge = false;
+        // 先找是否與已收錄的項目「同許可證」或「同健保碼」（支援非相鄰或相鄰的早晚分次胰島素）
+        let target = null;
+        if (cur.selectedLicenseId) {
+          target = out.find(x => x.selectedLicenseId && x.selectedLicenseId === cur.selectedLicenseId);
+        }
+        if (!target && cur.nhi_code) {
+          target = out.find(x => x.nhi_code && x.nhi_code === cur.nhi_code);
+        }
 
-        if (prev && !cur.nhi_code) {
-          // 情況 1：相鄰兩行比對出完全相同的 license_id（例如兩行都配到同一顆藥）
-          if (prev.selectedLicenseId && cur.selectedLicenseId && prev.selectedLicenseId === cur.selectedLicenseId) {
-            shouldMerge = true;
-          }
-          // 情況 2：前一行是商品名（如 OLSAA F.C. TABLET）、後一行沒有獨立用法且其文字命中前一行的主成分（如 OLMESARTAN）
-          if (!shouldMerge && !cur.has_explicit_sig && prev.matched && Array.isArray(prev.matched.ingredients)) {
-            const curLow = String(cur.drug_name || '').toLowerCase();
-            const prevIngs = prev.matched.ingredients.map(x => normalizeSingleIngredient(x)).filter(x => x.length >= 4);
-            if (prevIngs.some(ing => curLow.includes(ing.split(' ')[0]))) {
-              shouldMerge = true;
-            }
-          }
-          // 情況 3：前一行是學名、後一行是商品名且無獨立用法，兩者成分重疊
-          if (!shouldMerge && !cur.has_explicit_sig && prev.matched && cur.matched) {
-            const pIng = (prev.matched.ingredients || []).map(x => normalizeSingleIngredient(x)).filter(Boolean);
-            const cIng = (cur.matched.ingredients || []).map(x => normalizeSingleIngredient(x)).filter(Boolean);
-            if (pIng.length && cIng.length && pIng.some(x => cIng.includes(x))) {
-              shouldMerge = true;
-            }
+        const prev = out.length ? out[out.length - 1] : null;
+        let isAdjacentGenericCont = false;
+        if (!target && prev && !cur.nhi_code && !cur.has_explicit_sig && prev.matched && Array.isArray(prev.matched.ingredients)) {
+          const curLow = String(cur.drug_name || '').toLowerCase();
+          const prevIngs = prev.matched.ingredients.map(x => normalizeSingleIngredient(x)).filter(x => x.length >= 4);
+          if (prevIngs.some(ing => curLow.includes(ing.split(' ')[0]))) {
+            target = prev;
+            isAdjacentGenericCont = true;
           }
         }
 
-        if (shouldMerge && prev) {
-          const combinedName = `${prev.drug_name} / ${cur.drug_name}`.slice(0, 96);
-          const reCandidates = findTopMatches(combinedName, prev.nhi_code || cur.nhi_code, 5);
-          const reTop = reCandidates[0] || prev.candidates?.[0] || null;
-          prev.drug_name = combinedName;
-          prev.candidates = reCandidates.length ? reCandidates : prev.candidates;
-          prev.selectedLicenseId = reTop ? reTop.drug.license_id : prev.selectedLicenseId;
-          prev.matched = reTop ? reTop.drug : prev.matched;
-          prev.matchReason = reTop ? `${reTop.reason}（已自動合併學名行）` : prev.matchReason;
-          prev.matchScore = reTop ? reTop.score : prev.matchScore;
-          if (!prev.has_explicit_sig && cur.has_explicit_sig) {
-            prev.dosage_text = cur.dosage_text;
-            prev.has_explicit_sig = true;
+        if (target) {
+          // 合併不同時段／劑量 sigs
+          const mergedSigs = Array.isArray(target.sigs) ? [...target.sigs] : [];
+          const sigKeySet = new Set(mergedSigs.map(s => `${s.dose}|${s.freq}|${s.route}`));
+          if (Array.isArray(cur.sigs)) {
+            for (const sg of cur.sigs) {
+              const k = `${sg.dose}|${sg.freq}|${sg.route}`;
+              if (!sigKeySet.has(k)) {
+                mergedSigs.push(sg);
+                sigKeySet.add(k);
+              }
+            }
+          }
+          target.sigs = mergedSigs;
+
+          if (isAdjacentGenericCont) {
+            const combinedName = `${target.drug_name} / ${cur.drug_name}`.slice(0, 96);
+            const reCands = findTopMatches(combinedName, target.nhi_code || cur.nhi_code, 5);
+            const reTop = reCands[0] || target.candidates?.[0] || null;
+            target.drug_name = combinedName;
+            target.candidates = reCands.length ? reCands : target.candidates;
+            target.selectedLicenseId = reTop ? reTop.drug.license_id : target.selectedLicenseId;
+            target.matched = reTop ? reTop.drug : target.matched;
+            target.matchReason = reTop ? `${reTop.reason}（已合併學名行）` : target.matchReason;
+            target.matchScore = reTop ? reTop.score : target.matchScore;
+          } else if (mergedSigs.length >= 2) {
+            target.matchReason = `${target.matchReason.replace(/（已合併.*）$/, '')}（已合併分次劑量）`;
+          }
+
+          if (target.sigs.length) {
+            target.dosage_text = renderSigsToPlainZh(target.sigs, target.matched);
+            target.has_explicit_sig = true;
+          } else if (!target.has_explicit_sig && cur.has_explicit_sig) {
+            target.dosage_text = cur.dosage_text;
+            target.has_explicit_sig = true;
+          } else if (cur.has_explicit_sig && cur.dosage_text && !target.dosage_text.includes(cur.dosage_text)) {
+            target.dosage_text = `${target.dosage_text}；${cur.dosage_text}`;
           }
         } else {
           out.push(cur);
@@ -7372,12 +8120,18 @@ ${JSON.stringify(items)}
       const rawEnriched = (items || []).map(it => {
         const candidates = findTopMatches(it.drug_name, it.nhi_code, 5);
         const top = candidates[0] || null;
+        const matchedDrug = top ? top.drug : null;
+        // 關鍵修正：比對出資料庫藥品後，立刻依劑型／成分校正單位（例如胰島素自動改為「單位」、不再印「注射 30 顆」！）
+        const refinedDosage = (Array.isArray(it.sigs) && it.sigs.length)
+          ? renderSigsToPlainZh(it.sigs, matchedDrug)
+          : (it.dosage_text || '依醫師指示按時服用');
         return {
           ...it,
           checked: true,
           candidates,
-          selectedLicenseId: top ? top.drug.license_id : '',
-          matched: top ? top.drug : null,
+          selectedLicenseId: matchedDrug ? matchedDrug.license_id : '',
+          matched: matchedDrug,
+          dosage_text: refinedDosage,
           matchReason: top ? top.reason : '',
           matchScore: top ? top.score : 0
         };
@@ -7418,7 +8172,7 @@ ${JSON.stringify(items)}
         <button type="button" class="btn btn-primary btn-block" style="margin-bottom:8px;" onclick="addAllRxToMedList()">＋ 將勾選藥品一次加入清單並執行 Beers 檢核</button>
         ${list.map((it, idx) => {
           const badgeClass = it.matchScore >= 140 ? 'green' : (it.selectedLicenseId ? 'yellow' : 'red');
-          const badgeTxt = it.selectedLicenseId ? `✔ ${it.matchReason}` : '⚠️ 未比對到(直接加入)';
+          const badgeTxt = it.selectedLicenseId ? `✔ ${it.matchReason}` : '⚠️ 未比對到(請手動確認)';
           const optsHtml = [
             ...it.candidates.map(c => {
               const d = c.drug;
@@ -7429,7 +8183,6 @@ ${JSON.stringify(items)}
             `<option value="" ${!it.selectedLicenseId ? 'selected' : ''}>（不使用資料庫，直接以辨識名稱加入）</option>`
           ].join('');
 
-          // 若比對成功，卡片標題優先顯示乾淨的資料庫名稱，辨識原始字退居小字副標（視覺乾淨無亂碼感）
           const cleanDisplayTitle = (it.matched && (it.matched.name_zh || it.matched.name_en))
             ? `${it.matched.name_zh || it.matched.name_en}`
             : (it.drug_name || '');
@@ -7449,7 +8202,7 @@ ${JSON.stringify(items)}
                 </div>
               </div>
               <select class="rx-match-select" onchange="onRxCandidateChange(${idx}, this.value)">${optsHtml}</select>
-              <input type="text" class="rx-match-usage" value="${escapeAttr(it.dosage_text || '')}" placeholder="白話用法（可直接修改）" oninput="window._lastRxParsed[${idx}].dosage_text = this.value" />
+              <input type="text" id="rxUsageInput_${idx}" class="rx-match-usage" value="${escapeAttr(it.dosage_text || '')}" placeholder="白話用法（可直接修改）" oninput="window._lastRxParsed[${idx}].dosage_text = this.value" />
             </div>
           `;
         }).join('')}
@@ -7462,6 +8215,11 @@ ${JSON.stringify(items)}
       it.selectedLicenseId = lid;
       const found = (it.candidates || []).find(c => c.drug.license_id === lid);
       it.matched = found ? found.drug : null;
+      if (Array.isArray(it.sigs) && it.sigs.length) {
+        it.dosage_text = renderSigsToPlainZh(it.sigs, it.matched);
+        const uInp = document.getElementById('rxUsageInput_' + idx);
+        if (uInp) uInp.value = it.dosage_text;
+      }
     }
 
     async function addAllRxToMedList() {
@@ -7549,7 +8307,7 @@ ${JSON.stringify(items)}
       const drug = document.getElementById('rep_drug').value.trim() || '（未指定）';
       const desc = document.getElementById('rep_desc').value.trim();
       const contact = document.getElementById('rep_contact').value.trim() || '（未填寫）';
-      const env = `CareRx-v49 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
+      const env = `CareRx-v51 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
       return { type, drug, desc, contact, env, plainText: `【類型】${type}\n【藥品】${drug}\n【描述】${desc}\n【聯絡】${contact}\n【環境】${env}` };
     }
 
@@ -7644,6 +8402,7 @@ ${JSON.stringify(items)}
       ['patch','貼'],
       ['pack','包'],
       ['shot','支／針'],
+      ['iu','單位（胰島素）'],
       ['mg','mg（毫克）'],
       ['other','其他']
     ];
@@ -8324,7 +9083,11 @@ ${JSON.stringify(items)}
     function rxAutoInitMed(m) {
       const r = rxState(m);
       const nonOral = rxDetectNonOralForm(m);
-      const defaultUnit = (nonOral === 'eye_drops' || nonOral === 'ear_drops') ? 'drop'
+      const isInsulin = /insulin|glargine|detemir|degludec|aspart|lispro|glulisine|levemir|lantus|novorapid|tresiba|toujeo|humulin|胰島素|易筆/i.test(
+        `${m.generic || ''} ${m.nameZh || ''} ${m.nameEn || ''}`
+      );
+      const defaultUnit = isInsulin ? 'iu'
+        : (nonOral === 'eye_drops' || nonOral === 'ear_drops') ? 'drop'
         : (nonOral === 'inhaler' || nonOral === 'oral_spray' || nonOral === 'nasal_spray' || nonOral === 'topical_spray') ? 'puff'
         : nonOral === 'patch' ? 'patch'
         : (nonOral === 'injection' || nonOral === 'enema') ? 'shot'
@@ -8334,21 +9097,8 @@ ${JSON.stringify(items)}
         : (nonOral === 'ointment' || nonOral === 'vaginal_cream' || nonOral === 'eye_ointment') ? 'application'
         : 'tablet';
 
-      const u = String(m.usage || '');
-      const doseM = u.match(/(半|[0-9]+(?:\.[0-9]+)?)\s*(?:顆|錠|粒|包|滴|噴|貼|支|毫升|mL)/i);
-      const qty = doseM ? (doseM[1] === '半' ? '0.5' : doseM[1]) : '1';
-      const isAC = /飯前|空腹/.test(u);
-      const hasBedtime = /睡前/.test(u);
-      const hasExplicitEvening = /晚餐|晚飯|早晚|三餐/.test(u);
-      const slots = [];
-      if (/早|三餐/.test(u)) slots.push(isAC ? '0' : '1');
-      if (/午|中|三餐/.test(u)) slots.push(isAC ? '2' : '3');
-      if (hasExplicitEvening || (/晚/.test(u) && !hasBedtime)) slots.push(isAC ? '4' : '5');
-      if (hasBedtime) slots.push('6');
-      if (/需要時|痛時|不適時/.test(u) && !slots.length) slots.push('7');
-      if (!slots.length) slots.push('1');
-
-      const extraDefault = nonOral === 'oral_spray' ? '噴於舌下／口腔，勿吸入'
+      const extraDefault = isInsulin ? '皮下注射，每次輪替注射部位'
+        : nonOral === 'oral_spray' ? '噴於舌下／口腔，勿吸入'
         : nonOral === 'nasal_spray' ? '噴於鼻腔內'
         : nonOral === 'inhaler' ? '口腔吸入使用（含類固醇請漱口）'
         : nonOral === 'vaginal_cream' ? '依指示塗抹／置入陰道'
@@ -8365,8 +9115,42 @@ ${JSON.stringify(items)}
         : (/舌下錠/.test(`${m.dosageForm || ''} ${m.nameZh || ''}`) ? '含於舌下溶解，不可吞服'
         : (/發泡錠/.test(`${m.dosageForm || ''} ${m.nameZh || ''}`) ? '先泡水完全溶解再喝' : ''));
 
+      const parseUsageSegment = (segText) => {
+        const seg = String(segText || '');
+        const doseM = seg.match(/(半|[0-9]+(?:\.[0-9]+)?)\s*(單位|IU|unit|顆|錠|粒|包|滴|噴|貼|支|毫升|mL|次)/i);
+        const qty = doseM ? (doseM[1] === '半' ? '0.5' : doseM[1]) : '1';
+        let unit = defaultUnit;
+        if (doseM && doseM[2]) {
+          const uTok = doseM[2].toLowerCase();
+          if (uTok === '單位' || uTok === 'iu' || uTok === 'unit') unit = 'iu';
+          else if (uTok === '毫升' || uTok === 'ml') unit = 'ml';
+          else if (uTok === '包') unit = 'pack';
+          else if (uTok === '滴') unit = 'drop';
+          else if (uTok === '噴') unit = 'puff';
+          else if (uTok === '貼') unit = 'patch';
+          else if (uTok === '支') unit = 'shot';
+          else if (uTok === '次') unit = 'application';
+          else if (uTok === '顆' || uTok === '錠' || uTok === '粒') unit = isInsulin ? 'iu' : 'tablet';
+        }
+        const isAC = /飯前|空腹/.test(seg);
+        const hasBedtime = /睡前/.test(seg);
+        const hasExplicitEvening = /晚餐|晚飯|早晚|三餐/.test(seg);
+        const segSlots = [];
+        if (/早|三餐/.test(seg)) segSlots.push(isAC ? '0' : '1');
+        if (/午|中|三餐/.test(seg)) segSlots.push(isAC ? '2' : '3');
+        if (hasExplicitEvening || (/晚/.test(seg) && !hasBedtime)) segSlots.push(isAC ? '4' : '5');
+        if (hasBedtime) segSlots.push('6');
+        if (/需要時|痛時|不適時/.test(seg) && !segSlots.length) segSlots.push('7');
+        if (!segSlots.length) segSlots.push('1');
+        return segSlots.map(sl => ({ slot: sl, qty, unit, extra: extraDefault }));
+      };
+
+      const segments = String(m.usage || '').split(/[；;]/).map(x => x.trim()).filter(Boolean);
+      const parsedRows = segments.length ? segments.flatMap(parseUsageSegment) : parseUsageSegment('');
+      const slots = parsedRows.map(x => x.slot);
+
       if (!r.rows.some(x => x.slot !== '')) {
-        r.rows = slots.map(sl => ({ slot: sl, qty, unit: defaultUnit, extra: extraDefault }));
+        r.rows = parsedRows;
       }
       if (!r.freq) {
         if (slots.includes('7')) r.freq = '4';
@@ -9356,9 +10140,11 @@ ${sourceText.slice(0, 4000)}`
         syncFinalNotesIfAuto();
       }
 
+      const RX_IU_UNIT = { zh: '單位', en: 'unit(s)', vi: 'đơn vị', id: 'unit', th: 'ยูนิต' };
       const units = {
         tablet: T[12], mg: T[13], ml: T[14], application: T[15],
-        drop: T[16], puff: T[17], patch: T[18], pack: T[19], shot: T[20], other: ''
+        drop: T[16], puff: T[17], patch: T[18], pack: T[19], shot: T[20],
+        iu: RX_IU_UNIT[lang] || '單位', other: ''
       };
       const showApp = document.getElementById('opt_appearance') ? document.getElementById('opt_appearance').checked : true;
       const showPurpose = document.getElementById('opt_purpose') ? document.getElementById('opt_purpose').checked : true;

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'elder-med-pwa-v49';
+const CACHE_NAME = 'elder-med-pwa-v51';
 const APP_SHELL = [
   './',
   './index.html',
@@ -30,11 +30,31 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
-  // 允許快取離線 OCR／QR 掃碼用的靜態 CDN 套件（jsQR、Tesseract.js 與 eng 模型），讓第一次載入後即可完全離線使用；其餘外部 API 直接走網路
+  // 允許快取離線掃碼與 PaddleOCR ONNX 引擎（jsQR、onnxruntime-web 的 .js 與 .wasm）
   const isOfflineOcrCdn =
-    (url.hostname === 'cdn.jsdelivr.net' || url.hostname === 'tessdata.projectnaptha.com') &&
-    /(?:jsqr|tesseract|(?:eng|chi_tra)\.traineddata)/i.test(url.pathname);
+    (url.hostname === 'cdn.jsdelivr.net' || url.hostname === 'unpkg.com') &&
+    /(?:jsqr|onnxruntime-web)/i.test(url.pathname);
   if (url.origin !== self.location.origin && !isOfflineOcrCdn) return;
+
+  // PaddleOCR 模型檔（./models/*.onnx, keys.txt）與 ONNX Runtime WASM：Cache-First（載入一次永久離線秒開，不重複消耗行動網路）
+  const isImmutableModelOrWasm =
+    /\/models\/.*\.(?:onnx|txt)$/i.test(url.pathname) ||
+    isOfflineOcrCdn;
+  if (isImmutableModelOrWasm) {
+    event.respondWith(
+      caches.match(req).then((cached) => {
+        if (cached) return cached;
+        return fetch(req).then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+          }
+          return res;
+        });
+      })
+    );
+    return;
+  }
 
   const isHtmlOrIndex =
     req.mode === 'navigate' ||
@@ -44,7 +64,6 @@ self.addEventListener('fetch', (event) => {
     url.pathname.endsWith('tfda_drugs_index.json');
 
   if (isHtmlOrIndex) {
-    // Network-First：確保連網時總是取得最新網頁與藥品目錄，離線時自動回退快取
     event.respondWith(
       fetch(req)
         .then((res) => {
@@ -59,7 +78,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 其他同源靜態資源與藥品資料分片：Stale-While-Revalidate
   event.respondWith(
     caches.match(req).then((cached) => {
       const networkFetch = fetch(req)
