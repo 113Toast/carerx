@@ -1784,6 +1784,125 @@
   .rx-page.rx-tight-1 .patient-reminder-box { font-size: 13.8px; line-height: 1.4; padding: 6px 9px; }
 
 
+
+  /* v47 三合一免 API 處方輸入模組（健保 QR 掃碼 / 拍照框選離線 OCR / 批次貼上 / AI 保底） */
+  .rx-mode-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  .rx-mode-tab {
+    border: 1.5px solid var(--line-2);
+    background: #ffffff;
+    color: var(--ink-2);
+    border-radius: 9px;
+    padding: 7px 4px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.25;
+    transition: all 0.15s;
+  }
+  .rx-mode-tab:hover { background: var(--teal-l); border-color: var(--teal); color: var(--heading); }
+  .rx-mode-tab.active { background: var(--teal); border-color: var(--teal); color: #ffffff; }
+  .rx-mode-pane { display: none; }
+  .rx-mode-pane.active { display: block; }
+  .rx-free-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: var(--ok-bg);
+    color: var(--ok-text);
+    border: 1px solid var(--ok-border);
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+  .rx-qr-video-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    margin: 8px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #111827;
+    border: 2px solid var(--teal);
+  }
+  .rx-qr-video-wrap video {
+    width: 100%;
+    display: block;
+    max-height: 260px;
+    object-fit: cover;
+  }
+  .rx-qr-reticle {
+    position: absolute;
+    inset: 16% 20%;
+    border: 2.5px dashed rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+  }
+  .rx-crop-stage {
+    position: relative;
+    width: 100%;
+    background: #1f2937;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 8px 0;
+    text-align: center;
+    border: 1.5px solid var(--line-2);
+  }
+  .rx-crop-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 360px;
+    margin: 0 auto;
+    touch-action: none;
+    cursor: crosshair;
+  }
+  .rx-crop-tools {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .rx-match-card {
+    background: #ffffff;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 9px 10px;
+    margin-bottom: 8px;
+  }
+  .rx-match-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+  }
+  .rx-match-select {
+    width: 100%;
+    height: 36px !important;
+    font-size: 12.5px !important;
+    padding: 4px 8px !important;
+    margin-top: 4px;
+  }
+  .rx-match-usage {
+    width: 100%;
+    height: 35px !important;
+    font-size: 12.5px !important;
+    padding: 4px 8px !important;
+    margin-top: 4px;
+  }
+  @media (max-width: 600px) {
+    .rx-mode-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .rx-mode-tab { font-size: 12.5px; padding: 8px 6px; }
+  }
+
   /* v46 Mobile Alignment & Prescription OCR Progress Bar */
   .grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: end; }
   .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: end; }
@@ -1983,27 +2102,107 @@
           <h3>
             <span><span class="step-num">02</span>使用藥物</span>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button type="button" id="btnToggleRx" class="btn btn-outline btn-sm" onclick="toggleRxPanel()">📷 拍照辨識處方箋</button>
+              <button type="button" id="btnToggleRx" class="btn btn-outline btn-sm" onclick="toggleRxPanel()">📷 掃碼／辨識處方箋</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="addCustomMed()">＋ 手動新增</button>
             </div>
           </h3>
           <input type="text" id="searchInput" placeholder="輸入中文品名、英文商品名、學名、10 碼健保碼或許可證字號..." oninput="handleSearch()" />
           <div id="searchResults" class="search-results" style="display:none;"></div>
 
-          <!-- 內嵌可收合處方箋拍照辨識面板 -->
+          <!-- 內嵌可收合：三合一免 API 處方輸入模組（＋AI 拍照保底） -->
           <div id="rxInlinePanel" class="rx-inline-panel">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <strong style="font-size:13px; color:var(--primary-dark);">📷 處方箋拍照自動辨識</strong>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:6px;">
+              <strong style="font-size:13.5px; color:var(--primary-dark);">📷 處方箋快速匯入 <span class="rx-free-badge">離線無上限</span></strong>
               <button type="button" class="btn btn-outline btn-sm" style="padding:3px 9px;" onclick="toggleRxPanel(false)">收合</button>
             </div>
-            <div style="font-size:11.5px; background:var(--warn-bg); color:var(--warn-text); border:1px solid var(--warn-border); padding:6px 8px; border-radius:6px; margin-bottom:8px;">
-              ⚠️ 上傳前請遮蔽病人姓名與身分證字號；照片會自動壓縮加速辨識，若雲端壅塞會自動切換備援模型（單次最多等 15 秒，可隨時取消改手打）。
+
+            <div class="rx-mode-tabs" role="tablist">
+              <button type="button" class="rx-mode-tab active" data-rxmode="qr" onclick="switchRxInputMode('qr', this)">📱 健保 QR 掃碼</button>
+              <button type="button" class="rx-mode-tab" data-rxmode="crop" onclick="switchRxInputMode('crop', this)">✂️ 框選離線辨識</button>
+              <button type="button" class="rx-mode-tab" data-rxmode="paste" onclick="switchRxInputMode('paste', this)">📋 批次貼上</button>
+              <button type="button" class="rx-mode-tab" data-rxmode="ai" onclick="switchRxInputMode('ai', this)">🤖 AI 拍照(選用)</button>
             </div>
-            <input type="file" id="rxImageInput" accept="image/*" style="font-size:12.5px; margin-bottom:8px;" />
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button type="button" id="btnAnalyzeRx" class="btn btn-primary" style="flex:1;" onclick="analyzePrescription()">🤖 辨識處方箋並比對資料庫</button>
-              <button type="button" id="btnCancelRx" class="btn btn-danger" style="display:none;" onclick="cancelPrescriptionAnalysis()">⏹️ 取消，改手打</button>
+
+            <!-- 模式 1：台灣健保處方箋 QR Code（支援藥局 2D 條碼槍 ＋ 手機鏡頭 ＋ 上傳照片） -->
+            <div id="rxPane_qr" class="rx-mode-pane active">
+              <div style="font-size:11.5px; background:var(--ok-bg); color:var(--ok-text); border:1px solid var(--ok-border); padding:6px 9px; border-radius:8px; margin-bottom:8px; line-height:1.45;">
+                ✅ <strong>0 元、無次數上限、100% 離線不外洩個資</strong>（自動忽略右下角「就醫識別碼」與身分證字號；慢箋超過 6 種藥可連續掃第 2 顆 QR Code 自動合併）。
+              </div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;">
+                <button type="button" id="btnStartQrCam" class="btn btn-primary btn-sm" style="flex:1;" onclick="startQrCamera()">📷 開啟鏡頭掃描 QR</button>
+                <button type="button" id="btnStopQrCam" class="btn btn-danger btn-sm" style="display:none; flex:1;" onclick="stopQrCamera()">⏹️ 關閉鏡頭</button>
+                <label class="btn btn-outline btn-sm" style="margin:0; cursor:pointer;">
+                  🖼️ 選取 QR 照片
+                  <input type="file" id="rxQrImageInput" accept="image/*" style="display:none;" onchange="decodeQrFromImageFile(this)" />
+                </label>
+              </div>
+              <div id="rxQrVideoWrap" class="rx-qr-video-wrap" style="display:none;">
+                <video id="rxQrVideo" playsinline muted></video>
+                <div class="rx-qr-reticle"></div>
+              </div>
+              <label style="margin-top:2px;">藥局 USB 2D 條碼槍直接「嗶」這裡（或貼上 QR 內容後按 Enter）：</label>
+              <div style="display:flex; gap:6px; align-items:stretch;">
+                <input type="text" id="rxQrTextInput" placeholder="游標點此直接用條碼槍掃描健保處方二維條碼..." onkeydown="if(event.key==='Enter'){event.preventDefault(); handleQrRawTextInput(true);}" oninput="handleQrRawTextInput(false)" />
+                <button type="button" class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="handleQrRawTextInput(true)">解析</button>
+              </div>
+              <div id="rxQrMergeBar" style="display:none; margin-top:6px; font-size:12px; color:var(--primary-dark); align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap;">
+                <span id="rxQrMergeText"></span>
+                <button type="button" class="btn btn-outline btn-sm" onclick="clearQrBatchBuffer()">🗑️ 清空重掃</button>
+              </div>
             </div>
+
+            <!-- 模式 2：無 QR Code 處方 → 拍照「手動框選藥品區」＋ 純前端離線英文 OCR（Tesseract.js eng） -->
+            <div id="rxPane_crop" class="rx-mode-pane">
+              <div style="font-size:11.5px; background:var(--ok-bg); color:var(--ok-text); border:1px solid var(--ok-border); padding:6px 9px; border-radius:8px; margin-bottom:8px; line-height:1.45;">
+                ✅ <strong>免 API Key、無每日 20 次上限、100% 在手機／電腦本機離線辨識</strong>。專為無 QR Code 的門診批價處方單設計：只框選「藥品明細表格」，自動避開上方過敏紀錄與下方非藥品項目！
+              </div>
+              <input type="file" id="rxCropFileInput" accept="image/*" style="font-size:12.5px; margin-bottom:6px;" onchange="loadCropperImage(this)" />
+              <div id="rxCropWorkspace" style="display:none;">
+                <div style="font-size:11.5px; color:var(--ink-2); margin-bottom:4px;">
+                  👆 拖曳藍綠色方框（或拖曳四個角落）只框住「藥品名稱～途徑」表格區：
+                </div>
+                <div class="rx-crop-stage">
+                  <canvas id="rxCropCanvas" class="rx-crop-canvas"></canvas>
+                </div>
+                <div class="rx-crop-tools">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="resetCropRect('table')">📐 預設藥品區</button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="resetCropRect('full')">🖼️ 選取全圖</button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="rotateCropImage90()">🔄 旋轉 90°</button>
+                </div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                  <button type="button" id="btnRunOfflineOcr" class="btn btn-primary" style="flex:1;" onclick="runOfflineCroppedOcr()">⚡ 離線辨識框選藥品（免 API）</button>
+                  <button type="button" id="btnCancelOfflineOcr" class="btn btn-danger" style="display:none;" onclick="cancelOfflineOcr()">⏹️ 取消</button>
+                </div>
+              </div>
+              <details id="rxRawOcrDetails" style="display:none; margin-top:8px; background:#fff; border:1px solid var(--line); border-radius:8px; padding:6px 8px;">
+                <summary style="cursor:pointer; font-size:12px; font-weight:700; color:var(--primary-dark);">📝 檢視／微調離線辨識原始文字</summary>
+                <textarea id="rxRawOcrText" style="min-height:86px; font-size:12px; font-family:monospace; margin-top:6px;"></textarea>
+                <button type="button" class="btn btn-outline btn-sm" style="margin-top:5px;" onclick="reparseFromEditedOcrText()">🔄 依修改後文字重新比對</button>
+              </details>
+            </div>
+
+            <!-- 模式 3：批次貼上（調劑系統藥單／10碼健保碼清單／QR 字串） -->
+            <div id="rxPane_paste" class="rx-mode-pane">
+              <div style="font-size:11.5px; background:var(--ok-bg); color:var(--ok-text); border:1px solid var(--ok-border); padding:6px 9px; border-radius:8px; margin-bottom:8px; line-height:1.45;">
+                ✅ <strong>0 秒匯入、無次數上限</strong>：可直接從藥局調劑軟體複製藥品清單、貼上一排 10 碼健保碼（如 <code>BC21571100</code>），或貼上醫院處方文字（如 <code>Mirabegron 25mg (Betmiga) 1 TAB QD PO</code>）。
+              </div>
+              <textarea id="rxPasteInput" style="min-height:92px; font-size:12.5px; margin-bottom:8px;" placeholder="例如貼上：&#10;01 21T012 TamOXIfen 10mg (Nolvadex) 1.00 TAB QD PO&#10;02 28M002 Mirabegron 25mg/tab (Betmiga) 1.00 TAB QD PO&#10;或直接貼健保碼：BC21571100  BC22792100"></textarea>
+              <button type="button" class="btn btn-primary btn-block" onclick="parseBatchPastedRx()">⚡ 立即解析並比對資料庫</button>
+            </div>
+
+            <!-- 模式 4：Gemini AI 拍照（保留作手寫或雜亂處方保底） -->
+            <div id="rxPane_ai" class="rx-mode-pane">
+              <div style="font-size:11.5px; background:var(--warn-bg); color:var(--warn-text); border:1px solid var(--warn-border); padding:6px 8px; border-radius:6px; margin-bottom:8px; line-height:1.45;">
+                ⚠️ 此模式使用雲端 Gemini API（免費層每日約限 20 次且尖峰易塞車），<strong>藥局日常建議優先使用前三項免費離線功能</strong>；上傳前請務必遮蔽病人姓名與身分證字號。
+              </div>
+              <input type="file" id="rxImageInput" accept="image/*" style="font-size:12.5px; margin-bottom:8px;" />
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" id="btnAnalyzeRx" class="btn btn-primary" style="flex:1;" onclick="analyzePrescription()">🤖 AI 辨識處方箋並比對資料庫</button>
+                <button type="button" id="btnCancelRx" class="btn btn-danger" style="display:none;" onclick="cancelPrescriptionAnalysis()">⏹️ 取消，改手打</button>
+              </div>
+            </div>
+
+            <!-- 共用辨識進度與比對結果核對區 -->
             <div id="rxStatus" style="margin-top:8px;"></div>
             <div id="rxResults" style="margin-top:8px;"></div>
           </div>
@@ -4102,6 +4301,14 @@
       if (!panel) return;
       const next = (typeof forceOpen === 'boolean') ? forceOpen : !panel.classList.contains('open');
       panel.classList.toggle('open', next);
+      if (!next) {
+        if (typeof stopQrCamera === 'function') stopQrCamera();
+      } else {
+        const activeTab = panel.querySelector('.rx-mode-tab.active');
+        if (activeTab && activeTab.getAttribute('data-rxmode') === 'qr' && window.innerWidth > 960) {
+          setTimeout(() => { document.getElementById('rxQrTextInput')?.focus(); }, 60);
+        }
+      }
     }
 
     function setMobileView(mode) {
@@ -5759,27 +5966,9 @@ ${JSON.stringify(items)}
           `;
           return;
         }
-        window._lastRxParsed = items.map(it => {
-          const matched = findBestMatch(it.drug_name, it.nhi_code);
-          return { ...it, matched };
+        showParsedRxReview(items, {
+          sourceLabel: `AI 辨識（${geminiLastWorkingModel || 'Gemini'}，耗時 ${totalSec} 秒）`
         });
-        status.innerHTML = `
-          <div class="rx-progress-box is-ok">
-            ✅ 辨識完成（共 ${items.length} 種藥，使用 <strong>${escapeHtml(geminiLastWorkingModel || 'Gemini')}</strong>，耗時 ${totalSec} 秒）
-          </div>
-        `;
-        box.innerHTML = `
-          <button type="button" class="btn btn-primary btn-block" style="margin-bottom:8px;" onclick="addAllRxToMedList()">＋ 全部 ${items.length} 種藥一次加入清單並執行 Beers 檢核</button>
-          ${window._lastRxParsed.map((it, idx) => `
-            <div class="med-editor-card" style="padding:8px 10px;">
-              <strong>${idx + 1}. ${escapeHtml(it.drug_name || '')}</strong> ${it.nhi_code ? `<span class="nhi-tag">${escapeHtml(it.nhi_code)}</span>` : ''}
-              <div style="font-size:11.5px; color:var(--text-muted);">用法：${escapeHtml(it.dosage_text || '')}</div>
-              <div style="font-size:11.5px; color:${it.matched ? 'var(--ok-text)' : '#B45309'};">
-                ${it.matched ? `✔ 比對成功：${escapeHtml(it.matched.name_zh || it.matched.name_en || it.matched.license_id)}` : '⚠️ 資料庫未比對到，將以辨識名稱直接加入'}
-              </div>
-            </div>
-          `).join('')}
-        `;
       } catch (err) {
         stopRxTimer();
         rxActiveAbortController = null;
@@ -5796,23 +5985,1092 @@ ${JSON.stringify(items)}
       }
     }
 
-    function findBestMatch(name, nhiCode) {
-      if (!drugIndex.length) return null;
+    // =========================================================================
+    // 5B. v47 三合一免 API 處方輸入引擎（健保 QR 掃碼 ＋ 拍照框選離線英文 OCR ＋ 批次貼上 ＋ 多候選模糊比對）
+    // =========================================================================
+    let rxQrStream = null;
+    let rxQrRafId = null;
+    let rxQrBufferItems = [];
+    let rxQrBufferMeta = null;
+    let rxQrScannedHashes = new Set();
+
+    let rxCropImg = null;
+    let rxCropRect = { x: 0.04, y: 0.28, w: 0.92, h: 0.42 }; // 正規化比例 0..1
+    let rxCropDrag = null;
+    let rxCropBound = false;
+    let rxOfflineOcrCancelled = false;
+    let rxTesseractWorkerPromise = null;
+
+    function switchRxInputMode(mode, btnEl) {
+      document.querySelectorAll('#rxInlinePanel .rx-mode-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#rxInlinePanel .rx-mode-pane').forEach(p => p.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      const pane = document.getElementById('rxPane_' + mode);
+      if (pane) pane.classList.add('active');
+      if (mode !== 'qr') stopQrCamera();
+      if (mode === 'qr' && window.innerWidth > 960) {
+        setTimeout(() => document.getElementById('rxQrTextInput')?.focus(), 50);
+      }
+      if (mode === 'crop' && rxCropImg) {
+        setTimeout(drawCropCanvas, 50);
+      }
+    }
+
+    function loadExternalScriptOnce(url, globalCheckFn) {
+      if (globalCheckFn()) return Promise.resolve();
+      if (!window._extScriptPromises) window._extScriptPromises = {};
+      if (window._extScriptPromises[url]) return window._extScriptPromises[url];
+      window._extScriptPromises[url] = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = url;
+        s.async = true;
+        s.onload = () => resolve();
+        s.onerror = () => {
+          delete window._extScriptPromises[url];
+          reject(new Error('無法載入離線套件（初次使用需連網快取一次）'));
+        };
+        document.head.appendChild(s);
+      });
+      return window._extScriptPromises[url];
+    }
+
+    // --- 醫囑頻次與劑量轉台灣高齡白話用法 ---
+    function formatSigToPlainZh(doseStr, unitStr, freqStr, routeStr) {
+      const doseNum = parseFloat(String(doseStr || '').replace(/[^0-9.]/g, ''));
+      const cleanDose = (!isNaN(doseNum) && doseNum > 0)
+        ? (doseNum === 0.5 ? '半' : String(Number(doseNum.toFixed(2))))
+        : '1';
+      const uRaw = String(unitStr || '').toUpperCase().replace(/[^A-Z]/g, '');
+      const rRaw = String(routeStr || '').toUpperCase().replace(/[^A-Z]/g, '');
+      const fRaw = String(freqStr || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+      const unitMap = {
+        TAB: '顆', TABS: '顆', CAP: '顆', CAPS: '顆', PILL: '顆',
+        ML: '毫升', CC: '毫升', PACK: '包', PKT: '包', BAG: '包', SACHET: '包',
+        DROP: '滴', GTT: '滴', GTTS: '滴', PUFF: '噴', SPRAY: '噴',
+        PATCH: '貼', SUPP: '顆', BOT: '瓶', AMP: '支', VIAL: '支', SYR: '支', PEN: '支', IU: '單位', U: '單位'
+      };
+      let unitZh = unitMap[uRaw] || '顆';
+      if (rRaw === 'OPH' || rRaw === 'EYE' || rRaw === 'OU' || rRaw === 'OD' || rRaw === 'OS') unitZh = uRaw === 'GM' ? '次' : '滴';
+      else if (rRaw === 'INH' || rRaw === 'NASAL') unitZh = '噴';
+      else if (rRaw === 'EXT' || rRaw === 'TOP' || rRaw === 'SKIN') unitZh = '次';
+
+      const verb = (rRaw === 'EXT' || rRaw === 'TOP') ? '塗抹'
+        : (rRaw === 'OPH' || rRaw === 'OTIC') ? '點'
+        : (rRaw === 'INH' || rRaw === 'NASAL') ? '噴'
+        : (rRaw === 'SC' || rRaw === 'IM' || rRaw === 'IV') ? '注射'
+        : (rRaw === 'VAG' || rRaw === 'RECT' || rRaw === 'SUPP') ? '使用'
+        : (unitZh === '毫升' ? '喝' : '吃');
+
+      const mealSuffix = /AC$/.test(fRaw) ? '飯前' : (/PC$/.test(fRaw) ? '飯後' : '');
+      const baseFreq = fRaw.replace(/(?:AC|PC)$/, '');
+
+      if (baseFreq === 'PRN' || fRaw.includes('PRN')) return `需要時每次${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'HS' || baseFreq === 'QHS' || baseFreq === 'QN') return `晚上睡前${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'QD' || baseFreq === 'QDAM' || baseFreq === 'QAM') return `每天早上${mealSuffix}${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'QDPM' || baseFreq === 'QPM') return `每天晚上${mealSuffix}${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'BID') return `每天早晚${mealSuffix || '飯後'}各${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'TID') return `每天三餐${mealSuffix || '飯後'}各${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'QID') return `每天四次${mealSuffix}每次${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'QOD') return `每隔一天${mealSuffix}${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'QW' || baseFreq === 'QWK') return `每週固定一天${verb} ${cleanDose} ${unitZh}`;
+      if (baseFreq === 'STAT') return `立即${verb} ${cleanDose} ${unitZh}`;
+      if (/^Q(\d+)H$/.test(baseFreq)) {
+        const hrs = baseFreq.match(/^Q(\d+)H$/)[1];
+        return `每 ${hrs} 小時${verb} ${cleanDose} ${unitZh}`;
+      }
+      return `依醫師指示每次${verb} ${cleanDose} ${unitZh}`;
+    }
+
+    // --- 台灣健保標準處方箋 QR Code 解析器（自動排除就醫識別碼，丟棄身分證與全名僅留姓氏與年齡） ---
+    function parseTaiwanNhiQr(rawStr) {
+      const s = String(rawStr || '').trim();
+      if (!s) return { ok: false, reason: 'EMPTY' };
+
+      // 偵測是否為台灣健保標準分號分隔處方 QR Code
+      const parts = s.split(';').map(x => x.trim());
+      if (parts.length < 10) {
+        // 可能是長庚右下角的「就醫識別碼」或一般網址條碼
+        return { ok: false, reason: 'NOT_NHI_RX_QR' };
+      }
+
+      // 尋找所有 10 碼台灣健保藥品代碼（排除身分證字號 [A-Z][1289]\d{8} 與純數字日期/醫事機構碼）
+      const isTaiwanId = (tok) => /^[A-Z][1289]\d{8}$/i.test(tok);
+      const isNhiDrugCode = (tok) => {
+        if (!/^[A-Z0-9]{10}$/i.test(tok)) return false;
+        if (isTaiwanId(tok)) return false;
+        // 台灣健保藥品碼首碼常見 A/B/C/K/N/X/E/G/W 且含英文字母與數字
+        if (/^\d{10}$/.test(tok)) return false;
+        return /^[A-Z]{1,2}[A-Z0-9]{8,9}$/i.test(tok);
+      };
+
+      const nhiIndices = [];
+      for (let i = 0; i < parts.length; i++) {
+        if (isNhiDrugCode(parts[i])) nhiIndices.push(i);
+      }
+      if (!nhiIndices.length) {
+        return { ok: false, reason: 'NO_NHI_DRUGS' };
+      }
+
+      // 隱私安全擷取表頭：只抽「姓氏 1 字」與「出生民國年→年齡」，絕不保存姓名全名或身分證字號！
+      const meta = { surname: '', age: '', sex: '' };
+      const headerSlice = parts.slice(0, Math.min(14, nhiIndices[0]));
+      const curRocYear = new Date().getFullYear() - 1911;
+
+      for (const tok of headerSlice) {
+        if (!tok) continue;
+        // 身分證字號僅用於推斷性別(第2碼 1男/2女)，不保存原字號
+        if (isTaiwanId(tok)) {
+          if (!meta.sex) meta.sex = tok[1] === '1' ? 'M' : (tok[1] === '2' ? 'F' : '');
+          continue;
+        }
+        // 7 碼民國出生年月日（例如 0380512 → 民國 38 年）
+        if (!meta.age && /^[01]\d{6}$/.test(tok)) {
+          const y = parseInt(tok.slice(0, 3), 10);
+          const m = parseInt(tok.slice(3, 5), 10);
+          const d = parseInt(tok.slice(5, 7), 10);
+          if (y >= 1 && y <= curRocYear && m >= 1 && m <= 12 && d >= 1 && d <= 31) {
+            const calcAge = curRocYear - y;
+            if (calcAge >= 1 && calcAge <= 115) meta.age = String(calcAge);
+          }
+          continue;
+        }
+        // 僅取中文姓氏第 1 字（長度 2–4 的純中文視為病人姓名，丟棄後段只留姓氏）
+        if (!meta.surname && /^[\u4e00-\u9fff]{2,4}$/.test(tok) && !/醫院|診所|藥局|門診|健保/.test(tok)) {
+          meta.surname = tok[0];
+        }
+      }
+
+      const items = [];
+      const FREQ_RE = /^(?:QD|QDAC|QDPC|QDAM|QDPM|BID|BIDAC|BIDPC|TID|TIDAC|TIDPC|QID|QIDAC|QIDPC|HS|QHS|QN|PRN|QOD|QW|QWK|STAT|Q\d+H)$/i;
+      const ROUTE_RE = /^(?:PO|EXT|INH|OPH|OTIC|TOP|SC|IM|IV|SL|VAG|RECT|SUPP|NASAL|AD|AS|AU|OD|OS|OU|IE)$/i;
+
+      for (let k = 0; k < nhiIndices.length; k++) {
+        const idx = nhiIndices[k];
+        const nextIdx = (k + 1 < nhiIndices.length) ? nhiIndices[k + 1] : Math.min(parts.length, idx + 7);
+        const code = parts[idx].toUpperCase();
+        const seg = parts.slice(idx + 1, nextIdx);
+
+        let dose = '';
+        let freq = '';
+        let route = '';
+        for (const f of seg) {
+          if (!f) continue;
+          if (!dose && /^\d+(?:\.\d+)?$/.test(f)) { dose = f; continue; }
+          if (!freq && FREQ_RE.test(f)) { freq = f.toUpperCase(); continue; }
+          if (!route && ROUTE_RE.test(f)) { route = f.toUpperCase(); continue; }
+        }
+        items.push({
+          drug_name: code,
+          nhi_code: code,
+          dosage_text: formatSigToPlainZh(dose || '1', '', freq || 'QD', route || 'PO'),
+          raw_line: [code, dose, freq, route].filter(Boolean).join(' ')
+        });
+      }
+
+      return { ok: true, items, meta };
+    }
+
+    function applyQrResultToBuffer(rawStr) {
+      const status = document.getElementById('rxStatus');
+      const parsed = parseTaiwanNhiQr(rawStr);
+      if (!parsed.ok) {
+        if (parsed.reason === 'NOT_NHI_RX_QR' || parsed.reason === 'NO_NHI_DRUGS') {
+          status.innerHTML = `<div class="rx-progress-box">ℹ️ 偵測到「就醫識別碼」或其他非處方條碼，請對準處方箋上較大顆的<strong>健保處方二維條碼</strong>。</div>`;
+        }
+        return false;
+      }
+
+      const hash = rawStr.trim();
+      const isDupScan = rxQrScannedHashes.has(hash);
+      rxQrScannedHashes.add(hash);
+
+      if (parsed.meta && (parsed.meta.age || parsed.meta.surname || parsed.meta.sex)) {
+        rxQrBufferMeta = rxQrBufferMeta || {};
+        if (parsed.meta.surname && !rxQrBufferMeta.surname) rxQrBufferMeta.surname = parsed.meta.surname;
+        if (parsed.meta.age && !rxQrBufferMeta.age) rxQrBufferMeta.age = parsed.meta.age;
+        if (parsed.meta.sex && !rxQrBufferMeta.sex) rxQrBufferMeta.sex = parsed.meta.sex;
+      }
+
+      let addedCnt = 0;
+      const seenCodes = new Set(rxQrBufferItems.map(x => x.nhi_code));
+      for (const it of parsed.items) {
+        if (!seenCodes.has(it.nhi_code)) {
+          rxQrBufferItems.push(it);
+          seenCodes.add(it.nhi_code);
+          addedCnt++;
+        }
+      }
+
+      const bar = document.getElementById('rxQrMergeBar');
+      const barTxt = document.getElementById('rxQrMergeText');
+      if (bar && barTxt) {
+        bar.style.display = 'flex';
+        barTxt.textContent = `📦 已掃入 ${rxQrScannedHashes.size} 顆處方 QR（累計 ${rxQrBufferItems.length} 種藥；若慢箋有第 2 顆 QR 可繼續掃描合併）`;
+      }
+
+      showParsedRxReview(rxQrBufferItems, {
+        sourceLabel: isDupScan
+          ? `健保 QR Code（此顆已掃過，累計 ${rxQrBufferItems.length} 種藥）`
+          : `健保 QR Code 離線解析成功（本次新增 ${addedCnt} 種，累計 ${rxQrBufferItems.length} 種）`,
+        patientMeta: rxQrBufferMeta
+      });
+      return true;
+    }
+
+    function clearQrBatchBuffer() {
+      rxQrBufferItems = [];
+      rxQrBufferMeta = null;
+      rxQrScannedHashes.clear();
+      const bar = document.getElementById('rxQrMergeBar');
+      if (bar) bar.style.display = 'none';
+      const inp = document.getElementById('rxQrTextInput');
+      if (inp) inp.value = '';
+      document.getElementById('rxStatus').innerHTML = '';
+      document.getElementById('rxResults').innerHTML = '';
+    }
+
+    function handleQrRawTextInput(forceParse) {
+      const inp = document.getElementById('rxQrTextInput');
+      if (!inp) return;
+      const val = inp.value.trim();
+      if (!val) return;
+      const semiCnt = (val.match(/;/g) || []).length;
+      if (!forceParse && semiCnt < 12) return;
+      const ok = applyQrResultToBuffer(val);
+      if (ok) inp.value = '';
+    }
+
+    async function startQrCamera() {
+      const status = document.getElementById('rxStatus');
+      const wrap = document.getElementById('rxQrVideoWrap');
+      const video = document.getElementById('rxQrVideo');
+      const btnStart = document.getElementById('btnStartQrCam');
+      const btnStop = document.getElementById('btnStopQrCam');
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        status.innerHTML = `<div class="rx-progress-box is-error">❌ 此瀏覽器不支援直接開啟鏡頭，請改按「🖼️ 選取 QR 照片」拍照掃描。</div>`;
+        return;
+      }
+
+      stopQrCamera();
+      status.innerHTML = `<div class="rx-progress-box">⏳ 正在啟動相機鏡頭與離線掃碼引擎...</div>`;
+      try {
+        const useNative = ('BarcodeDetector' in window);
+        let nativeDetector = null;
+        if (useNative) {
+          try {
+            nativeDetector = new window.BarcodeDetector({ formats: ['qr_code'] });
+          } catch (_) { nativeDetector = null; }
+        }
+        if (!nativeDetector) {
+          await loadExternalScriptOnce('https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js', () => typeof window.jsQR === 'function');
+        }
+
+        rxQrStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        video.srcObject = rxQrStream;
+        await video.play();
+        wrap.style.display = 'block';
+        btnStart.style.display = 'none';
+        btnStop.style.display = 'inline-flex';
+        status.innerHTML = `<div class="rx-progress-box">📷 請將處方箋上的<strong>健保處方 QR Code</strong>對準白框內...</div>`;
+
+        const offCanvas = document.createElement('canvas');
+        const offCtx = offCanvas.getContext('2d', { willReadFrequently: true });
+        let lastScanTs = 0;
+
+        const tick = async () => {
+          if (!rxQrStream) return;
+          const now = performance.now();
+          if (video.readyState >= 2 && now - lastScanTs > 260) {
+            lastScanTs = now;
+            try {
+              let foundValues = [];
+              if (nativeDetector) {
+                const codes = await nativeDetector.detect(video);
+                foundValues = codes.map(c => c.rawValue).filter(Boolean);
+              } else if (typeof window.jsQR === 'function') {
+                const vw = video.videoWidth || 640;
+                const vh = video.videoHeight || 480;
+                const scale = Math.min(1, 720 / Math.max(vw, vh));
+                offCanvas.width = Math.round(vw * scale);
+                offCanvas.height = Math.round(vh * scale);
+                offCtx.drawImage(video, 0, 0, offCanvas.width, offCanvas.height);
+                const imgData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
+                const qr = window.jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts: 'dontInvert' });
+                if (qr && qr.data) foundValues.push(qr.data);
+              }
+              for (const val of foundValues) {
+                if (!rxQrScannedHashes.has(val.trim())) {
+                  const ok = applyQrResultToBuffer(val);
+                  if (ok && navigator.vibrate) navigator.vibrate(80);
+                }
+              }
+            } catch (_) {}
+          }
+          rxQrRafId = requestAnimationFrame(tick);
+        };
+        rxQrRafId = requestAnimationFrame(tick);
+      } catch (err) {
+        stopQrCamera();
+        status.innerHTML = `<div class="rx-progress-box is-error">❌ 無法開啟鏡頭（${escapeHtml(err.message || '未授權相機權限')}），您可改點「🖼️ 選取 QR 照片」。</div>`;
+      }
+    }
+
+    function stopQrCamera() {
+      if (rxQrRafId) { cancelAnimationFrame(rxQrRafId); rxQrRafId = null; }
+      if (rxQrStream) {
+        rxQrStream.getTracks().forEach(t => t.stop());
+        rxQrStream = null;
+      }
+      const wrap = document.getElementById('rxQrVideoWrap');
+      const video = document.getElementById('rxQrVideo');
+      const btnStart = document.getElementById('btnStartQrCam');
+      const btnStop = document.getElementById('btnStopQrCam');
+      if (video) video.srcObject = null;
+      if (wrap) wrap.style.display = 'none';
+      if (btnStart) btnStart.style.display = 'inline-flex';
+      if (btnStop) btnStop.style.display = 'none';
+    }
+
+    async function decodeQrFromImageFile(inputEl) {
+      const file = inputEl?.files?.[0];
+      if (!file) return;
+      const status = document.getElementById('rxStatus');
+      status.innerHTML = `<div class="rx-progress-box">⏳ 正在從照片尋找健保處方 QR Code...</div>`;
+      try {
+        await loadExternalScriptOnce('https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js', () => typeof window.jsQR === 'function');
+        const imgUrl = URL.createObjectURL(file);
+        const img = await new Promise((res, rej) => {
+          const im = new Image();
+          im.onload = () => res(im);
+          im.onerror = rej;
+          im.src = imgUrl;
+        });
+        URL.revokeObjectURL(imgUrl);
+
+        // 先掃全圖，再掃常見 QR 位置（右側、中下、左下、右下）提高遠拍處方辨識率
+        const regions = [
+          [0, 0, 1, 1],
+          [0.45, 0.25, 0.55, 0.55],
+          [0.45, 0.45, 0.55, 0.55],
+          [0.0, 0.45, 0.55, 0.55],
+          [0.2, 0.2, 0.6, 0.6]
+        ];
+        let matchedAny = false;
+        const c = document.createElement('canvas');
+        const ctx = c.getContext('2d', { willReadFrequently: true });
+
+        for (const [rx, ry, rw, rh] of regions) {
+          const sx = Math.round(img.naturalWidth * rx);
+          const sy = Math.round(img.naturalHeight * ry);
+          const sw = Math.max(1, Math.round(img.naturalWidth * rw));
+          const sh = Math.max(1, Math.round(img.naturalHeight * rh));
+          const scale = Math.min(1.5, 1100 / Math.max(sw, sh));
+          c.width = Math.round(sw * scale);
+          c.height = Math.round(sh * scale);
+          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, c.width, c.height);
+          const idata = ctx.getImageData(0, 0, c.width, c.height);
+          const qr = window.jsQR(idata.data, idata.width, idata.height, { inversionAttempts: 'attemptBoth' });
+          if (qr && qr.data) {
+            if (applyQrResultToBuffer(qr.data)) {
+              matchedAny = true;
+              break;
+            }
+          }
+        }
+        if (!matchedAny) {
+          status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 未在照片中讀出健保處方 QR Code（可能拍太遠或模糊）。建議近拍 QR Code，或切到「✂️ 框選離線辨識」辨識文字！</div>`;
+        }
+      } catch (err) {
+        status.innerHTML = `<div class="rx-progress-box is-error">❌ 解析 QR 照片失敗：${escapeHtml(err.message || '')}</div>`;
+      } finally {
+        inputEl.value = '';
+      }
+    }
+
+    // --- 模式 2：互動式框選畫布（觸控＋滑鼠）＋ 純前端離線英文 OCR（Tesseract.js eng） ---
+    function loadCropperImage(inputEl) {
+      const file = inputEl?.files?.[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        rxCropImg = img;
+        rxCropRect = { x: 0.04, y: 0.28, w: 0.92, h: 0.42 };
+        document.getElementById('rxCropWorkspace').style.display = 'block';
+        bindCropCanvasEvents();
+        drawCropCanvas();
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        alert('無法讀取圖片，請重新選擇照片。');
+      };
+      img.src = url;
+    }
+
+    function resetCropRect(preset) {
+      rxCropRect = preset === 'full'
+        ? { x: 0.01, y: 0.01, w: 0.98, h: 0.98 }
+        : { x: 0.04, y: 0.28, w: 0.92, h: 0.42 };
+      drawCropCanvas();
+    }
+
+    function rotateCropImage90() {
+      if (!rxCropImg) return;
+      const c = document.createElement('canvas');
+      c.width = rxCropImg.naturalHeight || rxCropImg.height;
+      c.height = rxCropImg.naturalWidth || rxCropImg.width;
+      const ctx = c.getContext('2d');
+      ctx.translate(c.width / 2, c.height / 2);
+      ctx.rotate(Math.PI / 2);
+      ctx.drawImage(rxCropImg, -rxCropImg.width / 2, -rxCropImg.height / 2);
+      const rotated = new Image();
+      rotated.onload = () => {
+        rxCropImg = rotated;
+        drawCropCanvas();
+      };
+      rotated.src = c.toDataURL('image/jpeg', 0.92);
+    }
+
+    function drawCropCanvas() {
+      const canvas = document.getElementById('rxCropCanvas');
+      if (!canvas || !rxCropImg) return;
+      const maxW = Math.min(760, Math.max(300, (canvas.parentElement?.clientWidth || 440) * 1.5));
+      const scale = maxW / rxCropImg.width;
+      canvas.width = Math.round(rxCropImg.width * scale);
+      canvas.height = Math.round(rxCropImg.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(rxCropImg, 0, 0, canvas.width, canvas.height);
+
+      const rx = rxCropRect.x * canvas.width;
+      const ry = rxCropRect.y * canvas.height;
+      const rw = rxCropRect.w * canvas.width;
+      const rh = rxCropRect.h * canvas.height;
+
+      // 遮罩框外區域
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.48)';
+      ctx.fillRect(0, 0, canvas.width, ry);
+      ctx.fillRect(0, ry + rh, canvas.width, canvas.height - (ry + rh));
+      ctx.fillRect(0, ry, rx, rh);
+      ctx.fillRect(rx + rw, ry, canvas.width - (rx + rw), rh);
+
+      // 框線
+      ctx.strokeStyle = '#34D399';
+      ctx.lineWidth = Math.max(2.5, canvas.width / 240);
+      ctx.setLineDash([8, 5]);
+      ctx.strokeRect(rx, ry, rw, rh);
+      ctx.setLineDash([]);
+
+      // 四個角落拖曳把手
+      const hs = Math.max(11, canvas.width / 44);
+      ctx.fillStyle = '#10B981';
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      for (const [cx, cy] of [[rx, ry], [rx + rw, ry], [rx, ry + rh], [rx + rw, ry + rh]]) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, hs / 1.7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+
+    function bindCropCanvasEvents() {
+      if (rxCropBound) return;
+      const canvas = document.getElementById('rxCropCanvas');
+      if (!canvas) return;
+      rxCropBound = true;
+
+      const getNormPt = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width)),
+          y: Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height))
+        };
+      };
+
+      canvas.addEventListener('pointerdown', (e) => {
+        if (!rxCropImg) return;
+        canvas.setPointerCapture(e.pointerId);
+        const pt = getNormPt(e);
+        const r = rxCropRect;
+        const tol = 0.065;
+        let mode = 'draw';
+        if (Math.hypot(pt.x - r.x, pt.y - r.y) < tol) mode = 'tl';
+        else if (Math.hypot(pt.x - (r.x + r.w), pt.y - r.y) < tol) mode = 'tr';
+        else if (Math.hypot(pt.x - r.x, pt.y - (r.y + r.h)) < tol) mode = 'bl';
+        else if (Math.hypot(pt.x - (r.x + r.w), pt.y - (r.y + r.h)) < tol) mode = 'br';
+        else if (pt.x >= r.x && pt.x <= r.x + r.w && pt.y >= r.y && pt.y <= r.y + r.h) mode = 'move';
+        rxCropDrag = { mode, startPt: pt, orig: { ...r } };
+      });
+
+      canvas.addEventListener('pointermove', (e) => {
+        if (!rxCropDrag) return;
+        const pt = getNormPt(e);
+        const d = rxCropDrag;
+        const o = d.orig;
+        const minSize = 0.06;
+        if (d.mode === 'move') {
+          const dx = pt.x - d.startPt.x;
+          const dy = pt.y - d.startPt.y;
+          rxCropRect.x = Math.min(1 - o.w, Math.max(0, o.x + dx));
+          rxCropRect.y = Math.min(1 - o.h, Math.max(0, o.y + dy));
+        } else if (d.mode === 'draw') {
+          rxCropRect = {
+            x: Math.min(d.startPt.x, pt.x),
+            y: Math.min(d.startPt.y, pt.y),
+            w: Math.max(minSize, Math.abs(pt.x - d.startPt.x)),
+            h: Math.max(minSize, Math.abs(pt.y - d.startPt.y))
+          };
+        } else {
+          let x1 = o.x, y1 = o.y, x2 = o.x + o.w, y2 = o.y + o.h;
+          if (d.mode.includes('l')) x1 = Math.min(x2 - minSize, pt.x);
+          if (d.mode.includes('r')) x2 = Math.max(x1 + minSize, pt.x);
+          if (d.mode.includes('t')) y1 = Math.min(y2 - minSize, pt.y);
+          if (d.mode.includes('b')) y2 = Math.max(y1 + minSize, pt.y);
+          rxCropRect = { x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
+        }
+        drawCropCanvas();
+      });
+
+      const endDrag = () => { rxCropDrag = null; };
+      canvas.addEventListener('pointerup', endDrag);
+      canvas.addEventListener('pointercancel', endDrag);
+    }
+
+    function buildEnhancedCropCanvas() {
+      const sx = Math.round(rxCropRect.x * rxCropImg.width);
+      const sy = Math.round(rxCropRect.y * rxCropImg.height);
+      const sw = Math.max(20, Math.round(rxCropRect.w * rxCropImg.width));
+      const sh = Math.max(20, Math.round(rxCropRect.h * rxCropImg.height));
+      // 放大至足夠解析度以提升針式／雷射印表機小字辨識率
+      const targetW = Math.min(2200, Math.max(sw, Math.round(sw * 1.8)));
+      const scale = targetW / sw;
+      const out = document.createElement('canvas');
+      out.width = Math.round(sw * scale);
+      out.height = Math.round(sh * scale);
+      const ctx = out.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, out.width, out.height);
+      ctx.drawImage(rxCropImg, sx, sy, sw, sh, 0, 0, out.width, out.height);
+
+      // 灰階＋自適應對比增強（淡化紅筆註記、強化黑灰印刷英文字）
+      try {
+        const imgData = ctx.getImageData(0, 0, out.width, out.height);
+        const d = imgData.data;
+        let minL = 255, maxL = 0;
+        const lum = new Uint8Array(d.length / 4);
+        for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+          // 稍微拉高紅色通道權重，讓處方上的紅筆圈線變淡、黑字保持深黑！
+          const l = Math.min(255, Math.round(0.45 * d[i] + 0.40 * d[i + 1] + 0.15 * d[i + 2]));
+          lum[p] = l;
+          if (l < minL) minL = l;
+          if (l > maxL) maxL = l;
+        }
+        const span = Math.max(30, maxL - minL);
+        for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+          let v = ((lum[p] - minL) * 255) / span;
+          // 柔和 S 型對比拉開背景與印刷字
+          v = v > 195 ? 255 : (v < 70 ? Math.max(0, v * 0.65) : v);
+          d[i] = d[i + 1] = d[i + 2] = Math.round(v);
+        }
+        ctx.putImageData(imgData, 0, 0);
+      } catch (_) {}
+      return out;
+    }
+
+    function cancelOfflineOcr() {
+      rxOfflineOcrCancelled = true;
+      document.getElementById('btnRunOfflineOcr').disabled = false;
+      document.getElementById('btnCancelOfflineOcr').style.display = 'none';
+      document.getElementById('rxStatus').innerHTML = `<div class="rx-progress-box">⏹️ 已取消離線辨識。</div>`;
+    }
+
+    async function runOfflineCroppedOcr() {
+      if (!rxCropImg) { alert('請先選擇處方箋照片！'); return; }
+      const status = document.getElementById('rxStatus');
+      const btnRun = document.getElementById('btnRunOfflineOcr');
+      const btnCancel = document.getElementById('btnCancelOfflineOcr');
+      rxOfflineOcrCancelled = false;
+      btnRun.disabled = true;
+      btnCancel.style.display = 'inline-flex';
+      const t0 = performance.now();
+
+      try {
+        status.innerHTML = `<div class="rx-progress-box">⏳ 正在準備純前端離線 OCR 引擎（首次使用約需載入 4 MB 英文模型，之後離線秒開）...</div>`;
+        await loadExternalScriptOnce('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js', () => Boolean(window.Tesseract));
+        if (rxOfflineOcrCancelled) return;
+
+        status.innerHTML = `<div class="rx-progress-box">✨ 正在增強框選區域對比度並淡化手寫紅線...</div>`;
+        const cropCanvas = buildEnhancedCropCanvas();
+
+        if (!rxTesseractWorkerPromise) {
+          rxTesseractWorkerPromise = window.Tesseract.createWorker('eng', 1, {
+            logger: (m) => {
+              if (rxOfflineOcrCancelled) return;
+              if (m.status === 'recognizing text') {
+                const pct = Math.round((m.progress || 0) * 100);
+                status.innerHTML = `<div class="rx-progress-box">🔎 本機離線辨識藥品文字中... <strong>${pct}%</strong>（0 元・不消耗 API）</div>`;
+              }
+            }
+          });
+        }
+        const worker = await rxTesseractWorkerPromise;
+        if (rxOfflineOcrCancelled) return;
+
+        const ret = await worker.recognize(cropCanvas);
+        if (rxOfflineOcrCancelled) return;
+
+        const rawText = (ret?.data?.text || '').trim();
+        const detailsEl = document.getElementById('rxRawOcrDetails');
+        const txtEl = document.getElementById('rxRawOcrText');
+        if (detailsEl && txtEl) {
+          txtEl.value = rawText;
+          detailsEl.style.display = 'block';
+        }
+
+        const sec = ((performance.now() - t0) / 1000).toFixed(1);
+        const parsed = parseHospitalRxText(rawText);
+        if (!parsed.items.length) {
+          status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 未從框選範圍抓到明確藥品（耗時 ${sec} 秒）。請調整藍綠框只涵蓋藥品表格，或點下方展開微調辨識文字。</div>`;
+          if (detailsEl) detailsEl.open = true;
+          return;
+        }
+        showParsedRxReview(parsed.items, {
+          sourceLabel: `純前端離線 OCR 完成（耗時 ${sec} 秒・0 元無上限）`,
+          patientMeta: parsed.meta
+        });
+      } catch (err) {
+        rxTesseractWorkerPromise = null;
+        if (!rxOfflineOcrCancelled) {
+          status.innerHTML = `<div class="rx-progress-box is-error">❌ 離線辨識失敗：${escapeHtml(err.message || '')}</div>`;
+        }
+      } finally {
+        btnRun.disabled = false;
+        btnCancel.style.display = 'none';
+      }
+    }
+
+    function reparseFromEditedOcrText() {
+      const txt = document.getElementById('rxRawOcrText')?.value || '';
+      const parsed = parseHospitalRxText(txt);
+      showParsedRxReview(parsed.items, { sourceLabel: '已依修改文字重新比對資料庫', patientMeta: parsed.meta });
+    }
+
+    // --- 模式 3：批次貼上解析（自動辨識 QR 字串 / 純健保碼清單 / 醫院處方明細） ---
+    function parseBatchPastedRx() {
+      const raw = (document.getElementById('rxPasteInput')?.value || '').trim();
+      const status = document.getElementById('rxStatus');
+      if (!raw) { alert('請先貼上處方內容或健保碼！'); return; }
+
+      // 1. 先檢查是否為健保 QR Code 分號格式
+      if ((raw.match(/;/g) || []).length >= 10) {
+        const qr = parseTaiwanNhiQr(raw);
+        if (qr.ok) {
+          showParsedRxReview(qr.items, { sourceLabel: '已辨識健保 QR 格式文字', patientMeta: qr.meta });
+          return;
+        }
+      }
+
+      // 2. 走通用醫院處方文字＋健保碼解析器
+      const parsed = parseHospitalRxText(raw);
+      if (!parsed.items.length) {
+        status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 未辨識到藥品名稱或 10 碼健保碼，請確認貼上內容包含英文藥名、中文品名或 10 碼健保碼。</div>`;
+        return;
+      }
+      showParsedRxReview(parsed.items, { sourceLabel: '批次文字離線解析完成（0 秒）', patientMeta: parsed.meta });
+    }
+
+    // --- 台灣醫院門診處方箋解析器（全面相容奇美/長庚/成大/診所格式、Tall Man Lettering、折行備註、過敏區排除、非藥品區截斷） ---
+    function parseHospitalRxText(rawText) {
+      const lines = String(rawText || '').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(Boolean);
+      const meta = { surname: '', age: '', sex: '' };
+
+      // 先試抓可能夾帶的年齡/性別（如「男 68歲」「女 4 歲」）
+      const fullTxt = lines.join('\n');
+      const sexAgeM = fullTxt.match(/(男|女)\s*(\d{1,3})\s*歲/);
+      if (sexAgeM) {
+        meta.sex = sexAgeM[1] === '男' ? 'M' : 'F';
+        meta.age = sexAgeM[2];
+      }
+
+      // 1. 過濾非藥品區與過敏區，並將折行併回上一筆（例如 [備註]if \n fever）
+      const mergedRows = [];
+      let inAllergySkip = false;
+      const STOP_RE = /以下為非藥品|非藥品類處方|診察費|藥事服務費|尿流量圖|超音波|檢驗項目|\*{2,}\s*以下/;
+      const HEADER_NOISE_RE = /^(?:序|代碼|名稱|劑量|單位|頻率|途徑|天數|總量|門診|批價處方|領藥號|病歷號碼|身分證號|看診日期|列印時間|診斷|依健保署|請至門診|科別|診號|姓名|生日|男\s*\d+|女\s*\d+|身份|身高|體重|GPT|SRCR|CR\s*:)/i;
+      const ALLERGY_START_RE = /過敏藥品|藥物過敏|禁忌用藥|\bNKDA\b/i;
+      const ROW_ANCHOR_RE = /^(?:0?[1-9]|1\d|20)\s+[A-Z0-9]{4,10}\b|^[0-9]{2}[A-Z][0-9A-Z]{2,5}\b|^[A-Z]{1,2}[0-9A-Z]{8,9}\b/i;
+
+      for (const line of lines) {
+        if (STOP_RE.test(line)) break;
+        if (ALLERGY_START_RE.test(line)) { inAllergySkip = true; continue; }
+        // 若剛離開過敏區，碰到正式序號或藥品表格表頭則恢復
+        if (inAllergySkip) {
+          if (ROW_ANCHOR_RE.test(line) || /劑量|頻率|途徑/.test(line)) inAllergySkip = false;
+          else continue;
+        }
+        if (HEADER_NOISE_RE.test(line)) continue;
+        // 排除純手寫/頁尾雜訊
+        if (line.length < 3 || /^[\d.\s\-_=*#@|/\\]+$/.test(line)) continue;
+
+        const isNewRow = ROW_ANCHOR_RE.test(line) ||
+          /\b(?:QD|BID|TID|QID|HS|PRN|QOD|QW|Q\d+H)(?:AC|PC)?\b/i.test(line) ||
+          /\b[A-Z]{1,2}[A-Z0-9]{8,9}\b/.test(line);
+
+        if (isNewRow || !mergedRows.length) {
+          mergedRows.push(line);
+        } else {
+          // 折行續接（如 "fever" 或長藥名第二行）
+          mergedRows[mergedRows.length - 1] += ' ' + line;
+        }
+      }
+
+      const items = [];
+      const FREQ_PAT = /\b((?:QD|BID|TID|QID|QHS|HS|QN|PRN|QOD|QW|STAT|Q\d+H)(?:AC|PC)?)\b/i;
+      const UNIT_PAT = /\b(TABS?|CAPS?|PILL|ML|CC|PACK|PKT|BOT|DROP|GTTS?|PUFF|PATCH|SUPP|GM|AMP|VIAL|PEN)\b/i;
+      const ROUTE_PAT = /\b(PO|EXT|INH|OPH|OTIC|TOP|SC|IM|IV|SL|VAG|RECT|SUPP|NASAL)\b/i;
+      const NHI_PAT = /\b([A-Z]{1,2}[0-9A-Z]{8,9})\b/g;
+
+      for (const row of mergedRows) {
+        // 特例：若整行是一串 10 碼健保碼（例如從 Excel 或調劑系統貼上多個健保碼）
+        const allNhi = Array.from(row.matchAll(NHI_PAT))
+          .map(m => m[1])
+          .filter(c => !/^[A-Z][1289]\d{8}$/i.test(c) && /\d{4,}/.test(c));
+        const hasOtherDrugWords = /[a-z]{4,}/i.test(row.replace(NHI_PAT, ' '));
+        if (allNhi.length >= 2 && !hasOtherDrugWords) {
+          allNhi.forEach(code => {
+            items.push({ drug_name: code, nhi_code: code.toUpperCase(), dosage_text: '依醫師指示按時服用', raw_line: code });
+          });
+          continue;
+        }
+
+        // 抓單筆藥品明細（相容「01 21T012 TamOXIfen 10mg (Nolvadex) 1.00 TAB QD PO 30 30.00 TAB」）
+        let work = row;
+        const nhiCode = allNhi.length ? allNhi[0].toUpperCase() : '';
+
+        // 去除行首序號（01..20）與院內自訂碼（如 21T012、33I006、25A006、28M002）
+        work = work.replace(/^(?:0?[1-9]|1\d|20)\s+/, '');
+        work = work.replace(/^[0-9]{2}[A-Z][0-9A-Z]{2,5}\s+/i, '');
+        if (nhiCode) work = work.replace(new RegExp('\\b' + nhiCode + '\\b', 'i'), ' ');
+
+        // 鎖定「每次劑量 + 單位 + 頻率 + 途徑」（避開最右側的「總量」欄）
+        let dose = '', unit = '', freq = '', route = '';
+        const sigBlockM = work.match(/(\d+(?:\.\d+)?)\s+(TABS?|CAPS?|ML|CC|PACK|PKT|BOT|DROP|GTTS?|PUFF|PATCH|SUPP|GM|AMP|VIAL|PEN)\s+((?:QD|BID|TID|QID|QHS|HS|QN|PRN|QOD|QW|STAT|Q\d+H)(?:AC|PC)?)(?:\s+(PO|EXT|INH|OPH|OTIC|TOP|SC|IM|IV|SL|VAG|RECT|SUPP|NASAL))?/i);
+        let namePart = work;
+        if (sigBlockM) {
+          dose = sigBlockM[1];
+          unit = sigBlockM[2];
+          freq = sigBlockM[3];
+          route = sigBlockM[4] || 'PO';
+          namePart = work.slice(0, sigBlockM.index);
+        } else {
+          const fm = work.match(FREQ_PAT);
+          if (fm) {
+            freq = fm[1];
+            const beforeF = work.slice(0, fm.index);
+            const afterF = work.slice(fm.index + fm[0].length);
+            const duM = beforeF.match(/(\d+(?:\.\d+)?)\s*(TABS?|CAPS?|ML|CC|PACK|PKT|BOT|DROP|GTTS?|PUFF|PATCH|SUPP)\s*$/i);
+            if (duM) {
+              dose = duM[1];
+              unit = duM[2];
+              namePart = beforeF.slice(0, duM.index);
+            } else {
+              namePart = beforeF;
+            }
+            const rm = afterF.match(ROUTE_PAT);
+            if (rm) route = rm[1];
+          }
+        }
+
+        // 清理備註、黏在英文藥名前的中文標記（如「低AcetylCYSteine」「液 Cyproheptadine」）與孤立亂碼
+        namePart = namePart
+          .replace(/\[[^\]]*\].*$/, '')
+          .replace(/備註.*$/, '')
+          .replace(/^[低液磨外內高冰管]\s*(?=[A-Za-z])/, '')
+          .replace(/^[^A-Za-z\u4e00-\u9fff]{1,4}(?=[A-Za-z]{3,})/, '')
+          .replace(/\)[化磨液外內高冰管]{1,2}\s*$/, ')')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        // 若沒有任何 3 碼以上英文字、2 字以上中文、或健保碼，跳過雜訊行
+        if (!nhiCode && !/[A-Za-z]{3,}|[\u4e00-\u9fff]{2,}/.test(namePart)) continue;
+        // 排除純院內檢查/費用名稱
+        if (/診察費|藥事服務|檢查|測量|掛號費|部分負擔/.test(namePart)) continue;
+
+        items.push({
+          drug_name: namePart || nhiCode,
+          nhi_code: nhiCode,
+          dosage_text: formatSigToPlainZh(dose || '1', unit, freq || 'QD', route || 'PO'),
+          raw_line: row
+        });
+      }
+
+      return { ok: items.length > 0, items, meta };
+    }
+
+    // --- 升級版多候選模糊比對引擎（支援健保碼、括號商品名、Tall Man Lettering、劑量強度與 OCR 1–2 字容錯） ---
+    function levenshteinBounded(a, b, maxDist = 2) {
+      if (Math.abs(a.length - b.length) > maxDist) return maxDist + 1;
+      const prev = new Array(b.length + 1);
+      for (let j = 0; j <= b.length; j++) prev[j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        let curr0 = i, minRow = curr0;
+        let diag = i - 1;
+        prev[0] = curr0;
+        for (let j = 1; j <= b.length; j++) {
+          const old = prev[j];
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          const val = Math.min(prev[j] + 1, prev[j - 1] + 1, diag + cost);
+          diag = old;
+          prev[j] = val;
+          if (val < minRow) minRow = val;
+        }
+        if (minRow > maxDist) return maxDist + 1;
+      }
+      return prev[b.length];
+    }
+
+    function findTopMatches(name, nhiCode, limit = 5) {
+      if (!drugIndex.length) return [];
+
+      // 1. 10 碼健保碼精準比對（最高優先）
       if (nhiCode && nhiCode.trim().length >= 8) {
         const codeL = nhiCode.trim().toLowerCase();
-        const exact = drugIndex.find(d => (d.nhi_codes || (drugFull[d.license_id]?.nhi_codes) || []).some(c => c.toLowerCase() === codeL));
-        if (exact) return exact;
+        const exact = drugIndex.filter(d =>
+          (d.nhi_codes || (drugFull[d.license_id]?.nhi_codes) || []).some(c => c.toLowerCase() === codeL)
+        );
+        if (exact.length) {
+          return exact.slice(0, limit).map(d => ({ drug: d, score: 1000, reason: '健保碼精準比對' }));
+        }
       }
-      const tokens = String(name || '').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g, ' ').trim().split(' ').filter(t => t.length >= 2);
-      if (!tokens.length) return null;
-      return drugIndex.find(d => (d.name_zh || '').toLowerCase().includes(tokens[0]) || (d.name_en || '').toLowerCase().includes(tokens[0]) || (d.ingredients || []).join(' ').toLowerCase().includes(tokens[0])) || null;
+
+      const raw = String(name || '').trim();
+      if (!raw) return [];
+
+      // 擷取括號內商品名（例如 (Betmiga)、(Nolvadex)、(Doxymycin)、(Coheal)、(StroLIN)）
+      const brandTokens = [];
+      for (const m of raw.matchAll(/\(([^)]{2,30})\)/g)) {
+        const bt = m[1].toLowerCase().replace(/[^a-z0-9-]/g, ' ').trim();
+        if (bt.length >= 3) brandTokens.push(bt);
+      }
+
+      // 擷取劑量數字（例如 10mg, 25mg, 100mg, 500mg, 1mg）
+      const doseNums = Array.from(raw.matchAll(/\b(\d+(?:\.\d+)?)\s*(?:mg|mcg|ug|g|gm|ml|%)\b/gi)).map(m => m[1]);
+
+      // 擷取劑型關鍵字
+      const wantSyrup = /\b(?:susp|syrup|solu|sol|liq|bot)\b|液|糖漿/i.test(raw);
+      const wantGranule = /\b(?:granule|powder|pack)\b|顆粒|散/i.test(raw);
+      const wantCap = /\b(?:cap|caps)\b|膠囊/i.test(raw);
+      const wantTab = /\b(?:tab|tabs)\b|錠/i.test(raw);
+
+      // 擷取主要英文／中文詞元（排除單位與常見非藥名噪字）
+      const STOP_WORDS = new Set(['tab','tabs','cap','caps','susp','syrup','solu','sol','bot','pack','granules','granule','powder','oral','cream','ointment','gel','drops','spray','inj','mg','ml','mcg','gm','base','if','fever','po','qd','bid','tid','qid','prn','hs']);
+      const noParen = raw.replace(/\([^)]*\)/g, ' ');
+      const enTokens = (noParen.toLowerCase().match(/[a-z][a-z0-9-]{2,}/g) || [])
+        .map(t => t.replace(/^-+|-+$/g, ''))
+        .filter(t => t.length >= 3 && !STOP_WORDS.has(t));
+      const zhTokens = (noParen.match(/[\u4e00-\u9fff]{2,}/g) || []).filter(t => !/備註|處方|門診/.test(t));
+
+      const primaryWords = Array.from(new Set([...brandTokens, ...enTokens, ...zhTokens]));
+      if (!primaryWords.length) return [];
+
+      const scored = [];
+      for (let i = 0; i < drugIndex.length; i++) {
+        const d = drugIndex[i];
+        const zh = String(d.name_zh || '').toLowerCase();
+        const en = String(d.name_en || '').toLowerCase();
+        const ing = (d.ingredients || []).join(' ').toLowerCase();
+        const df = String(d.dosage_form || '').toLowerCase();
+        const hasNhi = (d.nhi_codes && d.nhi_codes.length > 0);
+        let sc = 0;
+        let reason = '';
+
+        // A. 括號內英文商品名比對（最容易精準鎖定原廠/指定廠牌）
+        for (const bt of brandTokens) {
+          if (en.includes(bt)) {
+            sc += 180;
+            reason = '商品名精準比對';
+          } else if (bt.length >= 5) {
+            const enWords = en.match(/[a-z][a-z0-9-]{3,}/g) || [];
+            if (enWords.some(w => levenshteinBounded(bt, w, 1) <= 1)) {
+              sc += 110;
+              reason = reason || '商品名模糊比對';
+            }
+          }
+        }
+
+        // B. 英文學名／商品名詞元比對（相容 Tall Man Lettering 與 OCR 1–2 字錯字）
+        for (const wt of enTokens) {
+          if (ing.includes(wt)) {
+            sc += 120;
+            reason = reason || '學名比對';
+          } else if (en.includes(wt)) {
+            sc += 105;
+            reason = reason || '英文名比對';
+          } else if (wt.length >= 6) {
+            // 針對 OCR 誤把 l/I/1 或 rn/m 辨識錯的容錯比對
+            const candWords = (ing + ' ' + en).match(/[a-z]{5,}/g) || [];
+            let bestD = 3;
+            for (const cw of candWords) {
+              if (cw[0] !== wt[0] && cw[1] !== wt[1]) continue;
+              const dist = levenshteinBounded(wt, cw, 2);
+              if (dist < bestD) bestD = dist;
+              if (bestD === 1) break;
+            }
+            if (bestD === 1) { sc += 78; reason = reason || 'OCR 容錯比對'; }
+            else if (bestD === 2 && wt.length >= 8) { sc += 52; reason = reason || 'OCR 模糊比對'; }
+          }
+        }
+
+        // C. 中文品名詞元比對
+        for (const zt of zhTokens) {
+          if (zh.includes(zt)) {
+            sc += 115;
+            reason = reason || '中文名比對';
+          }
+        }
+
+        if (sc <= 0) continue;
+
+        // D. 劑量與劑型加分（避免把 25mg 誤配成 50mg，或把糖漿誤配成錠劑）
+        const fullMeta = `${zh} ${en} ${df}`;
+        for (const dn of doseNums) {
+          if (new RegExp(`(?:^|[^0-9.])${dn.replace('.', '\\.')}(?:$|[^0-9.])`).test(fullMeta)) sc += 32;
+        }
+        if (wantSyrup && /糖漿|口服液|內服液|懸液|syrup|susp|solu/.test(fullMeta)) sc += 28;
+        if (wantGranule && /顆粒|散劑|粉劑|granule|powder/.test(fullMeta)) sc += 28;
+        if (wantCap && /膠囊|capsule/.test(fullMeta)) sc += 18;
+        if (wantTab && /錠|tablet/.test(fullMeta)) sc += 18;
+        if (hasNhi) sc += 15; // 優先健保給付品項
+        if (d.has_leaflet) sc += 6;
+
+        scored.push({ drug: d, score: sc, reason: reason || '相似比對' });
+      }
+
+      scored.sort((a, b) => b.score - a.score);
+      return scored.slice(0, limit);
+    }
+
+    function findBestMatch(name, nhiCode) {
+      const tops = findTopMatches(name, nhiCode, 1);
+      return tops.length ? tops[0].drug : null;
+    }
+
+    function applyDetectedPatientMeta() {
+      const m = window._lastRxMeta;
+      if (!m) return;
+      if (m.surname && !document.getElementById('p_surname').value.trim()) {
+        document.getElementById('p_surname').value = m.surname;
+      }
+      if (m.age) document.getElementById('p_age').value = m.age;
+      if (m.sex) document.getElementById('p_sex').value = m.sex;
+      syncAutoSheetTitle();
+      runBeersAndRender();
+      const btn = document.getElementById('btnApplyRxMeta');
+      if (btn) { btn.textContent = '✅ 已套用病人資料'; btn.disabled = true; }
+    }
+
+    function showParsedRxReview(items, opts = {}) {
+      const status = document.getElementById('rxStatus');
+      const box = document.getElementById('rxResults');
+      const sourceLabel = opts.sourceLabel || '處方解析完成';
+      const pMeta = opts.patientMeta || null;
+      window._lastRxMeta = pMeta;
+
+      window._lastRxParsed = (items || []).map(it => {
+        const candidates = findTopMatches(it.drug_name, it.nhi_code, 5);
+        const top = candidates[0] || null;
+        return {
+          ...it,
+          checked: true,
+          candidates,
+          selectedLicenseId: top ? top.drug.license_id : '',
+          matched: top ? top.drug : null,
+          matchReason: top ? top.reason : '',
+          matchScore: top ? top.score : 0
+        };
+      });
+
+      const list = window._lastRxParsed;
+      if (!list.length) {
+        status.innerHTML = `<div class="rx-progress-box is-error">⚠️ 未解析出藥品項目。</div>`;
+        box.innerHTML = '';
+        return;
+      }
+
+      const matchedCnt = list.filter(x => x.selectedLicenseId).length;
+      status.innerHTML = `
+        <div class="rx-progress-box is-ok">
+          ✅ ${escapeHtml(sourceLabel)}（共 <strong>${list.length}</strong> 種藥，資料庫自動比對成功 <strong>${matchedCnt}</strong> 種）
+        </div>
+      `;
+
+      let metaBannerHtml = '';
+      if (pMeta && (pMeta.age || pMeta.surname || pMeta.sex)) {
+        const mParts = [];
+        if (pMeta.surname) mParts.push(`姓氏：${pMeta.surname}`);
+        if (pMeta.sex) mParts.push(`性別：${pMeta.sex === 'M' ? '男' : '女'}`);
+        if (pMeta.age) mParts.push(`年齡：${pMeta.age} 歲`);
+        metaBannerHtml = `
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; background:var(--primary-light); border:1px solid var(--primary-border); border-radius:9px; padding:7px 10px; margin-bottom:8px; font-size:12px;">
+            <span>👤 偵測到病人資訊（已去個資）：<strong>${escapeHtml(mParts.join('、'))}</strong></span>
+            <button type="button" id="btnApplyRxMeta" class="btn btn-outline btn-sm" onclick="applyDetectedPatientMeta()">套用至 01 病人資料</button>
+          </div>
+        `;
+      }
+
+      box.innerHTML = `
+        ${metaBannerHtml}
+        <button type="button" class="btn btn-primary btn-block" style="margin-bottom:8px;" onclick="addAllRxToMedList()">＋ 將勾選藥品一次加入清單並執行 Beers 檢核</button>
+        ${list.map((it, idx) => {
+          const badgeClass = it.matchScore >= 140 ? 'green' : (it.selectedLicenseId ? 'yellow' : 'red');
+          const badgeTxt = it.selectedLicenseId ? `✔ ${it.matchReason}` : '⚠️ 未比對到(直接加入)';
+          const optsHtml = [
+            ...it.candidates.map(c => {
+              const d = c.drug;
+              const nhiTag = (d.nhi_codes && d.nhi_codes[0]) ? `[${d.nhi_codes[0]}] ` : '';
+              const label = `${nhiTag}${d.name_zh || d.name_en} (${d.name_en || (d.ingredients || [])[0] || d.license_id})`;
+              return `<option value="${escapeAttr(d.license_id)}" ${d.license_id === it.selectedLicenseId ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+            }),
+            `<option value="" ${!it.selectedLicenseId ? 'selected' : ''}>（不使用資料庫，直接以辨識名稱加入）</option>`
+          ].join('');
+
+          return `
+            <div class="rx-match-card">
+              <div class="rx-match-head">
+                <input type="checkbox" ${it.checked ? 'checked' : ''} onchange="window._lastRxParsed[${idx}].checked = this.checked" style="width:auto; transform:scale(1.15);" />
+                <strong style="font-size:13px;">${idx + 1}. ${escapeHtml(it.drug_name || '')}</strong>
+                ${it.nhi_code ? `<span class="nhi-tag">${escapeHtml(it.nhi_code)}</span>` : ''}
+                <span class="src-badge ${badgeClass}">${escapeHtml(badgeTxt)}</span>
+              </div>
+              <select class="rx-match-select" onchange="onRxCandidateChange(${idx}, this.value)">${optsHtml}</select>
+              <input type="text" class="rx-match-usage" value="${escapeAttr(it.dosage_text || '')}" placeholder="白話用法（可直接修改）" oninput="window._lastRxParsed[${idx}].dosage_text = this.value" />
+            </div>
+          `;
+        }).join('')}
+      `;
+    }
+
+    function onRxCandidateChange(idx, lid) {
+      const it = window._lastRxParsed && window._lastRxParsed[idx];
+      if (!it) return;
+      it.selectedLicenseId = lid;
+      const found = (it.candidates || []).find(c => c.drug.license_id === lid);
+      it.matched = found ? found.drug : null;
     }
 
     async function addAllRxToMedList() {
-      const list = window._lastRxParsed || [];
+      const list = (window._lastRxParsed || []).filter(it => it.checked !== false);
+      if (!list.length) { alert('請至少勾選 1 種藥品！'); return; }
       for (const it of list) {
-        if (it.matched && it.matched.license_id) {
-          await addMedFromDb(it.matched.license_id, it.dosage_text || '');
+        const lid = it.selectedLicenseId || (it.matched && it.matched.license_id) || '';
+        if (lid) {
+          await addMedFromDb(lid, it.dosage_text || '');
         } else {
           const defs = buildElderlyDefaults({ name_zh: it.drug_name, name_en: it.drug_name, ingredients: [it.drug_name] });
           const spAlert = detectSpecialAlert({ name_zh: it.drug_name, name_en: it.drug_name, ingredients: [it.drug_name] });
@@ -5820,7 +7078,7 @@ ${JSON.stringify(items)}
           medList.push({
             id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
             checked: true, expanded: false, licenseId: '', nhiCodes: it.nhi_code ? [it.nhi_code] : [],
-            nameZh: it.drug_name || '', nameEn: '', generic: it.drug_name || '', dosageForm: '',
+            nameZh: it.drug_name || '', nameEn: it.drug_name || '', generic: it.drug_name || '', dosageForm: '',
             appearance: '', imageUrls: [], imgUrl: '', isNhiOnly: false, leafletMode: 'none', leafletSections: null,
             usage: uTxt, timings: guessTimingFromUsage(uTxt),
             purpose: defs.purpose, sideEffects: defs.sideEffects, lifestyle: defs.lifestyle, diet: defs.diet,
@@ -5828,8 +7086,11 @@ ${JSON.stringify(items)}
             leafletUrls: [], rawLeafletText: '', templateKeys: defs.templateKeys || [], isCombo: Boolean(defs.isCombo), sourceLevel: defs.sourceLevel, verifiedByPharmacist: false, specialAlertKey: spAlert.key || '', specialAlertTag: spAlert.tag, specialAlertText: spAlert.text,
             beersLevel: 'none', beersTags: []
           });
+          const added = medList[medList.length - 1];
+          if (added) rxAutoInitMed(added);
         }
       }
+      stopQrCamera();
       toggleRxPanel(false);
       switchTab('meds', document.getElementById('tabBtnMeds'));
       runBeersAndRender();
@@ -5888,7 +7149,7 @@ ${JSON.stringify(items)}
       const drug = document.getElementById('rep_drug').value.trim() || '（未指定）';
       const desc = document.getElementById('rep_desc').value.trim();
       const contact = document.getElementById('rep_contact').value.trim() || '（未填寫）';
-      const env = `CareRx-v46 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
+      const env = `CareRx-v47 | ${window.innerWidth}x${window.innerHeight} | ${new Date().toLocaleString('zh-TW')}`;
       return { type, drug, desc, contact, env, plainText: `【類型】${type}\n【藥品】${drug}\n【描述】${desc}\n【聯絡】${contact}\n【環境】${env}` };
     }
 

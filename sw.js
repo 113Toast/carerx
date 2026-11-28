@@ -1,4 +1,4 @@
-const CACHE_NAME = 'elder-med-pwa-v46';
+const CACHE_NAME = 'elder-med-pwa-v47';
 const APP_SHELL = [
   './',
   './index.html',
@@ -30,8 +30,11 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
-  // 僅快取同網域檔案；外部 API（Gemini、Google Apps Script、TFDA 圖片）直接走網路
-  if (url.origin !== self.location.origin) return;
+  // 允許快取離線 OCR／QR 掃碼用的靜態 CDN 套件（jsQR、Tesseract.js 與 eng 模型），讓第一次載入後即可完全離線使用；其餘外部 API 直接走網路
+  const isOfflineOcrCdn =
+    (url.hostname === 'cdn.jsdelivr.net' || url.hostname === 'tessdata.projectnaptha.com') &&
+    /(?:jsqr|tesseract|eng\.traineddata)/i.test(url.pathname);
+  if (url.origin !== self.location.origin && !isOfflineOcrCdn) return;
 
   const isHtmlOrIndex =
     req.mode === 'navigate' ||
